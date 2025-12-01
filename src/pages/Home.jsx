@@ -10,6 +10,7 @@ import Footer from '../component/Footer';
 const Home = () => {
   return (
     <div className="min-h-screen">
+      <h1>Shubham</h1>
       <Navbar />
       <Hero />
       <FeaturedProperties />
