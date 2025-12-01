@@ -6,6 +6,7 @@ import AboutUs from './pages/AboutUs';
 import Projects from './pages/Projects';
 import PropertyDetail from './pages/PropertyDetail';
 import ContactUs from './pages/ContactUs';
+import NotFound from './pages/NotFound';
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/projects" element={<Projects />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/property/:id" element={<PropertyDetail />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );

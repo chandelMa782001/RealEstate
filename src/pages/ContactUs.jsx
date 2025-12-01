@@ -2,7 +2,6 @@ import React from 'react';
 import Navbar from '../component/Navbar';
 import Footer from '../component/Footer';
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaWhatsapp } from 'react-icons/fa';
-
 const ContactUs = () => {
   return (
     <div className="min-h-screen bg-gray-50">
