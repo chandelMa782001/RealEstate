@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { FaUser, FaEnvelope, FaPhone, FaLock, FaTimes } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaPhone, FaLock, FaTimes, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { toast } from 'react-toastify';
+import { useAppContext } from '../context/AppContext';
 
 const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
+  const { signup } = useAppContext();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -9,6 +12,9 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
     password: '',
     confirmPassword: ''
   });
+  
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -19,32 +25,34 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
 
   const handleSignup = (e) => {
     e.preventDefault();
-    console.log('Signup:', formData);
-    // Handle signup logic here
+    if (formData.password !== formData.confirmPassword) {
+      toast.error('Passwords do not match!');
+      return;
+    }
+    const userData = { 
+      name: formData.name, 
+      email: formData.email, 
+      mobile: formData.mobile 
+    };
+    signup(userData);
+    onClose();
   };
-
   if (!isOpen) return null;
-
   return (
     <div className="fixed top-[13%] inset-0 bg-transparent flex items-center justify-center">
       <div className="bg-white rounded-lg shadow-2xl w-full max-w-md mx-4 relative">
-        {/* Close Button */}
+       
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition"
         >
           <FaTimes size={20} />
         </button>
-
-    
         <div className="p-6">
-        
           <h2 className="text-2xl font-bold text-gray-800 mb-6 border-l-4 border-orange-500 pl-3">
             Sign Up
           </h2>
-
           <form onSubmit={handleSignup} className="space-y-4">
-           
             <div className="relative">
               <input
                 type="text"
@@ -70,8 +78,6 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
               />
               <FaEnvelope className="absolute right-3 top-1/2 -translate-y-1/2 text-orange-500" />
             </div>
-
-          
             <div className="relative">
               <input
                 type="tel"
@@ -87,28 +93,42 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
 
             <div className="relative">
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Enter Password"
-                className="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 pr-10"
+                className="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 pr-20"
                 required
               />
-              <FaLock className="absolute right-3 top-1/2 -translate-y-1/2 text-orange-500" />
+           
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              >
+                {showPassword ? <FaEyeSlash size={18} className=' text-orange-500' /> : <FaEye size={18} className=' text-orange-500' />}
+              </button>
             </div>
 
             <div className="relative">
               <input
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 placeholder="Confirm Password"
-                className="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 pr-10"
+                className="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 pr-20"
                 required
               />
-              <FaLock className="absolute right-3 top-1/2 -translate-y-1/2 text-orange-500" />
+           
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              >
+                {showConfirmPassword ? <FaEyeSlash size={18} className=' text-orange-500' /> : <FaEye size={18} className=' text-orange-500' />}
+              </button>
             </div>
 
       

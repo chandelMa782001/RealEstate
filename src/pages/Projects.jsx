@@ -3,11 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../component/Navbar';
 import Footer from '../component/Footer';
 import { FaBed, FaBath, FaRulerCombined, FaMapMarkerAlt } from 'react-icons/fa';
-
 const Projects = () => {
   const navigate = useNavigate();
   const [filter, setFilter] = useState('All');
-
   const projects = [
     {
       id: 1,

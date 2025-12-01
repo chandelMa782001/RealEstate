@@ -18,30 +18,7 @@ const Navbar = () => {
   const [searchCity, setSearchCity] = useState('');
   return (
     <nav className="bg-white text-gray-800 shadow-lg sticky top-0 z-[70]">
-      {/* <div className="bg-gray-800 text-white py-2 px-4 text-sm">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="flex items-center space-x-6">
-            <a href="tel:+919354527118" className="flex items-center hover:text-orange-400 transition">
-              <span className="mr-2 text-white">📞</span>
-              +91-9354527118
-            </a>
-            <a href="#" className="flex items-center hover:text-orange-400 transition">
-              <span className="mr-2 text-white">📍</span>
-              B315 Roman court Ansal City Kundli Sonipat Haryana 131028
-            </a>
-          </div>
-          <div className="flex items-center space-x-4">
-            <a href="#" className="hover:text-orange-400 transition">Login / Sign Up</a>
-            <span>|</span>
-            <a href="#" className="hover:text-orange-400 transition">Help</a>
-            <div className="flex space-x-3 ml-4">
-              <a href="#" className="hover:text-orange-400 transition">f</a>
-              <a href="#" className="hover:text-orange-400 transition">in</a>
-              <a href="#" className="hover:text-orange-400 transition">@</a>
-            </div>
-          </div>
-        </div>
-      </div> */}
+     
       <div className="max-w-7xl mx-auto px-4 ">
         <div className="flex justify-between items-center">
      
@@ -63,10 +40,10 @@ const Navbar = () => {
               </div>
               {isDropdownOpen && (
                 <div className="absolute left-0  top-full  bg-white text-gray-800 rounded-xl shadow-2xl p-6 w-[700px] z-50 border border-gray-200">
-                  {/* Title */}
+                 
                   <h2 className="text-2xl font-bold text-gray-800 mb-4">Explore real estate in...</h2>
                   
-                  {/* Tabs */}
+                 
                   <div className="flex space-x-4 mb-4 border-b border-gray-200">
                     {['Buy', 'Rent / Lease', 'Plots/Land', 'PG / Co-living'].map((tab) => (
                       <button
@@ -155,45 +132,7 @@ const Navbar = () => {
             <a href="#" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base">For Owners</a>
             <a href="#" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base">For Dealers / Builders</a>
           
-            {/* <div className="relative">
-              <button 
-                onClick={() => setIsSupportOpen(!isSupportOpen)}
-                className="w-10 h-10 bg-white-100 hover:bg-orange-100 rounded-full flex items-center justify-center transition group"
-                title="Customer Support"
-              >
-                <BiSupport className="text-2xl text-gray-700 group-hover:text-orange-500" />
-              </button>
-              
-              {isSupportOpen && (
-                <div className="absolute right-0 top-full mt-2 bg-white rounded-lg shadow-2xl py-4 w-64 z-50 border border-gray-200">
-                  <div className="px-6 py-3 border-b border-gray-200">
-                    <h3 className="text-gray-800 font-bold text-lg flex items-center">
-                      <BiSupport className="mr-2 text-orange-500" />
-                      Customer Support
-                    </h3>
-                  </div>
-                  
-                  <div className="py-2">
-                    <a href="tel:+919354527118" className="block px-6 py-3 text-gray-700 hover:bg-gray-50 transition">
-                      📞 Call Us
-                    </a>
-                    <a href="#" className="block px-6 py-3 text-gray-700 hover:bg-gray-50 transition">
-                      💬 Live Chat
-                    </a>
-                    <a href="#" className="block px-6 py-3 text-gray-700 hover:bg-gray-50 transition">
-                      ✉️ Email Support
-                    </a>
-                    <a href="#" className="block px-6 py-3 text-gray-700 hover:bg-gray-50 transition">
-                      ❓ FAQs
-                    </a>
-                  </div>
-                  <div className="px-6 py-3 border-t border-gray-200 text-sm text-gray-600">
-                    <p>Available 24/7</p>
-                    <p className="font-semibold text-orange-500">+91-9354527118</p>
-                  </div>
-                </div>
-              )}
-            </div> */}
+          
             <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold transition whitespace-nowrap text-base">
               Post property <span className="text-sm">FREE</span>
             </button>
@@ -274,7 +213,7 @@ const Navbar = () => {
         )}
       </div>
 
-      {/* Login Modal */}
+   
       <LoginModal 
         isOpen={isLoginOpen} 
         onClose={() => setIsLoginOpen(false)}
@@ -284,7 +223,7 @@ const Navbar = () => {
         }}
       />
       
-      {/* Signup Modal */}
+     
       <SignupModal 
         isOpen={isSignupOpen} 
         onClose={() => setIsSignupOpen(false)}

@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { FaEnvelope, FaLock, FaTimes } from 'react-icons/fa';
+import { useAppContext } from '../context/AppContext';
 
 const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
+  const { login } = useAppContext();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log('Login:', { email, password });
-    // Handle login logic here
+    const userData = { email, name: email.split('@')[0] };
+    login(userData);
+    onClose();
   };
 
   if (!isOpen) return null;
