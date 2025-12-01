@@ -3,8 +3,10 @@ import { FaCheckCircle, FaUsers, FaBuilding, FaAward } from 'react-icons/fa';
 import Navbar from '../component/Navbar';
 import Footer from '../component/Footer';
 import WhyChooseUs from '../component/WhyChooseUs';
+import { useNavigate } from 'react-router-dom';
 
 const AboutUs = () => {
+  const navigate=useNavigate()
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
@@ -141,13 +143,13 @@ const AboutUs = () => {
           <p className="text-xl mb-8">Let us help you find the perfect home or investment opportunity.</p>
           <div className="flex justify-center space-x-4">
             <button 
-              onClick={() => window.location.href = '/contact-us'}
+              onClick={() => navigate("/contact-us")}
               className="bg-white text-orange-500 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition"
             >
               Contact Us
             </button>
             <button 
-              onClick={() => window.location.href = '/projects'}
+              onClick={() => navigate("/projects")}
               className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-orange-500 transition"
             >
               View Projects
