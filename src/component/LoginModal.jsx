@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaEnvelope, FaLock, FaTimes } from 'react-icons/fa';
-import { useAppContext } from '../context/AppContext';
+import { useAppContext } from '../Context/AppContext';
 import gsap from 'gsap';
 
 const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {

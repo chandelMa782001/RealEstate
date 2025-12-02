@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { useAppContext } from '../context/AppContext';
+import { useAppContext } from '../Context/AppContext';
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, setIsLoginModalOpen, showNotification } = useAppContext();

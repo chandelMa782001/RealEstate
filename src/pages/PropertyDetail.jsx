@@ -5,7 +5,7 @@ import { FaBed, FaBath, FaRulerCombined, FaMapMarkerAlt, FaPhone, FaEnvelope, Fa
 import Navbar from '../component/Navbar';
 import Footer from '../component/Footer';
 import gsap from 'gsap';
-import { useAppContext } from '../context/AppContext';
+import { useAppContext } from '../Context/AppContext';
 
 const PropertyDetail = () => {
   const { id } = useParams();

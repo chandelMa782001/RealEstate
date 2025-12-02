@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AppProvider, useAppContext } from './context/AppContext';
+import { AppProvider, useAppContext } from './Context/AppContext';
 import ProtectedRoute from './component/ProtectedRoute';
 import ScrollToTop from './component/ScrollToTop';
 import NotificationContainer from './component/NotificationContainer';

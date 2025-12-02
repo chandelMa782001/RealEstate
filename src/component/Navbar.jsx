@@ -4,7 +4,7 @@ import { CgProfile } from "react-icons/cg";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { FaSearch, FaSignOutAlt } from "react-icons/fa";
 import { images } from '../../utils/Image';
-import { useAppContext } from '../context/AppContext';
+import { useAppContext } from '../Context/AppContext';
 import LoginModal from './LoginModal';
 import SignupModal from './SignupModal';
 
