@@ -4,6 +4,7 @@ import { AppProvider, useAppContext } from './Context/AppContext';
 import ProtectedRoute from './component/ProtectedRoute';
 import ScrollToTop from './component/ScrollToTop';
 import NotificationContainer from './component/NotificationContainer';
+import LoanButton from './component/LoanButton';
 import Home from './pages/Home';
 import AboutUs from './pages/AboutUs';
 import Projects from './pages/Projects';
@@ -40,6 +41,7 @@ const AppContent = () => {
         notifications={notifications} 
         removeNotification={removeNotification} 
       />
+      <LoanButton />
     </>
   );
 };
