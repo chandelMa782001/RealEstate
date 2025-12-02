@@ -1,6 +1,5 @@
 import React from 'react';
 import { FaHome, FaBuilding, FaStore } from 'react-icons/fa';
-
 const ExploreServices = () => {
   const services = [
     {
@@ -44,8 +43,6 @@ const ExploreServices = () => {
           ))}
         </div>
       </div>
-
- 
       <a
         href="https://wa.me/919354527118"
         target="_blank"
@@ -60,5 +57,4 @@ const ExploreServices = () => {
     </div>
   );
 };
-
 export default ExploreServices;

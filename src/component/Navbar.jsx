@@ -7,6 +7,7 @@ import { images } from '../../utils/Image';
 import { useAppContext } from '../Context/AppContext';
 import LoginModal from './LoginModal';
 import SignupModal from './SignupModal';
+import PostRequirementModal from './PostRequirementModal';
 
 const Navbar = () => {
   const { 
@@ -21,6 +22,7 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isPostRequirementOpen, setIsPostRequirementOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('Buy');
   const [propertyType, setPropertyType] = useState('Residential');
   const [searchCity, setSearchCity] = useState('');
@@ -186,9 +188,15 @@ const Navbar = () => {
                     <a href="#" className="block px-6 py-3 text-gray-700 hover:bg-gray-50 transition">
                       Recently Searched
                     </a>
-                    <a href="#" className="block px-6 py-3 text-gray-700 hover:bg-gray-50 transition">
-                      Recently Viewed
-                    </a>
+                    <button 
+                      onClick={() => {
+                        setIsPostRequirementOpen(true);
+                        setIsUserMenuOpen(false);
+                      }}
+                      className="block w-full text-left px-6 py-3 text-gray-700 hover:bg-gray-50 transition"
+                    >
+                      Post Your Requirement
+                    </button>
                     <a href="#" className="block px-6 py-3 text-gray-700 hover:bg-gray-50 transition">
                       Shortlisted
                     </a>
@@ -262,6 +270,11 @@ const Navbar = () => {
           setIsSignupModalOpen(false);
           setIsLoginModalOpen(true);
         }}
+      />
+
+      <PostRequirementModal 
+        isOpen={isPostRequirementOpen} 
+        onClose={() => setIsPostRequirementOpen(false)}
       />
     </nav>
   );

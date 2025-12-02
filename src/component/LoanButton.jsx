@@ -28,7 +28,7 @@ const LoanButton = () => {
     <>
       <button className="loan-button" onClick={() => setIsModalOpen(true)}>
         <span className="coin-icon">🪙</span>
-        <span className="loan-text">Gold Loan</span>
+        <span className="loan-text">Home Loan</span>
       </button>
 
       {isModalOpen && (
@@ -38,7 +38,7 @@ const LoanButton = () => {
               ×
             </button>
             <div className="modal-header">
-              <h2>🪙 Apply for Gold Loan</h2>
+              <h2>🪙 Apply for Home Loan</h2>
               <p className="modal-subtitle">Get instant loan against your gold</p>
             </div>
             <form onSubmit={handleSubmit}>
@@ -79,18 +79,6 @@ const LoanButton = () => {
                   />
                 </div>
                 <div className="form-group">
-                  <label>Gold Weight (grams)</label>
-                  <input
-                    type="number"
-                    name="propertyType"
-                    value={formData.propertyType}
-                    onChange={handleChange}
-                    placeholder="Weight in grams"
-                    required
-                  />
-                </div>
-              </div>
-              <div className="form-group">
                 <label>Loan Amount Required</label>
                 <input
                   type="number"
@@ -101,6 +89,9 @@ const LoanButton = () => {
                   required
                 />
               </div>
+               
+              </div>
+              
               <button type="submit" className="loan-submit-btn">
                 <span>Submit Application</span>
                 <span className="btn-icon">→</span>
