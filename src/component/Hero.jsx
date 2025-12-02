@@ -45,7 +45,7 @@ const Hero = () => {
         <div className="flex justify-end space-x-4 mb-12">
         </div>
         <div className="text-center mb-12">
-          <h2>Hello Manish</h2>
+         
           <h1 ref={titleRef} className="text-5xl md:text-6xl font-bold text-white mb-4">
             Fullfil Your <span className="text-orange-500">Trust</span>
           </h1>
