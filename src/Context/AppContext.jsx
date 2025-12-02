@@ -1,6 +1,4 @@
 import React, { createContext, useContext, useState } from 'react';
-import { toast } from 'react-toastify';
-
 const AppContext = createContext();
 
 
@@ -21,43 +19,43 @@ export const AppProvider = ({ children }) => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
 
-
   const [favorites, setFavorites] = useState([]);
   const [recentlyViewed, setRecentlyViewed] = useState([]);
 
+  
+  const [notifications, setNotifications] = useState([]);
+
+
+  const showNotification = (message, type = 'info', duration = 3000) => {
+    const id = Date.now();
+    setNotifications(prev => [...prev, { id, message, type, duration }]);
+  };
+
+  const removeNotification = (id) => {
+    setNotifications(prev => prev.filter(notification => notification.id !== id));
+  };
 
   const login = (userData) => {
     setUser(userData);
     setIsAuthenticated(true);
     setIsLoginModalOpen(false);
     localStorage.setItem('user', JSON.stringify(userData));
-    toast.success(`Welcome back, ${userData.name || userData.email}!`, {
-      position: "top-right",
-      autoClose: 3000,
-    });
+    showNotification(`Welcome back, ${userData.name || userData.email}!`, 'success');
   };
-
 
   const logout = () => {
     setUser(null);
     setIsAuthenticated(false);
     localStorage.removeItem('user');
-    toast.info('You have been logged out successfully', {
-      position: "top-right",
-      autoClose: 3000,
-    });
+    showNotification('You have been logged out successfully', 'info');
   };
 
- 
   const signup = (userData) => {
     setUser(userData);
     setIsAuthenticated(true);
     setIsSignupModalOpen(false);
     localStorage.setItem('user', JSON.stringify(userData));
-    toast.success(`Account created successfully! Welcome, ${userData.name}!`, {
-      position: "top-right",
-      autoClose: 3000,
-    });
+    showNotification(`Account created successfully! Welcome, ${userData.name}!`, 'success');
   };
 
   
@@ -115,13 +113,17 @@ export const AppProvider = ({ children }) => {
     isSignupModalOpen,
     setIsSignupModalOpen,
 
-
     favorites,
     addToFavorites,
     removeFromFavorites,
 
     recentlyViewed,
-    addToRecentlyViewed
+    addToRecentlyViewed,
+
+    // Notifications
+    notifications,
+    showNotification,
+    removeNotification
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

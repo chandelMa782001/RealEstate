@@ -1,14 +1,65 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { images } from '../../utils/Image';
-import { FaBed, FaBath, FaRulerCombined, FaMapMarkerAlt, FaPhone, FaEnvelope, FaWhatsapp, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaBed, FaBath, FaRulerCombined, FaMapMarkerAlt, FaPhone, FaEnvelope, FaWhatsapp, FaChevronLeft, FaChevronRight, FaShare, FaFacebook, FaTwitter, FaLinkedin, FaCopy } from 'react-icons/fa';
 import Navbar from '../component/Navbar';
 import Footer from '../component/Footer';
+import gsap from 'gsap';
+import { useAppContext } from '../context/AppContext';
 
 const PropertyDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { showNotification } = useAppContext();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [showShareMenu, setShowShareMenu] = useState(false);
+  const contentRef = useRef(null);
+  const sidebarRef = useRef(null);
+  const shareMenuRef = useRef(null);
+
+  useEffect(() => {
+    // Animate page content on mount
+    const tl = gsap.timeline();
+    
+    tl.fromTo(
+      contentRef.current,
+      { opacity: 0, x: -50 },
+      { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out' }
+    )
+    .fromTo(
+      sidebarRef.current,
+      { opacity: 0, x: 50 },
+      { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out' },
+      '-=0.6'
+    );
+  }, []);
+
+  useEffect(() => {
+    if (showShareMenu && shareMenuRef.current) {
+      gsap.fromTo(
+        shareMenuRef.current,
+        { scale: 0, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.3, ease: 'back.out(1.7)' }
+      );
+    }
+  }, [showShareMenu]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (shareMenuRef.current && !shareMenuRef.current.contains(event.target) && 
+          !event.target.closest('button[class*="Share Property"]')) {
+        setShowShareMenu(false);
+      }
+    };
+
+    if (showShareMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showShareMenu]);
   const properties = {
     1: {
       title: 'Luxury Villa in Gurgaon',
@@ -35,11 +86,12 @@ const PropertyDetail = () => {
       age: 'Under Construction',
       parking: '3 Covered',
       builder: {
-        name: 'Maigreat Group',
+        id: 1,
+        name: 'Raghav Kumar',
         logo: images.companylogo,
         experience: '10+ Years',
         projects: '50+ Projects',
-        description: 'Maigreat Group is a leading real estate developer with over 10 years of experience in delivering quality residential and commercial projects.',
+        description: 'Experienced real estate dealer with over 10 years of expertise in delivering quality residential and commercial projects.',
         rating: 4.5,
         established: '2015'
       }
@@ -69,41 +121,154 @@ const PropertyDetail = () => {
       age: '2 Years',
       parking: '1 Covered',
       builder: {
-        name: 'Maigreat Group',
+        id: 1,
+        name: 'Raghav Kumar',
         logo: images.companylogo,
         experience: '10+ Years',
         projects: '50+ Projects',
-        description: 'Maigreat Group is a leading real estate developer with over 10 years of experience in delivering quality residential and commercial projects.',
+        description: 'Experienced real estate dealer with over 10 years of expertise in delivering quality residential and commercial projects.',
         rating: 4.5,
         established: '2015'
       }
     }
   };
   const property = properties[id] || properties[1];
+  
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % property.images.length);
   };
+  
   const prevImage = () => {
     setCurrentImageIndex((prev) => (prev - 1 + property.images.length) % property.images.length);
   };
 
+  const getShareUrl = () => {
+    return window.location.href;
+  };
+
+  const handleShare = (platform) => {
+    const url = getShareUrl();
+    const text = `Check out this amazing property: ${property.title} - ${property.price}`;
+    
+    let shareUrl = '';
+    
+    switch(platform) {
+      case 'whatsapp':
+        shareUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`;
+        break;
+      case 'facebook':
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+        break;
+      case 'twitter':
+        shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+        break;
+      case 'linkedin':
+        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+        break;
+      case 'email':
+        shareUrl = `mailto:?subject=${encodeURIComponent(property.title)}&body=${encodeURIComponent(text + '\n\n' + url)}`;
+        break;
+      case 'copy':
+        navigator.clipboard.writeText(url);
+        showNotification('Link copied to clipboard!', 'success', 2000);
+        setShowShareMenu(false);
+        return;
+      default:
+        return;
+    }
+    
+    window.open(shareUrl, '_blank');
+    setShowShareMenu(false);
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 page-transition">
       <Navbar />
       
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 py-8 slide-in-right">
       
-        <button 
-          onClick={() => navigate(-1)}
-          className="mb-6 flex items-center text-gray-600 hover:text-orange-500 transition bg-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg"
-        >
-          <FaChevronLeft className="mr-2" />
-          Back to Properties
-        </button>
+        <div className="mb-6 flex items-center justify-between">
+          <button 
+            onClick={() => navigate(-1)}
+            className="flex items-center text-gray-600 hover:text-orange-500 transition bg-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg"
+          >
+            <FaChevronLeft className="mr-2" />
+            Back to Properties
+          </button>
+
+          <div className="relative">
+            <button 
+              onClick={() => setShowShareMenu(!showShareMenu)}
+              className="flex items-center text-white bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition"
+            >
+              <FaShare className="mr-2" />
+              Share Property
+            </button>
+
+            {showShareMenu && (
+              <div 
+                ref={shareMenuRef}
+                className="absolute right-0 mt-2 bg-white rounded-lg shadow-xl p-4 z-50 min-w-[200px]"
+              >
+                <div className="space-y-2">
+                  <button
+                    onClick={() => handleShare('whatsapp')}
+                    className="w-full flex items-center space-x-3 px-4 py-2 hover:bg-green-50 rounded-lg transition text-left"
+                  >
+                    <FaWhatsapp className="text-green-500 text-xl" />
+                    <span className="text-gray-700">WhatsApp</span>
+                  </button>
+                  
+                  <button
+                    onClick={() => handleShare('facebook')}
+                    className="w-full flex items-center space-x-3 px-4 py-2 hover:bg-blue-50 rounded-lg transition text-left"
+                  >
+                    <FaFacebook className="text-blue-600 text-xl" />
+                    <span className="text-gray-700">Facebook</span>
+                  </button>
+                  
+                  <button
+                    onClick={() => handleShare('twitter')}
+                    className="w-full flex items-center space-x-3 px-4 py-2 hover:bg-blue-50 rounded-lg transition text-left"
+                  >
+                    <FaTwitter className="text-blue-400 text-xl" />
+                    <span className="text-gray-700">Twitter</span>
+                  </button>
+                  
+                  <button
+                    onClick={() => handleShare('linkedin')}
+                    className="w-full flex items-center space-x-3 px-4 py-2 hover:bg-blue-50 rounded-lg transition text-left"
+                  >
+                    <FaLinkedin className="text-blue-700 text-xl" />
+                    <span className="text-gray-700">LinkedIn</span>
+                  </button>
+                  
+                  <button
+                    onClick={() => handleShare('email')}
+                    className="w-full flex items-center space-x-3 px-4 py-2 hover:bg-gray-50 rounded-lg transition text-left"
+                  >
+                    <FaEnvelope className="text-gray-600 text-xl" />
+                    <span className="text-gray-700">Email</span>
+                  </button>
+                  
+                  <div className="border-t pt-2">
+                    <button
+                      onClick={() => handleShare('copy')}
+                      className="w-full flex items-center space-x-3 px-4 py-2 hover:bg-orange-50 rounded-lg transition text-left"
+                    >
+                      <FaCopy className="text-orange-500 text-xl" />
+                      <span className="text-gray-700">Copy Link</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
    
-          <div className="lg:col-span-2">
+          <div ref={contentRef} className="lg:col-span-2">
          
             <div className="relative mb-6 shadow-lg rounded-lg overflow-hidden">
               <img 
@@ -222,15 +387,29 @@ const PropertyDetail = () => {
 
           
             <div className="bg-white rounded-lg shadow-lg p-6">
-              <h2 className="text-2xl font-bold text-gray-800 mb-6">Builder Details</h2>
-              <div className="flex items-start space-x-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-gray-800">Builder Details</h2>
+                <button
+                  onClick={() => navigate(`/builder/${property.builder.id}`)}
+                  className="text-orange-500 hover:text-orange-600 font-semibold text-sm flex items-center space-x-1 transition"
+                >
+                  <span>View Full Profile</span>
+                  <span>→</span>
+                </button>
+              </div>
+              <div 
+                className="flex items-start space-x-6 cursor-pointer hover:bg-gray-50 p-4 rounded-lg transition"
+                onClick={() => navigate(`/builder/${property.builder.id}`)}
+              >
                 <img 
                   src={property.builder.logo} 
                   alt={property.builder.name}
                   className="w-24 h-24 object-contain rounded-lg border border-gray-200"
                 />
                 <div className="flex-1">
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">{property.builder.name}</h3>
+                  <h3 className="text-xl font-bold text-gray-800 mb-2 hover:text-orange-500 transition">
+                    {property.builder.name}
+                  </h3>
                   <div className="flex items-center space-x-4 mb-3">
                     <div className="flex items-center">
                       <span className="text-yellow-500 mr-1">★</span>
@@ -252,11 +431,16 @@ const PropertyDetail = () => {
                   </div>
                 </div>
               </div>
+              <div className="mt-4 pt-4 border-t">
+                <p className="text-sm text-gray-500 text-center">
+                  Click to view complete builder profile and all projects
+                </p>
+              </div>
             </div>
           </div>
 
    
-          <div className="lg:col-span-1">
+          <div ref={sidebarRef} className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow-lg p-6 sticky top-24">
               <h3 className="text-3xl font-bold text-orange-500 mb-6">{property.price}</h3>
               

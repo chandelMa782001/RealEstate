@@ -1,27 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FaEnvelope, FaLock, FaTimes } from 'react-icons/fa';
 import { useAppContext } from '../context/AppContext';
+import gsap from 'gsap';
 
 const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
   const { login } = useAppContext();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const modalRef = useRef(null);
+  const overlayRef = useRef(null);
+
+  useEffect(() => {
+    if (isOpen && modalRef.current) {
+      gsap.fromTo(
+        overlayRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.3 }
+      );
+      gsap.fromTo(
+        modalRef.current,
+        { scale: 0.8, opacity: 0, y: -50 },
+        { scale: 1, opacity: 1, y: 0, duration: 0.4, ease: 'back.out(1.5)' }
+      );
+    }
+  }, [isOpen]);
+
+  const handleClose = () => {
+    gsap.to(modalRef.current, {
+      scale: 0.8,
+      opacity: 0,
+      y: -50,
+      duration: 0.3,
+      ease: 'power2.in',
+      onComplete: onClose
+    });
+  };
 
   const handleLogin = (e) => {
     e.preventDefault();
     const userData = { email, name: email.split('@')[0] };
     login(userData);
-    onClose();
+    handleClose();
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-transparent flex items-center justify-center z-[60]">
-      <div className="bg-white rounded-lg shadow-2xl w-full max-w-md mx-4 relative">
+    <div ref={overlayRef} className="fixed inset-0 bg-transparent flex items-center justify-center z-[60]">
+      <div ref={modalRef} className="bg-white rounded-lg shadow-2xl w-full max-w-md mx-4 relative">
         
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition"
         >
           <FaTimes size={20} />

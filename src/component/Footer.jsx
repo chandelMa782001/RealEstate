@@ -21,8 +21,6 @@ const Footer = () => {
             <p className="text-gray-300 text-base mb-4 leading-relaxed">
               Maigreat Group in real estate established in the year 2015, with a combined experience of 10+ years and an aim of providing ultra-luxury residences to clients for an abode or future investments. We are working on multiple projects in a windswept with unique conceptual theme, transversal skills of our teammates.
             </p>
-           
-
             <div className="mt-6 space-y-3">
               <div className="flex items-start space-x-3">
                 <FaMapMarkerAlt className="text-orange-500 mt-1 flex-shrink-0 text-base" />

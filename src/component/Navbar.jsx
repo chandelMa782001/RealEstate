@@ -2,17 +2,25 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CgProfile } from "react-icons/cg";
 import { RiArrowDropDownLine } from "react-icons/ri";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaSignOutAlt } from "react-icons/fa";
 import { images } from '../../utils/Image';
+import { useAppContext } from '../context/AppContext';
 import LoginModal from './LoginModal';
 import SignupModal from './SignupModal';
 
 const Navbar = () => {
+  const { 
+    isAuthenticated, 
+    user, 
+    logout, 
+    isLoginModalOpen, 
+    setIsLoginModalOpen, 
+    isSignupModalOpen, 
+    setIsSignupModalOpen 
+  } = useAppContext();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isSignupOpen, setIsSignupOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('Buy');
   const [propertyType, setPropertyType] = useState('Residential');
   const [searchCity, setSearchCity] = useState('');
@@ -130,7 +138,7 @@ const Navbar = () => {
             <a href="#" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base">For Buyers</a>
             <a href="#" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base">For Tenants</a>
             <a href="#" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base">For Owners</a>
-            <a href="#" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base">For Dealers / Builders</a>
+            <Link to="/builders" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base">For Dealers / Builders</Link>
           
           
             <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold transition whitespace-nowrap text-base">
@@ -154,13 +162,21 @@ const Navbar = () => {
               {isUserMenuOpen && (
                 <div className="absolute  right-0 top-full  pt-2">
                   <div className="bg-white rounded-lg shadow-2xl py-4 w-72 border border-gray-200">
+                  {/* User Info or Login Button */}
                   <div className="px-6 py-3 border-b border-gray-200">
-                    <button 
-                      onClick={() => setIsLoginOpen(true)}
-                      className="text-blue-600 font-bold text-lg hover:text-blue-700 transition"
-                    >
-                      LOGIN / REGISTER
-                    </button>
+                    {isAuthenticated ? (
+                      <div>
+                        <p className="text-gray-800 font-bold text-lg">Welcome!</p>
+                        <p className="text-gray-600 text-sm">{user?.name || user?.email}</p>
+                      </div>
+                    ) : (
+                      <button 
+                        onClick={() => setIsLoginModalOpen(true)}
+                        className="text-blue-600 cursor-pointer font-bold text-lg hover:text-blue-700 transition"
+                      >
+                        LOGIN / REGISTER
+                      </button>
+                    )}
                   </div>
                   
                   <div className="py-2">
@@ -180,11 +196,26 @@ const Navbar = () => {
                       Contacted
                     </a>
                   </div>
+                  
                   <div className="px-6 py-3 border-t border-gray-200">
-                    <button className="flex items-center justify-between w-full text-gray-800 font-semibold hover:text-orange-500 transition">
+                    <button className="flex items-center justify-between w-full text-gray-800 font-semibold hover:text-orange-500 transition mb-3">
                       <span>Post Property</span>
                       <span className="bg-green-500 text-white text-xs px-3 py-1 rounded font-bold">FREE</span>
                     </button>
+                    
+                    {/* Logout Button */}
+                    {isAuthenticated && (
+                      <button 
+                        onClick={() => {
+                          logout();
+                          setIsUserMenuOpen(false);
+                        }}
+                        className="flex items-center justify-center w-full text-white bg-red-500 hover:bg-red-600 py-2 rounded-lg font-semibold transition"
+                      >
+                        <FaSignOutAlt className="mr-2" />
+                        Logout
+                      </button>
+                    )}
                   </div>
                   </div>
                 </div>
@@ -204,7 +235,7 @@ const Navbar = () => {
             <a href="#" className="block text-gray-700 hover:text-orange-500 transition">For Buyers</a>
             <a href="#" className="block text-gray-700 hover:text-orange-500 transition">For Tenants</a>
             <a href="#" className="block text-gray-700 hover:text-orange-500 transition">For Owners</a>
-            <a href="#" className="block text-gray-700 hover:text-orange-500 transition">For Dealers / Builders</a>
+            <Link to="/builders" className="block text-gray-700 hover:text-orange-500 transition">For Dealers / Builders</Link>
             <a href="#" className="block text-gray-700 hover:text-orange-500 transition">Insights</a>
             <button className="w-full bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-semibold transition">
               Post property FREE
@@ -215,21 +246,21 @@ const Navbar = () => {
 
    
       <LoginModal 
-        isOpen={isLoginOpen} 
-        onClose={() => setIsLoginOpen(false)}
+        isOpen={isLoginModalOpen} 
+        onClose={() => setIsLoginModalOpen(false)}
         onSwitchToSignup={() => {
-          setIsLoginOpen(false);
-          setIsSignupOpen(true);
+          setIsLoginModalOpen(false);
+          setIsSignupModalOpen(true);
         }}
       />
       
      
       <SignupModal 
-        isOpen={isSignupOpen} 
-        onClose={() => setIsSignupOpen(false)}
+        isOpen={isSignupModalOpen} 
+        onClose={() => setIsSignupModalOpen(false)}
         onSwitchToLogin={() => {
-          setIsSignupOpen(false);
-          setIsLoginOpen(true);
+          setIsSignupModalOpen(false);
+          setIsLoginModalOpen(true);
         }}
       />
     </nav>

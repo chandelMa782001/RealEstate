@@ -1,8 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import gsap from 'gsap';
 
 const Hero = () => {
-  const [activeTab, setActiveTab] = useState('PLOT');
-  const [searchType, setSearchType] = useState('Commercial Plot');
+  const [activeTab, setActiveTab] = useState('Residential');
+  const [searchType, setSearchType] = useState('Commercial Residential');
+  const titleRef = useRef(null);
+  const subtitleRef = useRef(null);
+  const searchBoxRef = useRef(null);
+
+  useEffect(() => {
+  
+    const tl = gsap.timeline();
+    
+    tl.fromTo(
+      titleRef.current,
+      { opacity: 0, y: -50 },
+      { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }
+    )
+    .fromTo(
+      subtitleRef.current,
+      { opacity: 0, y: -30 },
+      { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' },
+      '-=0.4'
+    )
+    .fromTo(
+      searchBoxRef.current,
+      { opacity: 0, y: 50, scale: 0.9 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'back.out(1.2)' },
+      '-=0.4'
+    );
+  }, []);
 
   return (
     <div className="relative min-h-screen">
@@ -18,25 +45,25 @@ const Hero = () => {
         <div className="flex justify-end space-x-4 mb-12">
         </div>
         <div className="text-center mb-12">
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">
+          <h1 ref={titleRef} className="text-5xl md:text-6xl font-bold text-white mb-4">
             Fullfil Your <span className="text-orange-500">Trust</span>
           </h1>
-          <h2 className="text-4xl md:text-5xl font-bold text-white">
+          <h2 ref={subtitleRef} className="text-4xl md:text-5xl font-bold text-white">
             To Find Your <span className="text-orange-500">Dream</span> Property
           </h2>
         </div>
-        <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-2xl p-6">
+        <div ref={searchBoxRef} className="max-w-3xl mx-auto bg-white rounded-lg shadow-2xl p-6">
      
           <div className="flex space-x-2 mb-6">
             <button
-              onClick={() => setActiveTab('PLOT')}
+              onClick={() => setActiveTab('Residential')}
               className={`flex-1 py-3 px-6 rounded-lg font-semibold transition ${
-                activeTab === 'PLOT'
+                activeTab === 'Residential'
                   ? 'bg-orange-500 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              🏠 PLOT
+              🏠 Residential
             </button>
             <button
               onClick={() => setActiveTab('FLAT')}
@@ -77,10 +104,10 @@ const Hero = () => {
               onChange={(e) => setSearchType(e.target.value)}
               className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
             >
-              <option>Commercial Plot</option>
-              <option>Residential Plot</option>
+              <option>Commercial </option>
+              <option>Residential </option>
               <option>Agricultural Land</option>
-              <option>Industrial Plot</option>
+              <option>Industrial Residential</option>
             </select>
             <button className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-semibold transition">
               🔍 Search

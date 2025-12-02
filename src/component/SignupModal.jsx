@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FaUser, FaEnvelope, FaPhone, FaLock, FaTimes, FaEye, FaEyeSlash } from 'react-icons/fa';
-import { toast } from 'react-toastify';
 import { useAppContext } from '../context/AppContext';
+import gsap from 'gsap';
 
 const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
   const { signup } = useAppContext();
@@ -15,18 +15,48 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
   
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [error, setError] = useState('');
+  const modalRef = useRef(null);
+  const overlayRef = useRef(null);
+
+  useEffect(() => {
+    if (isOpen && modalRef.current) {
+      gsap.fromTo(
+        overlayRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.3 }
+      );
+      gsap.fromTo(
+        modalRef.current,
+        { scale: 0.8, opacity: 0, y: -50 },
+        { scale: 1, opacity: 1, y: 0, duration: 0.4, ease: 'back.out(1.5)' }
+      );
+    }
+  }, [isOpen]);
+
+  const handleClose = () => {
+    gsap.to(modalRef.current, {
+      scale: 0.8,
+      opacity: 0,
+      y: -50,
+      duration: 0.3,
+      ease: 'power2.in',
+      onComplete: onClose
+    });
+  };
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
+    setError('');
   };
 
   const handleSignup = (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      toast.error('Passwords do not match!');
+      setError('Passwords do not match!');
       return;
     }
     const userData = { 
@@ -35,15 +65,16 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
       mobile: formData.mobile 
     };
     signup(userData);
-    onClose();
+    handleClose();
   };
+
   if (!isOpen) return null;
   return (
-    <div className="fixed top-[13%] inset-0 bg-transparent flex items-center justify-center">
-      <div className="bg-white rounded-lg shadow-2xl w-full max-w-md mx-4 relative">
+    <div ref={overlayRef} className="fixed top-[13%] inset-0 bg-transparent flex items-center justify-center">
+      <div ref={modalRef} className="bg-white rounded-lg shadow-2xl w-full max-w-md mx-4 relative">
        
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition"
         >
           <FaTimes size={20} />
@@ -52,6 +83,11 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
           <h2 className="text-2xl font-bold text-gray-800 mb-6 border-l-4 border-orange-500 pl-3">
             Sign Up
           </h2>
+          {error && (
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+              {error}
+            </div>
+          )}
           <form onSubmit={handleSignup} className="space-y-4">
             <div className="relative">
               <input
@@ -110,7 +146,6 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
                 {showPassword ? <FaEyeSlash size={18} className=' text-orange-500' /> : <FaEye size={18} className=' text-orange-500' />}
               </button>
             </div>
-
             <div className="relative">
               <input
                 type={showConfirmPassword ? "text" : "password"}
@@ -144,7 +179,6 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
                 Login Here
               </button>
             </div>
-
             <div className="flex space-x-4 pt-4">
               <button
                 type="submit"

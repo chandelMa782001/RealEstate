@@ -1,8 +1,65 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAppContext } from '../context/AppContext';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const FeaturedProperties = () => {
   const navigate = useNavigate();
+  const { showNotification } = useAppContext();
+  const cardsRef = useRef([]);
+
+  useEffect(() => {
+    // Animate property cards on scroll
+    cardsRef.current.forEach((card, index) => {
+      if (card) {
+        gsap.fromTo(
+          card,
+          { 
+            opacity: 0, 
+            y: 50,
+            scale: 0.9
+          },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.6,
+            delay: index * 0.1,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: card,
+              start: 'top 85%',
+              toggleActions: 'play none none none'
+            }
+          }
+        );
+      }
+    });
+  }, []);
+
+  const handleViewDetails = (property, e) => {
+    e.stopPropagation();
+    
+    // GSAP button animation
+    gsap.to(e.currentTarget, {
+      scale: 0.9,
+      duration: 0.1,
+      yoyo: true,
+      repeat: 1,
+      ease: 'power2.inOut'
+    });
+
+    // Show notification
+    showNotification(`Loading ${property.title}...`, 'info', 2000);
+
+    // Navigate with slight delay for smooth animation
+    setTimeout(() => {
+      navigate(`/property/${property.id}`);
+    }, 300);
+  };
   const properties = [
     {
       id: 1,
@@ -101,11 +158,15 @@ const FeaturedProperties = () => {
         <p className="text-gray-600 text-center mb-12">Discover our handpicked selection of premium properties</p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {properties.map((property) => (
-            <div key={property.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition group"  onClick={() => navigate(`/property/${property.id}`)}>
+          {properties.map((property, index) => (
+            <div 
+               onClick={(e) => handleViewDetails(property, e)}
+              key={property.id} 
+              ref={(el) => (cardsRef.current[index] = el)}
+              className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group"
+            >
               <div className="relative overflow-hidden">
                 <img 
-                
                   src={property.image} 
                   alt={property.title}
                   className="w-full h-48 object-cover group-hover:scale-110 transition duration-300"
@@ -131,8 +192,8 @@ const FeaturedProperties = () => {
                 <div className="flex items-center justify-between pt-3 border-t">
                   <span className="text-2xl font-bold text-orange-500">{property.price}</span>
                   <button 
-                    onClick={() => navigate(`/property/${property.id}`)}
-                    className="bg-gray-800 hover:bg-gray-900 text-white px-4 py-2 rounded-lg text-sm transition"
+                    onClick={(e) => handleViewDetails(property, e)}
+                    className="bg-gray-800 hover:bg-gray-900 text-white px-4 py-2 rounded-lg text-sm transition-all duration-200 hover:scale-105 active:scale-95"
                   >
                     View Details
                   </button>
