@@ -39,7 +39,7 @@ const LoanButton = () => {
             </button>
             <div className="modal-header">
               <h2>🪙 Apply for Home Loan</h2>
-              <p className="modal-subtitle">Get instant loan against your gold</p>
+              <p className="modal-subtitle">Get instant Home loan </p>
             </div>
             <form onSubmit={handleSubmit}>
               <div className="form-row">

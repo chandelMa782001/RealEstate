@@ -1,7 +1,6 @@
 import React from 'react';
 import { FaHandshake, FaHeadset, FaHardHat, FaHandHoldingUsd } from 'react-icons/fa';
 import {images} from '../../utils/Image'
-
 const WhyChooseUs = () => {
   const features = [
     {
@@ -53,5 +52,4 @@ const WhyChooseUs = () => {
     </div>
   );
 };
-
 export default WhyChooseUs;

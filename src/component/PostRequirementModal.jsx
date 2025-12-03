@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './PostRequirementModal.css';
-
 const PostRequirementModal = ({ isOpen, onClose }) => {
   const [propertyCategory, setPropertyCategory] = useState('Residential');
   const [propertySubType, setPropertySubType] = useState('');
@@ -13,14 +12,12 @@ const PostRequirementModal = ({ isOpen, onClose }) => {
     location: '',
     requirements: ''
   });
-
   const propertyOptions = {
     Residential: ['Villa', 'Apartment', 'Independent House', 'Plot/Land'],
     Flat: ['1 BHK', '2 BHK', '3 BHK', '4 BHK', 'Studio Apartment'],
     Commercial: ['Office Space', 'Shops', 'Industrial Land', 'Warehouse'],
     Rent: ['Residential Rent', 'Commercial Rent', 'PG/Hostel']
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Requirement submitted:', { ...formData, propertyCategory, propertySubType });
@@ -43,18 +40,14 @@ const PostRequirementModal = ({ isOpen, onClose }) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
   if (!isOpen) return null;
-
   return (
     <div className="requirement-modal-overlay" onClick={onClose}>
       <div className="requirement-modal" onClick={(e) => e.stopPropagation()}>
         <button className="requirement-modal-close" onClick={onClose}>
           ×
         </button>
-        
         <h2 className="requirement-title">Post Your Requirement</h2>
-        
         <form onSubmit={handleSubmit} className="requirement-form">
           <div className="form-row">
             <div className="input-group">

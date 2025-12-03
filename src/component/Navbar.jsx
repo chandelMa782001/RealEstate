@@ -8,7 +8,6 @@ import { useAppContext } from '../Context/AppContext';
 import LoginModal from './LoginModal';
 import SignupModal from './SignupModal';
 import PostRequirementModal from './PostRequirementModal';
-
 const Navbar = () => {
   const { 
     isAuthenticated, 
@@ -22,6 +21,8 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isTenantsMenuOpen, setIsTenantsMenuOpen] = useState(false);
+  const [isOwnersMenuOpen, setIsOwnersMenuOpen] = useState(false);
   const [isPostRequirementOpen, setIsPostRequirementOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('Buy');
   const [propertyType, setPropertyType] = useState('Residential');
@@ -138,14 +139,215 @@ const Navbar = () => {
             </div>
             <Link to="/about-us" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base">About Us</Link>
             <a href="#" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base">For Buyers</a>
-            <a href="#" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base">For Tenants</a>
-            <a href="#" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base">For Owners</a>
+            
+            {/* For Tenants Dropdown */}
+            <div 
+              className="relative"
+              onMouseEnter={() => setIsTenantsMenuOpen(true)}
+              onMouseLeave={() => setIsTenantsMenuOpen(false)}
+            >
+              <div className="flex items-center text-gray-700 hover:text-orange-500 transition font-medium cursor-pointer whitespace-nowrap text-base">
+                For Tenants
+                <RiArrowDropDownLine 
+                  size="2em" 
+                  className={`transition-transform duration-300 ${isTenantsMenuOpen ? 'rotate-180' : 'rotate-0'}`}
+                />
+              </div>
+              {isTenantsMenuOpen && (
+                <div className="absolute left-1/2 -translate-x-1/2 top-full pt-2 z-50">
+                  <div className="bg-white text-gray-800 rounded-xl shadow-2xl w-[900px] max-w-[95vw] border border-gray-200 overflow-hidden">
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-0">
+                      {/* Left Section - Menu Categories */}
+                      <div className="col-span-1 md:col-span-3 bg-gray-50 p-4 md:p-6 space-y-4">
+                        <div>
+                          <h3 className="text-gray-700 font-bold text-sm md:text-base mb-2 uppercase tracking-wide">RENT A HOME</h3>
+                        </div>
+                        <div>
+                          <h3 className="text-gray-700 font-bold text-sm md:text-base mb-2 uppercase tracking-wide">PG/CO-LIVING</h3>
+                        </div>
+                        <div>
+                          <h3 className="text-gray-700 font-bold text-sm md:text-base mb-2 uppercase tracking-wide">COMMERCIAL</h3>
+                        </div>
+                        <div>
+                          <h3 className="text-gray-700 font-bold text-sm md:text-base mb-2 uppercase tracking-wide">POPULAR AREAS</h3>
+                        </div>
+                        <div>
+                          <h3 className="text-blue-600 font-bold text-sm md:text-base mb-2 uppercase tracking-wide flex items-center gap-2">
+                            INSIGHTS <span className="bg-blue-500 text-white text-xs px-2 py-0.5 rounded font-bold">NEW</span>
+                          </h3>
+                        </div>
+                        <div>
+                          <h3 className="text-gray-700 font-bold text-sm md:text-base mb-2 uppercase tracking-wide">ARTICLES & NEWS</h3>
+                        </div>
+                      </div>
+                      
+                      {/* Middle Section - Property Lists */}
+                      <div className="col-span-1 md:col-span-5 bg-white p-4 md:p-6">
+                        <h3 className="text-gray-500 text-xs font-semibold mb-3 uppercase tracking-wider">PROPERTIES IN DELHI SOUTH WEST</h3>
+                        <div className="space-y-2 text-sm">
+                          <a href="#" className="block text-gray-700 hover:text-orange-500 transition">Flats</a>
+                          <a href="#" className="block text-gray-700 hover:text-orange-500 transition">Builder Floors</a>
+                          <a href="#" className="block text-gray-700 hover:text-orange-500 transition">Independent House</a>
+                          <a href="#" className="block text-gray-700 hover:text-orange-500 transition">Serviced Apartments</a>
+                          <a href="#" className="block text-gray-700 hover:text-orange-500 transition">Studio Apartments/1 RK Flats</a>
+                        </div>
+                      </div>
+                      
+                      {/* Right Section - Popular Searches & Insights */}
+                      <div className="col-span-1 md:col-span-4 bg-white p-4 md:p-6 border-l border-gray-100">
+                        <div className="mb-6">
+                          <h3 className="text-gray-500 text-xs font-semibold mb-3 uppercase tracking-wider">POPULAR SEARCHES</h3>
+                          <div className="space-y-2 text-sm">
+                            <a href="#" className="block text-gray-700 hover:text-orange-500 transition">Property for rent in Delhi South West</a>
+                            <a href="#" className="block text-gray-700 hover:text-orange-500 transition">Verified Property in Delhi South West</a>
+                          </div>
+                        </div>
+                        
+                        <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-4 rounded-lg">
+                          <div className="flex items-start gap-3">
+                            <div className="bg-blue-500 text-white p-2 rounded-lg">
+                              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+                                <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd"/>
+                              </svg>
+                            </div>
+                            <div className="flex-1">
+                              <h4 className="font-bold text-gray-800 text-sm mb-1 flex items-center gap-2">
+                                INTRODUCING Insights
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                              </h4>
+                              <ul className="space-y-1 text-xs text-gray-600">
+                                <li className="flex items-center gap-2">
+                                  <span className="text-blue-500">✓</span> Understand localities
+                                </li>
+                                <li className="flex items-center gap-2">
+                                  <span className="text-blue-500">✓</span> Read Resident Reviews
+                                </li>
+                                <li className="flex items-center gap-2">
+                                  <span className="text-blue-500">✓</span> Check Price Trends
+                                </li>
+                                <li className="flex items-center gap-2">
+                                  <span className="text-blue-500">✓</span> Tools, Utilities & more
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Bottom Contact Bar */}
+                    <div className="bg-gray-50 px-4 md:px-6 py-2 md:py-3 flex flex-col md:flex-row items-start md:items-center justify-center gap-2 text-xs md:text-sm border-t border-gray-200">
+                      <div className="text-gray-600 text-center">
+                        <span className="font-semibold">contact us toll free on</span>
+                        <span className="ml-2 text-blue-600 font-bold">1800 41 99099</span>
+                        <span className="text-gray-400 ml-1">(9AM-11PM IST)</span>
+                      </div>
+                      <span className="hidden md:inline text-gray-300">|</span>
+                      <div className="text-gray-600 text-center">
+                        Email us at <a href="mailto:services@99acres.com" className="text-blue-600 hover:underline">services@99acres.com</a>, or call us at <span className="font-semibold">1800 41 99099</span> <span className="text-gray-400">(IND Toll-Free)</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            {/* For Owners Dropdown */}
+            <div 
+              className="relative"
+              onMouseEnter={() => setIsOwnersMenuOpen(true)}
+              onMouseLeave={() => setIsOwnersMenuOpen(false)}
+            >
+              <div className="flex items-center text-gray-700 hover:text-orange-500 transition font-medium cursor-pointer whitespace-nowrap text-base">
+                For Owners
+                <RiArrowDropDownLine 
+                  size="2em" 
+                  className={`transition-transform duration-300 ${isOwnersMenuOpen ? 'rotate-180' : 'rotate-0'}`}
+                />
+              </div>
+              {isOwnersMenuOpen && (
+                <div className="absolute left-1/2 -translate-x-1/2 top-full pt-2 z-50">
+                  <div className="bg-white text-gray-800 rounded-xl shadow-2xl w-[850px] max-w-[95vw] border border-gray-200 overflow-hidden">
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-0">
+                      {/* Left Section - Menu Categories */}
+                      <div className="col-span-1 md:col-span-3 bg-gray-50 p-4 md:p-6 space-y-3">
+                        <div>
+                          <h3 className="text-gray-700 font-bold text-sm md:text-base mb-2 uppercase tracking-wide">OWNER OFFERINGS</h3>
+                        </div>
+                        <div>
+                          <h3 className="text-blue-600 font-bold text-sm md:text-base mb-2 uppercase tracking-wide flex items-center gap-2">
+                            INSIGHTS <span className="bg-blue-500 text-white text-xs px-2 py-0.5 rounded font-bold">NEW</span>
+                          </h3>
+                        </div>
+                        <div>
+                          <h3 className="text-gray-700 font-bold text-sm md:text-base mb-2 uppercase tracking-wide">ARTICLES & NEWS</h3>
+                        </div>
+                      </div>
+                      
+                      {/* Middle Section - Owner Services */}
+                      <div className="col-span-1 md:col-span-4 bg-white p-4 md:p-6">
+                        <h3 className="text-gray-500 text-xs font-semibold mb-3 uppercase tracking-wider">OWNER OFFERINGS</h3>
+                        <div className="space-y-2">
+                          <Link to="/post-property" className="flex items-center gap-2 text-sm text-gray-700 hover:text-orange-500 transition font-medium">
+                            <span>Post Property</span>
+                            <span className="bg-green-500 text-white text-xs px-2 py-0.5 rounded font-bold">FREE</span>
+                          </Link>
+                          <a href="#" className="block text-sm text-gray-700 hover:text-orange-500 transition">Owner Services</a>
+                          <a href="#" className="block text-sm text-gray-700 hover:text-orange-500 transition">My99acres</a>
+                          <a href="#" className="block text-sm text-gray-700 hover:text-orange-500 transition">View Responses</a>
+                        </div>
+                      </div>
+                      
+                      {/* Right Section - Promotional Card */}
+                      <div className="col-span-1 md:col-span-5 bg-gradient-to-br from-green-50 to-blue-50 p-4 md:p-6 flex flex-col md:flex-row items-center justify-between gap-4">
+                        <div className="flex-1 text-center md:text-left">
+                          <h2 className="text-lg md:text-xl font-bold text-gray-800 mb-2">
+                            Sell or rent faster at<br className="hidden md:block" /> the right price!
+                          </h2>
+                          <p className="text-sm text-gray-600 mb-4">
+                            List your property<br className="hidden md:block" /> now for FREE
+                          </p>
+                          <Link 
+                            to="/post-property"
+                            className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition shadow-lg text-sm"
+                          >
+                            Post Property
+                          </Link>
+                        </div>
+                        <div className="flex-shrink-0">
+                          <div className="w-20 h-20 md:w-32 md:h-32 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white text-3xl md:text-5xl">
+                            👨‍💼
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Bottom Contact Bar */}
+                    <div className="bg-gray-50 px-4 md:px-6 py-2 md:py-3 flex flex-col md:flex-row items-start md:items-center justify-center gap-2 text-xs md:text-sm border-t border-gray-200">
+                      <div className="text-gray-600 text-center">
+                        <span className="font-semibold">contact us toll free on</span>
+                        <span className="ml-2 text-blue-600 font-bold">1800 41 99099</span>
+                        <span className="text-gray-400 ml-1">(9AM-11PM IST)</span>
+                      </div>
+                      <span className="hidden md:inline text-gray-300">|</span>
+                      <div className="text-gray-600 text-center">
+                        Email us at <a href="mailto:services@99acres.com" className="text-blue-600 hover:underline">services@99acres.com</a>, or call us at <span className="font-semibold">1800 41 99099</span> <span className="text-gray-400">(IND Toll-Free)</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+            
             <Link to="/builders" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base">For Dealers / Builders</Link>
           
           
-            <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold transition whitespace-nowrap text-base">
+            <Link to="/post-property" className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold transition whitespace-nowrap text-base inline-block">
               Post property <span className="text-sm">FREE</span>
-            </button>
+            </Link>
              <div 
               className="relative"
               onMouseEnter={() => setIsUserMenuOpen(true)}
@@ -182,6 +384,9 @@ const Navbar = () => {
                   </div>
                   
                   <div className="py-2">
+                    <Link to="/dashboard" className="block px-6 py-3 text-gray-700 hover:bg-gray-50 transition font-semibold">
+                     My Dashboard
+                    </Link>
                     <a href="#" className="block px-6 py-3 text-gray-700 hover:bg-gray-50 transition">
                       My Activity
                     </a>
@@ -206,10 +411,10 @@ const Navbar = () => {
                   </div>
                   
                   <div className="px-6 py-3 border-t border-gray-200">
-                    <button className="flex items-center justify-between w-full text-gray-800 font-semibold hover:text-orange-500 transition mb-3">
+                    <Link to="/post-property" className="flex items-center justify-between w-full text-gray-800 font-semibold hover:text-orange-500 transition mb-3">
                       <span>Post Property</span>
                       <span className="bg-green-500 text-white text-xs px-3 py-1 rounded font-bold">FREE</span>
-                    </button>
+                    </Link>
                     
                     {/* Logout Button */}
                     {isAuthenticated && (
@@ -245,9 +450,9 @@ const Navbar = () => {
             <a href="#" className="block text-gray-700 hover:text-orange-500 transition">For Owners</a>
             <Link to="/builders" className="block text-gray-700 hover:text-orange-500 transition">For Dealers / Builders</Link>
             <a href="#" className="block text-gray-700 hover:text-orange-500 transition">Insights</a>
-            <button className="w-full bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-semibold transition">
+            <Link to="/post-property" className="block w-full bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-semibold transition text-center">
               Post property FREE
-            </button>
+            </Link>
           </div>
         )}
       </div>

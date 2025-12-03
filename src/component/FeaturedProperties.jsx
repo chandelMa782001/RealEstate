@@ -12,7 +12,7 @@ const FeaturedProperties = () => {
   const cardsRef = useRef([]);
 
   useEffect(() => {
-    // Animate property cards on scroll
+   
     cardsRef.current.forEach((card, index) => {
       if (card) {
         gsap.fromTo(
@@ -42,8 +42,6 @@ const FeaturedProperties = () => {
 
   const handleViewDetails = (property, e) => {
     e.stopPropagation();
-    
-    // GSAP button animation
     gsap.to(e.currentTarget, {
       scale: 0.9,
       duration: 0.1,
@@ -52,10 +50,8 @@ const FeaturedProperties = () => {
       ease: 'power2.inOut'
     });
 
-    // Show notification
-    showNotification(`Loading ${property.title}...`, 'info', 2000);
-
-    // Navigate with slight delay for smooth animation
+ 
+    // showNotification(`Loading ${property.title}...`, 'info', 2000);
     setTimeout(() => {
       navigate(`/property/${property.id}`);
     }, 300);
@@ -150,7 +146,6 @@ const FeaturedProperties = () => {
       image: 'https://images.unsplash.com/photo-1464146072230-91cabc968266?w=600'
     }
   ];
-
   return (
     <div className="bg-gray-50 py-16">
       <div className="max-w-7xl mx-auto px-4">
@@ -174,15 +169,13 @@ const FeaturedProperties = () => {
                 <div className="absolute top-3 right-3 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
                   {property.type}
                 </div>
-              </div>
-              
+              </div> 
               <div className="p-4">
                 <h3 className="text-xl font-bold text-gray-800 mb-2">{property.title}</h3>
                 <p className="text-gray-600 text-sm mb-3 flex items-center">
                   <span className="mr-1">📍</span>
                   {property.location}
                 </p>
-                
                 <div className="flex items-center justify-between mb-3 text-sm text-gray-600">
                   {property.beds && <span>🛏️ {property.beds} Beds</span>}
                   {property.baths && <span>🚿 {property.baths} Baths</span>}
@@ -206,5 +199,4 @@ const FeaturedProperties = () => {
     </div>
   );
 };
-
 export default FeaturedProperties;

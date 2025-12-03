@@ -4,7 +4,6 @@ import { AppProvider, useAppContext } from './Context/AppContext';
 import ProtectedRoute from './component/ProtectedRoute';
 import ScrollToTop from './component/ScrollToTop';
 import NotificationContainer from './component/NotificationContainer';
-import LoanButton from './component/LoanButton';
 import Home from './pages/Home';
 import AboutUs from './pages/AboutUs';
 import Projects from './pages/Projects';
@@ -12,6 +11,8 @@ import PropertyDetail from './pages/PropertyDetail';
 import ContactUs from './pages/ContactUs';
 import Builders from './pages/Builders';
 import BuilderDetail from './pages/BuilderDetail';
+import PostProperty from './pages/PostProperty';
+import Dashboard from './pages/Dashboard';
 import NotFound from './pages/NotFound';
 
 const AppContent = () => {
@@ -27,6 +28,8 @@ const AppContent = () => {
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/builders" element={<Builders />} />
         <Route path="/builder/:id" element={<BuilderDetail />} />
+        <Route path="/post-property" element={<PostProperty />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route 
           path="/property/:id" 
           element={
@@ -41,7 +44,6 @@ const AppContent = () => {
         notifications={notifications} 
         removeNotification={removeNotification} 
       />
-      <LoanButton />
     </>
   );
 };

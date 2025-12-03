@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import LoanButton from './LoanButton';
 
 const Hero = () => {
   const [activeTab, setActiveTab] = useState('Residential');
@@ -142,6 +143,7 @@ const Hero = () => {
           </div>
         </div>
       </div>
+      <LoanButton />
     </div>
   );
 };
