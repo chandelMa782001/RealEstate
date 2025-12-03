@@ -4,6 +4,7 @@ import { FaSearch, FaMapMarkerAlt, FaStar, FaBuilding, FaPhone, FaEnvelope } fro
 import Navbar from '../component/Navbar';
 import Footer from '../component/Footer';
 import gsap from 'gsap';
+import { images } from '../../utils/Image';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -25,7 +26,8 @@ const Builders = () => {
       specialization: 'Residential & Commercial',
       phone: '+91 9354527118',
       email: 'raghav.kumar@realestate.com',
-      image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600',
+      // image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600',
+      image:images.builder_1,
       description: 'Experienced real estate dealer with over 10 years of expertise in delivering quality residential and commercial projects.',
       completedProjects: ['Luxury Villas', 'Modern Apartments', 'Commercial Spaces']
     },
@@ -39,7 +41,8 @@ const Builders = () => {
       specialization: 'Luxury Residential',
       phone: '+91 124 4567890',
       email: 'priya.sharma@properties.com',
-      image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600',
+      // image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600',
+      image:images.builder_2,
       description: 'Trusted property dealer specializing in luxury residential properties across Delhi NCR.',
       completedProjects: ['Premium Apartments', 'Luxury Penthouses', 'Villa Projects']
     },
@@ -53,7 +56,8 @@ const Builders = () => {
       specialization: 'Sustainable Housing',
       phone: '+91 120 4567890',
       email: 'amit.verma@builders.com',
-      image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600',
+      // image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600',
+      image:images.builder_3,
       description: 'Committed to delivering innovative and sustainable real estate solutions with a focus on eco-friendly projects.',
       completedProjects: ['Green Apartments', 'Eco Villas', 'Smart Homes']
     },
@@ -67,7 +71,8 @@ const Builders = () => {
       specialization: 'Affordable & Premium',
       phone: '+91 124 7890123',
       email: 'neha.gupta@realty.com',
-      image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600',
+      // image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600',
+      image:images.builder_4,
       description: 'Building trust through quality properties, specializing in both affordable and premium segments.',
       completedProjects: ['Budget Apartments', 'Premium Flats', 'Residential Plots']
     },
@@ -81,7 +86,8 @@ const Builders = () => {
       specialization: 'Premium Residential',
       phone: '+91 11 4567890',
       email: 'vikram.singh@estates.com',
-      image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600',
+      // image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600',
+      image:images.builder_5,
       description: 'Renowned for uncompromising quality and customer satisfaction in premium residential projects.',
       completedProjects: ['Luxury Towers', 'Premium Societies', 'High-Rise Apartments']
     },
@@ -95,7 +101,8 @@ const Builders = () => {
       specialization: 'Mixed-Use Development',
       phone: '+91 120 9876543',
       email: 'anjali.mehta@properties.com',
-      image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600',
+      // image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600',
+      image:images.builder_6,
       description: 'Creating landmark projects across residential, commercial, and retail segments with expertise.',
       completedProjects: ['Mixed-Use Complexes', 'Shopping Centers', 'Residential Towers']
     },
@@ -109,7 +116,8 @@ const Builders = () => {
       specialization: 'Integrated Townships',
       phone: '+91 124 3456789',
       email: 'rohit.malhotra@builders.com',
-      image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600',
+      // image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600',
+      image:images.builder_7,
       description: 'Pioneer in creating integrated lifestyle communities with modern amenities and facilities.',
       completedProjects: ['Township Projects', 'Gated Communities', 'Residential Complexes']
     },

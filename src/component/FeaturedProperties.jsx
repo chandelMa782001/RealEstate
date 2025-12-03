@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../Context/AppContext';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { images } from '../../utils/Image';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -66,7 +67,8 @@ const FeaturedProperties = () => {
       beds: 4,
       baths: 3,
       area: '3500 sq.ft',
-      image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600'
+      // image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600'
+      image:images.house_1
     },
     {
       id: 2,
@@ -77,7 +79,9 @@ const FeaturedProperties = () => {
       beds: 3,
       baths: 2,
       area: '1800 sq.ft',
-      image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600'
+      // image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600'
+         image:images.house_2
+
     },
     {
       id: 3,
@@ -88,7 +92,8 @@ const FeaturedProperties = () => {
       beds: null,
       baths: 2,
       area: '2500 sq.ft',
-      image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600'
+      // image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600'
+      image:images.house_3
     },
     {
       id: 4,
@@ -99,7 +104,8 @@ const FeaturedProperties = () => {
       beds: null,
       baths: null,
       area: '200 sq.yd',
-      image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600'
+      image:images.house_4
+      // image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600'
     },
     {
       id: 5,
@@ -110,7 +116,8 @@ const FeaturedProperties = () => {
       beds: 5,
       baths: 4,
       area: '4200 sq.ft',
-      image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600'
+      // image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600'
+      image:images.house_5
     },
     {
       id: 6,
