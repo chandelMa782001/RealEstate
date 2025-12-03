@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import LoanButton from './LoanButton';
-
+import "../component/Hero.css"
 const Hero = () => {
   const [activeTab, setActiveTab] = useState('Residential');
   const [searchType, setSearchType] = useState('');
@@ -54,24 +54,24 @@ const Hero = () => {
       >
         <div className="absolute inset-0 bg-gradient-to-r from-green-900/70 to-green-700/50"></div>
       </div>
-      <div className="relative z-10 max-w-7xl mx-auto px-4 py-20">
-        <div className="flex justify-end space-x-4 mb-12">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20">
+        <div className="flex justify-end space-x-4 mb-8 sm:mb-12">
         </div>
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 sm:mb-12">
          
-          <h1 ref={titleRef} className="text-5xl md:text-6xl font-bold text-white mb-4">
+          <h1 ref={titleRef} className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-3 sm:mb-4 px-2">
             Fullfil Your <span className="text-orange-500">Trust</span>
           </h1>
-          <h2 ref={subtitleRef} className="text-4xl md:text-5xl font-bold text-white">
+          <h2 ref={subtitleRef} className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white px-2">
             To Find Your <span className="text-orange-500">Dream</span> Property
           </h2>
         </div>
-        <div ref={searchBoxRef} className="max-w-3xl mx-auto bg-white rounded-lg shadow-2xl p-6">
+        <div ref={searchBoxRef} className="max-w-3xl mx-auto bg-white rounded-lg shadow-2xl p-4 sm:p-6">
      
-          <div className="flex space-x-2 mb-6">
+          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 mb-4 sm:mb-6">
             <button
               onClick={() => handleTabChange('Residential')}
-              className={`flex-1 py-3 px-6 rounded-lg font-semibold transition ${
+              className={`flex-1 py-2 sm:py-3 px-3 sm:px-6 rounded-lg text-sm sm:text-base font-semibold transition ${
                 activeTab === 'Residential'
                   ? 'bg-orange-500 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -81,7 +81,7 @@ const Hero = () => {
             </button>
             <button
               onClick={() => handleTabChange('FLAT')}
-              className={`flex-1 py-3 px-6 rounded-lg font-semibold transition ${
+              className={`flex-1 py-2 sm:py-3 px-3 sm:px-6 rounded-lg text-sm sm:text-base font-semibold transition ${
                 activeTab === 'FLAT'
                   ? 'bg-orange-500 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -91,7 +91,7 @@ const Hero = () => {
             </button>
             <button
               onClick={() => handleTabChange('COMMERCIAL')}
-              className={`flex-1 py-3 px-6 rounded-lg font-semibold transition ${
+              className={`flex-1 py-2 sm:py-3 px-3 sm:px-6 rounded-lg text-sm sm:text-base font-semibold transition ${
                 activeTab === 'COMMERCIAL'
                   ? 'bg-orange-500 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -101,7 +101,7 @@ const Hero = () => {
             </button>
             <button
               onClick={() => handleTabChange('RENT')}
-              className={`flex-1 py-3 px-6 rounded-lg font-semibold transition ${
+              className={`flex-1 py-2 sm:py-3 px-3 sm:px-6 rounded-lg text-sm sm:text-base font-semibold transition ${
                 activeTab === 'RENT'
                   ? 'bg-orange-500 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -110,13 +110,11 @@ const Hero = () => {
               🔑 RENT
             </button>
           </div>
-
-       
-          <div className="flex space-x-2">
+          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
             <select
               value={searchType}
               onChange={(e) => setSearchType(e.target.value)}
-              className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white text-gray-800 font-medium text-base cursor-pointer hover:border-orange-400 transition-all appearance-none bg-no-repeat bg-right pr-10"
+              className="flex-1 px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white text-gray-800 font-medium text-sm sm:text-base cursor-pointer hover:border-orange-400 transition-all appearance-none bg-no-repeat bg-right pr-10"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23f97316' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
                 backgroundPosition: 'right 0.5rem center',
@@ -130,7 +128,7 @@ const Hero = () => {
                 </option>
               ))}
             </select>
-            <button className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-semibold transition-all hover:shadow-lg hover:scale-105">
+            <button className="bg-orange-500 hover:bg-orange-600 text-white px-6 sm:px-8 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-all hover:shadow-lg hover:scale-105 w-full sm:w-auto">
               🔍 Search
             </button>
           </div>

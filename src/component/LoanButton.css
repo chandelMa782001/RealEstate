@@ -70,6 +70,8 @@
   align-items: center;
   z-index: 2000;
   animation: fadeIn 0.3s ease;
+  padding: 20px;
+  overflow-y: auto;
 }
 
 @keyframes fadeIn {
@@ -87,10 +89,13 @@
   border-radius: 25px;
   max-width: 600px;
   width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
   position: relative;
   animation: slideUp 0.3s ease;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   border: 2px solid #FFD700;
+  margin: auto;
 }
 
 @keyframes slideUp {
@@ -129,37 +134,37 @@
 
 .modal-header {
   text-align: center;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
 .loan-modal h2 {
-  margin: 0 0 8px 0;
+  margin: 0 0 6px 0;
   color: #333;
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 700;
 }
 
 .modal-subtitle {
   margin: 0;
   color: #666;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 400;
 }
 
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 15px;
-  margin-bottom: 15px;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
   color: #333;
   font-weight: 600;
   font-size: 13px;
@@ -168,9 +173,9 @@
 .form-group input,
 .form-group select {
   width: 100%;
-  padding: 11px 14px;
+  padding: 10px 12px;
   border: 2px solid #e8e8e8;
-  border-radius: 12px;
+  border-radius: 10px;
   font-size: 14px;
   transition: all 0.3s ease;
   box-sizing: border-box;
@@ -190,20 +195,20 @@
 
 .loan-submit-btn {
   width: 100%;
-  padding: 14px;
+  padding: 12px;
   background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
   color: #000;
   border: none;
-  border-radius: 12px;
-  font-size: 16px;
+  border-radius: 10px;
+  font-size: 15px;
   font-weight: 700;
   cursor: pointer;
-  margin-top: 8px;
+  margin-top: 5px;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
   box-shadow: 0 4px 15px rgba(255, 165, 0, 0.3);
 }
 
@@ -223,35 +228,100 @@
 
 @media (max-width: 768px) {
   .loan-button {
-    bottom: 90px;
-    right: 20px;
-    padding: 10px 16px;
-    font-size: 12px;
+    bottom: 80px;
+    right: 15px;
+    padding: 8px 12px;
+    font-size: 10px;
+    border-radius: 12px;
+    border: 2px solid #FFD700;
+    gap: 3px;
   }
 
   .coin-icon {
-    font-size: 24px;
+    font-size: 20px;
   }
 
   .loan-text {
-    font-size: 12px;
+    font-size: 10px;
+    letter-spacing: 0.3px;
   }
 
   .loan-modal {
-    padding: 25px 20px;
+    padding: 20px 15px;
     width: 95%;
+    max-width: 95%;
+    border-radius: 15px;
+    max-height: 85vh;
+  }
+
+  .modal-header {
+    margin-bottom: 15px;
   }
 
   .loan-modal h2 {
-    font-size: 22px;
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+
+  .modal-subtitle {
+    font-size: 11px;
   }
 
   .form-row {
     grid-template-columns: 1fr;
     gap: 0;
+    margin-bottom: 8px;
   }
 
   .form-group {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
+  }
+
+  .form-group label {
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+
+  .form-group input,
+  .form-group select {
+    padding: 9px 10px;
+    font-size: 13px;
+    border-radius: 8px;
+  }
+
+  .loan-submit-btn {
+    padding: 10px;
+    font-size: 13px;
+    margin-top: 5px;
+  }
+
+  .btn-icon {
+    font-size: 16px;
+  }
+
+  .loan-modal-close {
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    width: 30px;
+    height: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .loan-button {
+    bottom: 70px;
+    right: 10px;
+    padding: 6px 10px;
+    font-size: 9px;
+    border-radius: 10px;
+  }
+
+  .coin-icon {
+    font-size: 18px;
+  }
+
+  .loan-text {
+    font-size: 9px;
   }
 }

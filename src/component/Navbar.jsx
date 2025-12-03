@@ -443,16 +443,79 @@ const Navbar = () => {
           </button>
         </div>
         {isMenuOpen && (
-          <div className="md:hidden mt-4 space-y-3">
-            <a href="#" className="block text-gray-700 hover:text-orange-500 transition">Buy in ...</a>
-            <a href="#" className="block text-gray-700 hover:text-orange-500 transition">For Buyers</a>
-            <a href="#" className="block text-gray-700 hover:text-orange-500 transition">For Tenants</a>
-            <a href="#" className="block text-gray-700 hover:text-orange-500 transition">For Owners</a>
-            <Link to="/builders" className="block text-gray-700 hover:text-orange-500 transition">For Dealers / Builders</Link>
-            <a href="#" className="block text-gray-700 hover:text-orange-500 transition">Insights</a>
-            <Link to="/post-property" className="block w-full bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-semibold transition text-center">
+          <div className="md:hidden mt-4 space-y-3 pb-4">
+            <Link 
+              to="/" 
+              onClick={() => setIsMenuOpen(false)}
+              className="block text-gray-700 hover:text-orange-500 transition py-2"
+            >
+              🏠 Home
+            </Link>
+            <Link 
+              to="/about-us" 
+              onClick={() => setIsMenuOpen(false)}
+              className="block text-gray-700 hover:text-orange-500 transition py-2"
+            >
+              About Us
+            </Link>
+            <Link 
+              to="/projects" 
+              onClick={() => setIsMenuOpen(false)}
+              className="block text-gray-700 hover:text-orange-500 transition py-2"
+            >
+              Projects
+            </Link>
+            <Link 
+              to="/builders" 
+              onClick={() => setIsMenuOpen(false)}
+              className="block text-gray-700 hover:text-orange-500 transition py-2"
+            >
+              Builders
+            </Link>
+            <Link 
+              to="/contact-us" 
+              onClick={() => setIsMenuOpen(false)}
+              className="block text-gray-700 hover:text-orange-500 transition py-2"
+            >
+              Contact Us
+            </Link>
+            {isAuthenticated && (
+              <Link 
+                to="/dashboard" 
+                onClick={() => setIsMenuOpen(false)}
+                className="block text-gray-700 hover:text-orange-500 transition py-2"
+              >
+                📊 My Dashboard
+              </Link>
+            )}
+            <Link 
+              to="/post-property" 
+              onClick={() => setIsMenuOpen(false)}
+              className="block w-full bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold transition text-center mt-4"
+            >
               Post property FREE
             </Link>
+            {!isAuthenticated ? (
+              <button 
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  setIsLoginModalOpen(true);
+                }}
+                className="block w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition text-center"
+              >
+                Login / Register
+              </button>
+            ) : (
+              <button 
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  logout();
+                }}
+                className="block w-full bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-semibold transition text-center"
+              >
+                Logout
+              </button>
+            )}
           </div>
         )}
       </div>
