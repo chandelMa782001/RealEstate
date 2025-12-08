@@ -13,6 +13,8 @@ const PropertyDetail = () => {
   const { showNotification } = useAppContext();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showShareMenu, setShowShareMenu] = useState(false);
+  const [userLocation, setUserLocation] = useState(null);
+  const [showMap, setShowMap] = useState(false);
   const contentRef = useRef(null);
   const sidebarRef = useRef(null);
   const shareMenuRef = useRef(null);
@@ -64,6 +66,7 @@ const PropertyDetail = () => {
     1: {
       title: 'Luxury Villa in Gurgaon',
       location: 'Sector 47, Gurgaon',
+      coordinates: { lat: 28.4211, lng: 77.0797 }, // Sector 47, Gurgaon coordinates
       price: '₹2.5 Cr',
       type: 'Villa',
       beds: 4,
@@ -99,6 +102,7 @@ const PropertyDetail = () => {
     2: {
       title: 'Modern Apartment',
       location: 'Dwarka, New Delhi',
+      coordinates: { lat: 28.5921, lng: 77.0460 }, // Dwarka, Delhi coordinates
       price: '₹85 Lac',
       type: 'Apartment',
       beds: 3,
@@ -187,19 +191,19 @@ const PropertyDetail = () => {
       
       <div className="max-w-7xl mx-auto px-4 py-8 slide-in-right">
       
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <button 
             onClick={() => navigate(-1)}
-            className="flex items-center text-gray-600 hover:text-orange-500 transition bg-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg"
+            className="flex items-center text-gray-600 hover:text-orange-500 transition bg-white px-3 sm:px-4 py-2 rounded-lg shadow-md hover:shadow-lg text-sm sm:text-base"
           >
             <FaChevronLeft className="mr-2" />
             Back to Properties
           </button>
 
-          <div className="relative">
+          <div className="relative w-full sm:w-auto">
             <button 
               onClick={() => setShowShareMenu(!showShareMenu)}
-              className="flex items-center text-white bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition"
+              className="flex items-center justify-center w-full sm:w-auto text-white bg-orange-500 hover:bg-orange-600 px-3 sm:px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition text-sm sm:text-base"
             >
               <FaShare className="mr-2" />
               Share Property
@@ -303,136 +307,219 @@ const PropertyDetail = () => {
 
         
             <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h1 className="text-3xl font-bold text-gray-800 mb-2">{property.title}</h1>
-                  <p className="text-gray-600 flex items-center text-lg">
-                    <FaMapMarkerAlt className="mr-2 text-orange-500" />
-                    {property.location}
-                  </p>
+              <div className="flex flex-col sm:flex-row items-start justify-between mb-4 gap-4">
+                <div className="flex-1 w-full">
+                  <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">{property.title}</h1>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
+                    <p className="text-gray-600 flex items-center text-base sm:text-lg">
+                      <FaMapMarkerAlt className="mr-2 text-orange-500 flex-shrink-0" />
+                      <span className="break-words">{property.location}</span>
+                    </p>
+                    <button
+                      onClick={() => {
+                        setUserLocation(property.coordinates);
+                        setShowMap(true);
+                        showNotification(`Showing ${property.location} on map`, 'success', 3000);
+                      }}
+                      className="flex items-center gap-2 px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded-lg transition whitespace-nowrap"
+                    >
+                      <FaMapMarkerAlt />
+                      <span>My Location</span>
+                    </button>
+                  </div>
                 </div>
-                <div className="bg-orange-500 text-white px-4 py-2 rounded-lg font-semibold">
+                <div className="bg-orange-500 text-white px-4 py-2 rounded-lg font-semibold text-sm sm:text-base whitespace-nowrap">
                   {property.type}
                 </div>
               </div>
 
-              <div className="flex items-center space-x-6 mb-6 pb-6 border-b">
+              <div className="flex flex-wrap items-center gap-4 sm:gap-6 mb-6 pb-6 border-b">
                 {property.beds && (
                   <div className="flex items-center text-gray-700">
-                    <FaBed className="mr-2 text-orange-500 text-xl" />
-                    <span className="font-semibold">{property.beds} Bedrooms</span>
+                    <FaBed className="mr-2 text-orange-500 text-lg sm:text-xl" />
+                    <span className="font-semibold text-sm sm:text-base">{property.beds} Bedrooms</span>
                   </div>
                 )}
                 {property.baths && (
                   <div className="flex items-center text-gray-700">
-                    <FaBath className="mr-2 text-orange-500 text-xl" />
-                    <span className="font-semibold">{property.baths} Bathrooms</span>
+                    <FaBath className="mr-2 text-orange-500 text-lg sm:text-xl" />
+                    <span className="font-semibold text-sm sm:text-base">{property.baths} Bathrooms</span>
                   </div>
                 )}
                 <div className="flex items-center text-gray-700">
-                  <FaRulerCombined className="mr-2 text-orange-500 text-xl" />
-                  <span className="font-semibold">{property.area}</span>
+                  <FaRulerCombined className="mr-2 text-orange-500 text-lg sm:text-xl" />
+                  <span className="font-semibold text-sm sm:text-base">{property.area}</span>
                 </div>
               </div>
 
               <h2 className="text-2xl font-bold text-gray-800 mb-4">Description</h2>
               <p className="text-gray-600 leading-relaxed mb-6">{property.description}</p>
 
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">Property Details</h2>
-              <div className="grid grid-cols-2 gap-4 mb-6">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4">Property Details</h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
                 <div>
-                  <p className="text-gray-500 text-sm">Property ID</p>
-                  <p className="font-semibold text-gray-800">{property.propertyId}</p>
+                  <p className="text-gray-500 text-xs sm:text-sm">Property ID</p>
+                  <p className="font-semibold text-gray-800 text-sm sm:text-base">{property.propertyId}</p>
                 </div>
                 <div>
-                  <p className="text-gray-500 text-sm">Status</p>
-                  <p className="font-semibold text-gray-800">{property.status}</p>
+                  <p className="text-gray-500 text-xs sm:text-sm">Status</p>
+                  <p className="font-semibold text-gray-800 text-sm sm:text-base">{property.status}</p>
                 </div>
                 <div>
-                  <p className="text-gray-500 text-sm">Facing</p>
-                  <p className="font-semibold text-gray-800">{property.facing}</p>
+                  <p className="text-gray-500 text-xs sm:text-sm">Facing</p>
+                  <p className="font-semibold text-gray-800 text-sm sm:text-base">{property.facing}</p>
                 </div>
                 <div>
-                  <p className="text-gray-500 text-sm">Furnished</p>
-                  <p className="font-semibold text-gray-800">{property.furnished}</p>
+                  <p className="text-gray-500 text-xs sm:text-sm">Furnished</p>
+                  <p className="font-semibold text-gray-800 text-sm sm:text-base">{property.furnished}</p>
                 </div>
                 <div>
-                  <p className="text-gray-500 text-sm">Floor</p>
-                  <p className="font-semibold text-gray-800">{property.floor} of {property.totalFloors}</p>
+                  <p className="text-gray-500 text-xs sm:text-sm">Floor</p>
+                  <p className="font-semibold text-gray-800 text-sm sm:text-base">{property.floor} of {property.totalFloors}</p>
                 </div>
                 <div>
-                  <p className="text-gray-500 text-sm">Parking</p>
-                  <p className="font-semibold text-gray-800">{property.parking}</p>
+                  <p className="text-gray-500 text-xs sm:text-sm">Parking</p>
+                  <p className="font-semibold text-gray-800 text-sm sm:text-base">{property.parking}</p>
                 </div>
               </div>
 
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">Features</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4">Features</h2>
               <div className="flex flex-wrap gap-2 mb-6">
                 {property.features.map((feature, index) => (
-                  <span key={index} className="bg-orange-100 text-orange-700 px-4 py-2 rounded-full text-sm">
+                  <span key={index} className="bg-orange-100 text-orange-700 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm">
                     {feature}
                   </span>
                 ))}
               </div>
 
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">Amenities</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4">Amenities</h2>
               <div className="flex flex-wrap gap-2 mb-6">
                 {property.amenities.map((amenity, index) => (
-                  <span key={index} className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm">
+                  <span key={index} className="bg-blue-100 text-blue-700 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm">
                     {amenity}
                   </span>
                 ))}
               </div>
+
+              {/* Location Map */}
+              {showMap && userLocation && (
+                <div className="mt-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Property Location</h2>
+                    <button
+                      onClick={() => setShowMap(false)}
+                      className="text-gray-500 hover:text-gray-700 text-xs sm:text-sm font-semibold"
+                    >
+                      Hide Map
+                    </button>
+                  </div>
+                  <div className="bg-gray-100 rounded-lg overflow-hidden shadow-lg">
+                    <iframe
+                      title="Property Location Map"
+                      width="100%"
+                      height="350"
+                      frameBorder="0"
+                      style={{ border: 0 }}
+                      src={`https://www.google.com/maps?q=${userLocation.lat},${userLocation.lng}&output=embed&z=16`}
+                      allowFullScreen
+                      className="sm:h-[450px]"
+                    />
+                    <div className="bg-white p-3 sm:p-4 border-t">
+                      <div className="flex items-center gap-2 mb-3">
+                        <FaMapMarkerAlt className="text-orange-500 text-lg sm:text-xl flex-shrink-0" />
+                        <p className="text-sm sm:text-base font-semibold text-gray-800 break-words">
+                          {property.location}
+                        </p>
+                      </div>
+                      <p className="text-xs sm:text-sm text-gray-600 mb-4">
+                        <strong>Coordinates:</strong> {userLocation.lat.toFixed(6)}, {userLocation.lng.toFixed(6)}
+                      </p>
+                      <div className="flex flex-col sm:flex-row gap-2">
+                        <a
+                          href={`https://www.google.com/maps?q=${userLocation.lat},${userLocation.lng}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-1 text-center bg-blue-500 hover:bg-blue-600 text-white py-2 px-3 sm:px-4 rounded-lg text-xs sm:text-sm font-semibold transition"
+                        >
+                          Open in Google Maps
+                        </a>
+                        <button
+                          onClick={() => {
+                            if (navigator.geolocation) {
+                              navigator.geolocation.getCurrentPosition(
+                                (position) => {
+                                  const userLat = position.coords.latitude;
+                                  const userLng = position.coords.longitude;
+                                  window.open(
+                                    `https://www.google.com/maps/dir/${userLat},${userLng}/${userLocation.lat},${userLocation.lng}`,
+                                    '_blank'
+                                  );
+                                },
+                                () => {
+                                  showNotification('Please enable location services to get directions', 'error', 3000);
+                                }
+                              );
+                            }
+                          }}
+                          className="flex-1 text-center bg-green-500 hover:bg-green-600 text-white py-2 px-3 sm:px-4 rounded-lg text-xs sm:text-sm font-semibold transition"
+                        >
+                          Get Directions
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
           
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-800">Builder Details</h2>
+            <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-3">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Builder Details</h2>
                 <button
                   onClick={() => navigate(`/builder/${property.builder.id}`)}
-                  className="text-orange-500 hover:text-orange-600 font-semibold text-sm flex items-center space-x-1 transition"
+                  className="text-orange-500 hover:text-orange-600 font-semibold text-xs sm:text-sm flex items-center space-x-1 transition"
                 >
                   <span>View Full Profile</span>
                   <span>→</span>
                 </button>
               </div>
               <div 
-                className="flex items-start space-x-6 cursor-pointer hover:bg-gray-50 p-4 rounded-lg transition"
+                className="flex flex-col sm:flex-row items-start space-y-4 sm:space-y-0 sm:space-x-6 cursor-pointer hover:bg-gray-50 p-3 sm:p-4 rounded-lg transition"
                 onClick={() => navigate(`/builder/${property.builder.id}`)}
               >
                 <img 
                   src={property.builder.logo} 
                   alt={property.builder.name}
-                  className="w-24 h-24 object-contain rounded-lg border border-gray-200"
+                  className="w-20 h-20 sm:w-24 sm:h-24 object-contain rounded-lg border border-gray-200 mx-auto sm:mx-0"
                 />
-                <div className="flex-1">
-                  <h3 className="text-xl font-bold text-gray-800 mb-2 hover:text-orange-500 transition">
+                <div className="flex-1 w-full pl-6">
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-2 hover:text-orange-500 transition">
                     {property.builder.name}
                   </h3>
-                  <div className="flex items-center space-x-4 mb-3">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-3 text-sm">
                     <div className="flex items-center">
                       <span className="text-yellow-500 mr-1">★</span>
                       <span className="font-semibold text-gray-700">{property.builder.rating}</span>
                     </div>
                     <span className="text-gray-500">|</span>
-                    <span className="text-gray-600">Established {property.builder.established}</span>
+                    <span className="text-gray-600 text-xs sm:text-sm">Established {property.builder.established}</span>
                   </div>
-                  <p className="text-gray-600 mb-4">{property.builder.description}</p>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-orange-50 p-3 rounded-lg">
-                      <p className="text-orange-600 font-semibold">{property.builder.experience}</p>
-                      <p className="text-gray-600 text-sm">Experience</p>
+                  <p className="text-gray-600 mb-4 text-sm sm:text-base">{property.builder.description}</p>
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                    <div className="bg-orange-50 p-2 sm:p-3 rounded-lg">
+                      <p className="text-orange-600 font-semibold text-sm sm:text-base">{property.builder.experience}</p>
+                      <p className="text-gray-600 text-xs sm:text-sm">Experience</p>
                     </div>
-                    <div className="bg-blue-50 p-3 rounded-lg">
-                      <p className="text-blue-600 font-semibold">{property.builder.projects}</p>
-                      <p className="text-gray-600 text-sm">Completed</p>
+                    <div className="bg-blue-50 p-2 sm:p-3 rounded-lg">
+                      <p className="text-blue-600 font-semibold text-sm sm:text-base">{property.builder.projects}</p>
+                      <p className="text-gray-600 text-xs sm:text-sm">Completed</p>
                     </div>
                   </div>
                 </div>
               </div>
               <div className="mt-4 pt-4 border-t">
-                <p className="text-sm text-gray-500 text-center">
+                <p className="text-xs sm:text-sm text-gray-500 text-center">
                   Click to view complete builder profile and all projects
                 </p>
               </div>
@@ -441,13 +528,13 @@ const PropertyDetail = () => {
 
    
           <div ref={sidebarRef} className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-lg p-6 sticky top-24">
-              <h3 className="text-3xl font-bold text-orange-500 mb-6">{property.price}</h3>
+            <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 lg:sticky lg:top-24">
+              <h3 className="text-2xl sm:text-3xl font-bold text-orange-500 mb-4 sm:mb-6">{property.price}</h3>
               
-              <div className="space-y-4 mb-6">
+              <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
                 <a 
                   href="tel:+919354527118"
-                  className="flex items-center justify-center space-x-3 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition"
+                  className="flex items-center justify-center space-x-3 bg-blue-600 hover:bg-blue-700 text-white py-2.5 sm:py-3 rounded-lg transition text-sm sm:text-base"
                 >
                   <FaPhone />
                   <span>Call Now</span>
@@ -457,7 +544,7 @@ const PropertyDetail = () => {
                   href="https://wa.me/919354527118"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center space-x-3 bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg transition"
+                  className="flex items-center justify-center space-x-3 bg-green-600 hover:bg-green-700 text-white py-2.5 sm:py-3 rounded-lg transition text-sm sm:text-base"
                 >
                   <FaWhatsapp />
                   <span>WhatsApp</span>
@@ -465,33 +552,33 @@ const PropertyDetail = () => {
                 
                 <a 
                   href="mailto:info@maigreatgroup.com"
-                  className="flex items-center justify-center space-x-3 bg-gray-600 hover:bg-gray-700 text-white py-3 rounded-lg transition"
+                  className="flex items-center justify-center space-x-3 bg-gray-600 hover:bg-gray-700 text-white py-2.5 sm:py-3 rounded-lg transition text-sm sm:text-base"
                 >
                   <FaEnvelope />
                   <span>Email</span>
                 </a>
               </div>
-              <div className="border-t pt-6">
-                <h4 className="font-bold text-gray-800 mb-4">Schedule a Visit</h4>
-                <form className="space-y-4">
+              <div className="border-t pt-4 sm:pt-6">
+                <h4 className="font-bold text-gray-800 mb-3 sm:mb-4 text-base sm:text-lg">Schedule a Visit</h4>
+                <form className="space-y-3 sm:space-y-4">
                   <input
                     type="text"
                     placeholder="Your Name"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm sm:text-base"
                   />
                   <input
                     type="tel"
                     placeholder="Phone Number"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm sm:text-base"
                   />
                   <input
                     type="email"
                     placeholder="Email"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm sm:text-base"
                   />
                   <button
                     type="submit"
-                    className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-lg font-semibold transition"
+                    className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2.5 sm:py-3 rounded-lg font-semibold transition text-sm sm:text-base"
                   >
                     Request Callback
                   </button>

@@ -12,12 +12,7 @@ const PostRequirementModal = ({ isOpen, onClose }) => {
     location: '',
     requirements: ''
   });
-  const propertyOptions = {
-    Residential: ['Villa', 'Apartment', 'Independent House', 'Plot/Land'],
-    Flat: ['1 BHK', '2 BHK', '3 BHK', '4 BHK', 'Studio Apartment'],
-    Commercial: ['Office Space', 'Shops', 'Industrial Land', 'Warehouse'],
-    Rent: ['Residential Rent', 'Commercial Rent', 'PG/Hostel']
-  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Requirement submitted:', { ...formData, propertyCategory, propertySubType });
@@ -61,7 +56,7 @@ const PostRequirementModal = ({ isOpen, onClose }) => {
               />
               <span className="input-icon">👤</span>
             </div>
-            
+          
             <div className="input-group">
               <input
                 type="email"
@@ -116,7 +111,6 @@ const PostRequirementModal = ({ isOpen, onClose }) => {
               </label>
             </div>
           </div>
-
           <div className="form-row">
             <div className="input-group">
               <input

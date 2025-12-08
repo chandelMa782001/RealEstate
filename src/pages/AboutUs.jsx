@@ -12,19 +12,19 @@ const AboutUs = () => {
       <Navbar />
       
    
-      <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white py-20">
+      <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white py-12 sm:py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-5xl font-bold mb-4">About Us</h1>
-          <p className="text-xl">Your Trusted Partner in Real Estate</p>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4">About Us</h1>
+          <p className="text-base sm:text-lg md:text-xl">Your Trusted Partner in Real Estate</p>
         </div>
       </div>
 
 
-      <div className="max-w-7xl mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      <div className="max-w-7xl mx-auto px-4 py-8 sm:py-12 md:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10 md:gap-12 items-center">
           <div>
-            <h2 className="text-4xl font-bold text-gray-800 mb-6">Who We Are</h2>
-            <p className="text-gray-600 text-lg leading-relaxed mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4 sm:mb-6">Who We Are</h2>
+            <p className="text-gray-600 text-base sm:text-lg leading-relaxed mb-4">
               Maigreat Group in real estate established in the year 2015, with a combined experience of 10+ years and an aim of providing ultra-luxury residences to clients for an abode or future investments.
             </p>
             <p className="text-gray-600 text-lg leading-relaxed mb-4">
@@ -44,10 +44,10 @@ const AboutUs = () => {
         </div>
       </div>
 
-      <div className="bg-white py-16">
+      <div className="bg-white py-8 sm:py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-4xl font-bold text-gray-800 mb-12 text-center">Our Core Values</h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-8 sm:mb-10 md:mb-12 text-center">Our Core Values</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
             <div className="text-center p-6">
               <div className="bg-orange-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <FaCheckCircle className="text-4xl text-orange-500" />
@@ -92,42 +92,42 @@ const AboutUs = () => {
       </div>
 
    
-      <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-16">
+      <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-8 sm:py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 text-center">
             <div>
-              <h3 className="text-5xl font-bold text-orange-500 mb-2">10+</h3>
-              <p className="text-xl">Years Experience</p>
+              <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-orange-500 mb-2">10+</h3>
+              <p className="text-sm sm:text-base md:text-xl">Years Experience</p>
             </div>
             <div>
-              <h3 className="text-5xl font-bold text-orange-500 mb-2">500+</h3>
-              <p className="text-xl">Happy Clients</p>
+              <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-orange-500 mb-2">500+</h3>
+              <p className="text-sm sm:text-base md:text-xl">Happy Clients</p>
             </div>
             <div>
-              <h3 className="text-5xl font-bold text-orange-500 mb-2">50+</h3>
-              <p className="text-xl">Projects Completed</p>
+              <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-orange-500 mb-2">50+</h3>
+              <p className="text-sm sm:text-base md:text-xl">Projects Completed</p>
             </div>
             <div>
-              <h3 className="text-5xl font-bold text-orange-500 mb-2">100%</h3>
-              <p className="text-xl">Client Satisfaction</p>
+              <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-orange-500 mb-2">100%</h3>
+              <p className="text-sm sm:text-base md:text-xl">Client Satisfaction</p>
             </div>
           </div>
         </div>
       </div>
 
    
-      <div className="max-w-7xl mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          <div className="bg-white p-8 rounded-lg shadow-lg">
-            <h2 className="text-3xl font-bold text-gray-800 mb-6">Our Mission</h2>
-            <p className="text-gray-600 text-lg leading-relaxed">
+      <div className="max-w-7xl mx-auto px-4 py-8 sm:py-12 md:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-12">
+          <div className="bg-white p-6 sm:p-8 rounded-lg shadow-lg">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">Our Mission</h2>
+            <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
               To provide exceptional real estate solutions that create lasting value for our clients through innovation, integrity, and unwavering commitment to excellence. We aim to make property ownership accessible and rewarding for everyone.
             </p>
           </div>
 
-          <div className="bg-white p-8 rounded-lg shadow-lg">
-            <h2 className="text-3xl font-bold text-gray-800 mb-6">Our Vision</h2>
-            <p className="text-gray-600 text-lg leading-relaxed">
+          <div className="bg-white p-6 sm:p-8 rounded-lg shadow-lg">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">Our Vision</h2>
+            <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
               To be the most trusted and preferred real estate company in India, known for our quality projects, customer-centric approach, and contribution to building sustainable communities that enhance the quality of life.
             </p>
           </div>
@@ -137,20 +137,20 @@ const AboutUs = () => {
   <WhyChooseUs/>
 
  
-      <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white py-16">
+      <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white py-8 sm:py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-6">Ready to Find Your Dream Property?</h2>
-          <p className="text-xl mb-8">Let us help you find the perfect home or investment opportunity.</p>
-          <div className="flex justify-center space-x-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">Ready to Find Your Dream Property?</h2>
+          <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8">Let us help you find the perfect home or investment opportunity.</p>
+          <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
             <button 
               onClick={() => navigate("/contact-us")}
-              className="bg-white text-orange-500 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition"
+              className="bg-white text-orange-500 px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-gray-100 transition text-sm sm:text-base"
             >
               Contact Us
             </button>
             <button 
               onClick={() => navigate("/projects")}
-              className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-orange-500 transition"
+              className="bg-transparent border-2 border-white text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-white hover:text-orange-500 transition text-sm sm:text-base"
             >
               View Projects
             </button>

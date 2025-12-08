@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaUser, FaEnvelope, FaPhone, FaLock, FaTimes, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useAppContext } from '../Context/AppContext';
+import { validateForm, getErrorMessage } from '../../utils/validation';
 import gsap from 'gsap';
 
 const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
-  const { signup } = useAppContext();
+  const { signup, showNotification } = useAppContext();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -15,7 +16,9 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
   
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [error, setError] = useState('');
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const modalRef = useRef(null);
   const overlayRef = useRef(null);
 
@@ -45,28 +48,123 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
     });
   };
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-    setError('');
+  const validateField = (field, value) => {
+    let error = '';
+    
+    if (field === 'confirmPassword') {
+      if (!value) {
+        error = 'Please confirm your password';
+      } else if (value !== formData.password) {
+        error = 'Passwords do not match';
+      }
+    } else {
+      error = getErrorMessage(field, value);
+    }
+    
+    setErrors(prev => ({ ...prev, [field]: error }));
+    return !error;
   };
 
-  const handleSignup = (e) => {
+  const handleBlur = (field) => {
+    setTouched(prev => ({ ...prev, [field]: true }));
+    validateField(field, formData[field]);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    
+    // Validate on change if field was touched
+    if (touched[name]) {
+      validateField(name, value);
+    }
+    
+    // Also revalidate confirmPassword if password changes
+    if (name === 'password' && touched.confirmPassword) {
+      validateField('confirmPassword', formData.confirmPassword);
+    }
+  };
+
+  const handleSignup = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+
+    // Mark all fields as touched
+    const allTouched = {
+      name: true,
+      email: true,
+      mobile: true,
+      password: true,
+      confirmPassword: true
+    };
+    setTouched(allTouched);
+
+    // Validate all fields
+    const validationErrors = validateForm(formData, ['name', 'email', 'mobile', 'password']);
+    
+    // Check password match
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match!');
+      validationErrors.confirmPassword = 'Passwords do not match';
+    }
+
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length > 0) {
+      setIsSubmitting(false);
+      showNotification('Please fix the errors before submitting', 'error', 3000);
       return;
     }
-    const userData = { 
-      name: formData.name, 
-      email: formData.email, 
-      mobile: formData.mobile 
-    };
-    signup(userData);
-    handleClose();
+
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const userData = { 
+        name: formData.name, 
+        email: formData.email, 
+        mobile: formData.mobile 
+      };
+      signup(userData);
+      showNotification('Account created successfully!', 'success', 3000);
+      
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        mobile: '',
+        password: '',
+        confirmPassword: ''
+      });
+      setErrors({});
+      setTouched({});
+      handleClose();
+    } catch (error) {
+      showNotification('Signup failed. Please try again.', 'error', 3000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  // Reset form when modal closes
+  useEffect(() => {
+    if (!isOpen) {
+      setFormData({
+        name: '',
+        email: '',
+        mobile: '',
+        password: '',
+        confirmPassword: ''
+      });
+      setErrors({});
+      setTouched({});
+      setIsSubmitting(false);
+      setShowPassword(false);
+      setShowConfirmPassword(false);
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
   return (
@@ -83,87 +181,134 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
           <h2 className="text-2xl font-bold text-gray-800 mb-6 border-l-4 border-orange-500 pl-3">
             Sign Up
           </h2>
-          {error && (
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-              {error}
-            </div>
-          )}
-          <form onSubmit={handleSignup} className="space-y-4">
-            <div className="relative">
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Enter your Name"
-                className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 pr-10"
-                required
-              />
-              <FaUser className="absolute right-3 top-1/2 -translate-y-1/2 text-orange-500" />
-            </div>
-
-            <div className="relative">
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Enter your Email"
-                className="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 pr-10"
-                required
-              />
-              <FaEnvelope className="absolute right-3 top-1/2 -translate-y-1/2 text-orange-500" />
-            </div>
-            <div className="relative">
-              <input
-                type="tel"
-                name="mobile"
-                value={formData.mobile}
-                onChange={handleChange}
-                placeholder="Enter your Mobile"
-                className="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 pr-10"
-                required
-              />
-              <FaPhone className="absolute right-3 top-1/2 -translate-y-1/2 text-orange-500" />
+          <form onSubmit={handleSignup} className="space-y-4" noValidate>
+            <div>
+              <div className="relative">
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  onBlur={() => handleBlur('name')}
+                  placeholder="Enter your Name"
+                  className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 pr-10 ${
+                    touched.name && errors.name 
+                      ? 'border-red-500 focus:ring-red-500' 
+                      : 'border-gray-300 focus:ring-orange-500'
+                  }`}
+                />
+                <FaUser className={`absolute right-3 top-1/2 -translate-y-1/2 ${
+                  touched.name && errors.name ? 'text-red-500' : 'text-orange-500'
+                }`} />
+              </div>
+              {touched.name && errors.name && (
+                <p className="text-red-500 text-xs mt-1 ml-1">{errors.name}</p>
+              )}
             </div>
 
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="Enter Password"
-                className="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 pr-20"
-                required
-              />
-           
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-              >
-                {showPassword ? <FaEyeSlash size={18} className=' text-orange-500' /> : <FaEye size={18} className=' text-orange-500' />}
-              </button>
+            <div>
+              <div className="relative">
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  onBlur={() => handleBlur('email')}
+                  placeholder="Enter your Email"
+                  className={`w-full px-4 py-3 border rounded focus:outline-none focus:ring-2 pr-10 ${
+                    touched.email && errors.email 
+                      ? 'border-red-500 focus:ring-red-500' 
+                      : 'border-gray-300 focus:ring-orange-500'
+                  }`}
+                />
+                <FaEnvelope className={`absolute right-3 top-1/2 -translate-y-1/2 ${
+                  touched.email && errors.email ? 'text-red-500' : 'text-orange-500'
+                }`} />
+              </div>
+              {touched.email && errors.email && (
+                <p className="text-red-500 text-xs mt-1 ml-1">{errors.email}</p>
+              )}
             </div>
-            <div className="relative">
-              <input
-                type={showConfirmPassword ? "text" : "password"}
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                placeholder="Confirm Password"
-                className="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 pr-20"
-                required
-              />
-           
-              <button
-                type="button"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-              >
-                {showConfirmPassword ? <FaEyeSlash size={18} className=' text-orange-500' /> : <FaEye size={18} className=' text-orange-500' />}
-              </button>
+
+            <div>
+              <div className="relative">
+                <input
+                  type="tel"
+                  name="mobile"
+                  value={formData.mobile}
+                  onChange={handleChange}
+                  onBlur={() => handleBlur('mobile')}
+                  placeholder="Enter your Mobile (10 digits)"
+                  className={`w-full px-4 py-3 border rounded focus:outline-none focus:ring-2 pr-10 ${
+                    touched.mobile && errors.mobile 
+                      ? 'border-red-500 focus:ring-red-500' 
+                      : 'border-gray-300 focus:ring-orange-500'
+                  }`}
+                  maxLength="10"
+                />
+                <FaPhone className={`absolute right-3 top-1/2 -translate-y-1/2 ${
+                  touched.mobile && errors.mobile ? 'text-red-500' : 'text-orange-500'
+                }`} />
+              </div>
+              {touched.mobile && errors.mobile && (
+                <p className="text-red-500 text-xs mt-1 ml-1">{errors.mobile}</p>
+              )}
+            </div>
+
+            <div>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  onBlur={() => handleBlur('password')}
+                  placeholder="Enter Password"
+                  className={`w-full px-4 py-3 border rounded focus:outline-none focus:ring-2 pr-20 ${
+                    touched.password && errors.password 
+                      ? 'border-red-500 focus:ring-red-500' 
+                      : 'border-gray-300 focus:ring-orange-500'
+                  }`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? <FaEyeSlash size={18} className='text-orange-500' /> : <FaEye size={18} className='text-orange-500' />}
+                </button>
+              </div>
+              {touched.password && errors.password && (
+                <p className="text-red-500 text-xs mt-1 ml-1">{errors.password}</p>
+              )}
+            </div>
+
+            <div>
+              <div className="relative">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  onBlur={() => handleBlur('confirmPassword')}
+                  placeholder="Confirm Password"
+                  className={`w-full px-4 py-3 border rounded focus:outline-none focus:ring-2 pr-20 ${
+                    touched.confirmPassword && errors.confirmPassword 
+                      ? 'border-red-500 focus:ring-red-500' 
+                      : 'border-gray-300 focus:ring-orange-500'
+                  }`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {showConfirmPassword ? <FaEyeSlash size={18} className='text-orange-500' /> : <FaEye size={18} className='text-orange-500' />}
+                </button>
+              </div>
+              {touched.confirmPassword && errors.confirmPassword && (
+                <p className="text-red-500 text-xs mt-1 ml-1">{errors.confirmPassword}</p>
+              )}
             </div>
 
       
@@ -182,14 +327,20 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
             <div className="flex space-x-4 pt-4">
               <button
                 type="submit"
-                className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded font-semibold transition uppercase"
+                disabled={isSubmitting}
+                className={`flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded font-semibold transition uppercase ${
+                  isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
               >
-                SIGN UP
+                {isSubmitting ? 'SIGNING UP...' : 'SIGN UP'}
               </button>
               <button
                 type="button"
-                onClick={onClose}
-                className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded font-semibold transition uppercase"
+                onClick={handleClose}
+                disabled={isSubmitting}
+                className={`flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded font-semibold transition uppercase ${
+                  isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
               >
                 CANCEL
               </button>

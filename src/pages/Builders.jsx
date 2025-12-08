@@ -184,43 +184,43 @@ const Builders = () => {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       
-      <div className="bg-gradient-to-r from-green-900 to-green-700 py-16">
+      <div className="bg-gradient-to-r from-green-900 to-green-700 py-8 sm:py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 text-center">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4 text-center">
             Find Trusted <span className="text-orange-500">Builders & Dealers</span>
           </h1>
-          <p className="text-white text-center mb-8 text-lg">
+          <p className="text-white text-center mb-6 sm:mb-8 text-base sm:text-lg">
             Connect with verified builders and dealers across Delhi NCR
           </p>
           
           <div className="max-w-2xl mx-auto">
             <div className="relative">
-              <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
+              <FaSearch className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg sm:text-xl" />
               <input
                 type="text"
                 placeholder="Search by location (e.g., Gurgaon, Delhi, Noida)"
                 value={searchLocation}
                 onChange={(e) => setSearchLocation(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-lg"
+                className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 rounded-lg text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-lg"
               />
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+      <div className="max-w-7xl mx-auto px-4 py-8 sm:py-12">
+        <div className="mb-6 sm:mb-8">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">
             {filteredBuilders.length} Builder{filteredBuilders.length !== 1 ? 's' : ''} Found
           </h2>
           {searchLocation && (
-            <p className="text-gray-600">
+            <p className="text-sm sm:text-base text-gray-600">
               Showing results for: <span className="font-semibold">{searchLocation}</span>
             </p>
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredBuilders.map((builder, index) => (
             <div
               key={builder.id}
@@ -282,10 +282,10 @@ const Builders = () => {
         </div>
 
         {filteredBuilders.length === 0 && (
-          <div className="text-center py-16">
-            <FaBuilding className="text-gray-300 text-6xl mx-auto mb-4" />
-            <h3 className="text-2xl font-bold text-gray-800 mb-2">No Builders Found</h3>
-            <p className="text-gray-600">Try searching with a different location</p>
+          <div className="text-center py-12 sm:py-16">
+            <FaBuilding className="text-gray-300 text-5xl sm:text-6xl mx-auto mb-4" />
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">No Builders Found</h3>
+            <p className="text-sm sm:text-base text-gray-600">Try searching with a different location</p>
           </div>
         )}
       </div>

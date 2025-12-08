@@ -116,21 +116,21 @@ const Projects = () => {
       <Navbar />
       
    
-      <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white py-20">
+      <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white py-12 sm:py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-5xl font-bold mb-4">Our Projects</h1>
-          <p className="text-xl">Explore our premium real estate projects</p>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4">Our Projects</h1>
+          <p className="text-base sm:text-lg md:text-xl">Explore our premium real estate projects</p>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-16">
+      <div className="max-w-7xl mx-auto px-4 py-8 sm:py-12 md:py-16">
       
-        <div className="flex flex-wrap gap-3 mb-12 justify-center">
+        <div className="flex flex-wrap gap-2 sm:gap-3 mb-8 sm:mb-10 md:mb-12 justify-center">
           {filters.map((filterOption) => (
             <button
               key={filterOption}
               onClick={() => setFilter(filterOption)}
-              className={`px-6 py-3 rounded-lg font-semibold transition ${
+              className={`px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 md:py-3 rounded-lg font-semibold transition text-sm sm:text-base ${
                 filter === filterOption
                   ? 'bg-orange-500 text-white shadow-lg'
                   : 'bg-white text-gray-700 hover:bg-gray-100 shadow'
@@ -142,7 +142,7 @@ const Projects = () => {
         </div>
 
       
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {filteredProjects.map((project) => (
             <div 
               key={project.id} 
@@ -153,24 +153,24 @@ const Projects = () => {
                 <img 
                   src={project.image} 
                   alt={project.title}
-                  className="w-full h-56 object-cover group-hover:scale-110 transition duration-300"
+                  className="w-full h-48 sm:h-56 object-cover group-hover:scale-110 transition duration-300"
                 />
-                <div className="absolute top-3 right-3 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                <div className="absolute top-2 sm:top-3 right-2 sm:right-3 bg-orange-500 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold">
                   {project.type}
                 </div>
-                <div className="absolute top-3 left-3 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                <div className="absolute top-2 sm:top-3 left-2 sm:left-3 bg-green-500 text-white px-2 sm:px-3 py-1 rounded-full text-xs font-semibold">
                   {project.status}
                 </div>
               </div>
               
-              <div className="p-5">
-                <h3 className="text-xl font-bold text-gray-800 mb-2">{project.title}</h3>
-                <p className="text-gray-600 text-sm mb-4 flex items-center">
-                  <FaMapMarkerAlt className="mr-2 text-orange-500" />
-                  {project.location}
+              <div className="p-4 sm:p-5">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-2">{project.title}</h3>
+                <p className="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4 flex items-center">
+                  <FaMapMarkerAlt className="mr-2 text-orange-500 flex-shrink-0" />
+                  <span className="truncate">{project.location}</span>
                 </p>
                 
-                <div className="flex items-center justify-between mb-4 text-sm text-gray-600">
+                <div className="flex items-center justify-between mb-3 sm:mb-4 text-xs sm:text-sm text-gray-600">
                   {project.beds && (
                     <div className="flex items-center">
                       <FaBed className="mr-1 text-orange-500" />
@@ -185,18 +185,18 @@ const Projects = () => {
                   )}
                   <div className="flex items-center">
                     <FaRulerCombined className="mr-1 text-orange-500" />
-                    <span>{project.area}</span>
+                    <span className="text-xs sm:text-sm">{project.area}</span>
                   </div>
                 </div>
                 
-                <div className="flex items-center justify-between pt-4 border-t">
-                  <span className="text-2xl font-bold text-orange-500">{project.price}</span>
+                <div className="flex items-center justify-between pt-3 sm:pt-4 border-t">
+                  <span className="text-xl sm:text-2xl font-bold text-orange-500">{project.price}</span>
                   <button 
                     onClick={(e) => {
                       e.stopPropagation();
                       navigate(`/property/${project.id}`);
                     }}
-                    className="bg-gray-800 hover:bg-gray-900 text-white px-4 py-2 rounded-lg text-sm transition"
+                    className="bg-gray-800 hover:bg-gray-900 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm transition"
                   >
                     View Details
                   </button>
@@ -206,8 +206,8 @@ const Projects = () => {
           ))}
         </div>
         {filteredProjects.length === 0 && (
-          <div className="text-center py-16">
-            <p className="text-gray-600 text-xl">No projects found in this category.</p>
+          <div className="text-center py-12 sm:py-16">
+            <p className="text-gray-600 text-lg sm:text-xl">No projects found in this category.</p>
           </div>
         )}
       </div>
