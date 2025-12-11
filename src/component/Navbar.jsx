@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { CgProfile } from "react-icons/cg";
 import { RiArrowDropDownLine } from "react-icons/ri";
@@ -27,6 +27,25 @@ const Navbar = () => {
   const [activeTab, setActiveTab] = useState('Buy');
   const [propertyType, setPropertyType] = useState('Residential');
   const [searchCity, setSearchCity] = useState('');
+  const [budgetRange, setBudgetRange] = useState({ min: 30, max: 500 });
+  const [showBudgetSlider, setShowBudgetSlider] = useState(false);
+
+  // Close budget slider when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showBudgetSlider && !event.target.closest('.budget-filter-container')) {
+        setShowBudgetSlider(false);
+      }
+    };
+
+    if (showBudgetSlider) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showBudgetSlider]);
   return (
     <nav className="bg-white text-gray-800 shadow-lg sticky top-0 z-[70]">
      
@@ -72,7 +91,8 @@ const Navbar = () => {
                   </div>
 
                
-                  <div className="flex items-center space-x-3 mb-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+                    {/* Property Type */}
                     <select
                       value={propertyType}
                       onChange={(e) => setPropertyType(e.target.value)}
@@ -84,7 +104,8 @@ const Navbar = () => {
                       <option>Industrial</option>
                     </select>
 
-                    <div className="flex-1 relative">
+                    {/* City Search */}
+                    <div className="relative">
                       <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
                       <input
                         type="text"
@@ -95,6 +116,86 @@ const Navbar = () => {
                       />
                     </div>
 
+                    {/* Budget Filter */}
+                    <div className="relative budget-filter-container">
+                      <button
+                        onClick={() => setShowBudgetSlider(!showBudgetSlider)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-sm text-left flex items-center justify-between hover:bg-gray-50 transition"
+                      >
+                        <span className="text-gray-700">
+                          ₹{budgetRange.min} Lacs - ₹{budgetRange.max >= 100 ? `${Math.round(budgetRange.max/100)}+ Cr` : `${budgetRange.max} Lacs`}
+                        </span>
+                        <RiArrowDropDownLine 
+                          className={`transition-transform duration-200 ${showBudgetSlider ? 'rotate-180' : 'rotate-0'}`}
+                        />
+                      </button>
+                      
+                      {showBudgetSlider && (
+                        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg p-4 z-[60] min-w-[280px]">
+                          <div className="mb-3">
+                            <h4 className="text-sm font-semibold text-gray-700 mb-2">Select Price Range</h4>
+                            <div className="text-xs text-gray-500 mb-3">
+                              ₹{budgetRange.min} Lacs - ₹{budgetRange.max >= 100 ? `${budgetRange.max/100}+ Crores` : `${budgetRange.max} Lacs`}
+                            </div>
+                          </div>
+                          
+                          {/* Budget Range Slider */}
+                          <div className="relative mb-4">
+                            <div className="flex items-center space-x-2 mb-2">
+                              <span className="text-xs bg-blue-600 text-white px-2 py-1 rounded">₹{budgetRange.min} Lacs</span>
+                              <div className="flex-1 relative">
+                                <input
+                                  type="range"
+                                  min="10"
+                                  max="500"
+                                  step="10"
+                                  value={budgetRange.min}
+                                  onChange={(e) => setBudgetRange(prev => ({ ...prev, min: parseInt(e.target.value) }))}
+                                  className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer slider"
+                                  style={{
+                                    background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${(budgetRange.min-10)/490*100}%, #e5e7eb ${(budgetRange.min-10)/490*100}%, #e5e7eb 100%)`
+                                  }}
+                                />
+                              </div>
+                              <span className="text-xs bg-blue-600 text-white px-2 py-1 rounded">₹{budgetRange.max >= 100 ? `${budgetRange.max/100}+ Cr` : `${budgetRange.max} Lacs`}</span>
+                            </div>
+                            
+                            <input
+                              type="range"
+                              min="20"
+                              max="500"
+                              step="10"
+                              value={budgetRange.max}
+                              onChange={(e) => setBudgetRange(prev => ({ ...prev, max: parseInt(e.target.value) }))}
+                              className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer slider"
+                              style={{
+                                background: `linear-gradient(to right, #e5e7eb 0%, #e5e7eb ${(budgetRange.max-20)/480*100}%, #3b82f6 ${(budgetRange.max-20)/480*100}%, #3b82f6 100%)`
+                              }}
+                            />
+                          </div>
+
+                          {/* Quick Budget Options */}
+                          <div className="grid grid-cols-2 gap-2 mb-3">
+                            {[
+                              { label: '₹30L - ₹50L', min: 30, max: 50 },
+                              { label: '₹50L - ₹1Cr', min: 50, max: 100 },
+                              { label: '₹1Cr - ₹2Cr', min: 100, max: 200 },
+                              { label: '₹2Cr+', min: 200, max: 500 }
+                            ].map((option) => (
+                              <button
+                                key={option.label}
+                                onClick={() => setBudgetRange({ min: option.min, max: option.max })}
+                                className="px-2 py-1 text-xs border border-gray-300 rounded hover:bg-blue-50 hover:border-blue-300 transition"
+                              >
+                                {option.label}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Explore Button */}
                     <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition text-sm">
                       Explore
                     </button>
@@ -138,6 +239,10 @@ const Navbar = () => {
               )}
             </div>
             <Link to="/about-us" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base">About Us</Link>
+            <Link to="/offers" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base relative">
+              View Offers
+             
+            </Link>
             <a href="#" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base">For Buyers</a>
             
             {/* For Tenants Dropdown */}
@@ -444,6 +549,112 @@ const Navbar = () => {
         </div>
         {isMenuOpen && (
           <div className="md:hidden mt-4 space-y-3 pb-4">
+            {/* Mobile Search Section */}
+            <div className="bg-gray-50 p-4 rounded-lg mb-4">
+              <h3 className="text-lg font-semibold text-gray-800 mb-3">Search Properties</h3>
+              
+              {/* Property Type */}
+              <select
+                value={propertyType}
+                onChange={(e) => setPropertyType(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-sm mb-3"
+              >
+                <option>Residential</option>
+                <option>Commercial</option>
+                <option>Agricultural</option>
+                <option>Industrial</option>
+              </select>
+
+              {/* City Search */}
+              <div className="relative mb-3">
+                <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
+                <input
+                  type="text"
+                  value={searchCity}
+                  onChange={(e) => setSearchCity(e.target.value)}
+                  placeholder="Enter City Name"
+                  className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                />
+              </div>
+
+              {/* Budget Filter for Mobile */}
+              <div className="mb-3">
+                <button
+                  onClick={() => setShowBudgetSlider(!showBudgetSlider)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-sm text-left flex items-center justify-between hover:bg-gray-50 transition"
+                >
+                  <span className="text-gray-700">
+                    Budget: ₹{budgetRange.min}L - ₹{budgetRange.max >= 100 ? `${Math.round(budgetRange.max/100)}+ Cr` : `${budgetRange.max}L`}
+                  </span>
+                  <RiArrowDropDownLine 
+                    className={`transition-transform duration-200 ${showBudgetSlider ? 'rotate-180' : 'rotate-0'}`}
+                  />
+                </button>
+                
+                {showBudgetSlider && (
+                  <div className="mt-2 bg-white border border-gray-300 rounded-lg shadow-lg p-4">
+                    <div className="mb-3">
+                      <h4 className="text-sm font-semibold text-gray-700 mb-2">Select Price Range</h4>
+                      <div className="text-xs text-gray-500 mb-3">
+                        ₹{budgetRange.min} Lacs - ₹{budgetRange.max >= 100 ? `${Math.round(budgetRange.max/100)}+ Crores` : `${budgetRange.max} Lacs`}
+                      </div>
+                    </div>
+                    
+                    {/* Mobile Budget Sliders */}
+                    <div className="space-y-3 mb-4">
+                      <div>
+                        <label className="text-xs text-gray-600 mb-1 block">Min: ₹{budgetRange.min} Lacs</label>
+                        <input
+                          type="range"
+                          min="10"
+                          max="500"
+                          step="10"
+                          value={budgetRange.min}
+                          onChange={(e) => setBudgetRange(prev => ({ ...prev, min: parseInt(e.target.value) }))}
+                          className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer slider"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-gray-600 mb-1 block">Max: ₹{budgetRange.max >= 100 ? `${Math.round(budgetRange.max/100)}+ Cr` : `${budgetRange.max} Lacs`}</label>
+                        <input
+                          type="range"
+                          min="20"
+                          max="500"
+                          step="10"
+                          value={budgetRange.max}
+                          onChange={(e) => setBudgetRange(prev => ({ ...prev, max: parseInt(e.target.value) }))}
+                          className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer slider"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Quick Budget Options for Mobile */}
+                    <div className="grid grid-cols-2 gap-2">
+                      {[
+                        { label: '₹30L - ₹50L', min: 30, max: 50 },
+                        { label: '₹50L - ₹1Cr', min: 50, max: 100 },
+                        { label: '₹1Cr - ₹2Cr', min: 100, max: 200 },
+                        { label: '₹2Cr+', min: 200, max: 500 }
+                      ].map((option) => (
+                        <button
+                          key={option.label}
+                          onClick={() => setBudgetRange({ min: option.min, max: option.max })}
+                          className="px-2 py-1 text-xs border border-gray-300 rounded hover:bg-blue-50 hover:border-blue-300 transition"
+                        >
+                          {option.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Search Button */}
+              <button className="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition text-sm">
+                🔍 Search Properties
+              </button>
+            </div>
+
             <Link 
               to="/" 
               onClick={() => setIsMenuOpen(false)}
@@ -464,6 +675,14 @@ const Navbar = () => {
               className="block text-gray-700 hover:text-orange-500 transition py-2"
             >
               Projects
+            </Link>
+            <Link 
+              to="/offers" 
+              onClick={() => setIsMenuOpen(false)}
+              className="block text-gray-700 hover:text-orange-500 transition py-2 flex items-center"
+            >
+               View Offers
+             
             </Link>
             <Link 
               to="/builders" 

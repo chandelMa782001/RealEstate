@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { images } from '../../utils/Image';
-import { FaBed, FaBath, FaRulerCombined, FaMapMarkerAlt, FaPhone, FaEnvelope, FaWhatsapp, FaChevronLeft, FaChevronRight, FaShare, FaFacebook, FaTwitter, FaLinkedin, FaCopy } from 'react-icons/fa';
+import { FaBed, FaBath, FaRulerCombined, FaMapMarkerAlt, FaPhone, FaEnvelope, FaWhatsapp, FaChevronLeft, FaChevronRight, FaShare, FaFacebook, FaTwitter, FaLinkedin, FaCopy, FaDownload, FaFilePdf } from 'react-icons/fa';
 import Navbar from '../component/Navbar';
 import Footer from '../component/Footer';
 import gsap from 'gsap';
 import { useAppContext } from '../Context/AppContext';
+import jsPDF from 'jspdf';
 
 const PropertyDetail = () => {
   const { id } = useParams();
@@ -66,7 +67,7 @@ const PropertyDetail = () => {
     1: {
       title: 'Luxury Villa in Gurgaon',
       location: 'Sector 47, Gurgaon',
-      coordinates: { lat: 28.4211, lng: 77.0797 }, // Sector 47, Gurgaon coordinates
+      coordinates: { lat: 28.4211, lng: 77.0797 }, 
       price: '₹2.5 Cr',
       type: 'Villa',
       beds: 4,
@@ -102,7 +103,7 @@ const PropertyDetail = () => {
     2: {
       title: 'Modern Apartment',
       location: 'Dwarka, New Delhi',
-      coordinates: { lat: 28.5921, lng: 77.0460 }, // Dwarka, Delhi coordinates
+      coordinates: { lat: 28.5921, lng: 77.0460 }, 
       price: '₹85 Lac',
       type: 'Apartment',
       beds: 3,
@@ -185,6 +186,115 @@ const PropertyDetail = () => {
     setShowShareMenu(false);
   };
 
+  const handlePropertyBrochureDownload = () => {
+    const pdf = new jsPDF();
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const margin = 20;
+    let yPosition = 30;
+
+  
+    const addText = (text, fontSize = 10, isBold = false, isCenter = false) => {
+      pdf.setFontSize(fontSize);
+      if (isBold) pdf.setFont(undefined, 'bold');
+      else pdf.setFont(undefined, 'normal');
+      
+      if (isCenter) {
+        pdf.text(text, pageWidth / 2, yPosition, { align: 'center' });
+      } else {
+        const lines = pdf.splitTextToSize(text, pageWidth - 2 * margin);
+        pdf.text(lines, margin, yPosition);
+        yPosition += lines.length * (fontSize * 0.4);
+      }
+      yPosition += fontSize * 0.6;
+    };
+
+    const addSection = (title, content = []) => {
+      if (yPosition > 250) {
+        pdf.addPage();
+        yPosition = 30;
+      }
+      addText(title, 14, true);
+      yPosition += 5;
+      content.forEach(item => {
+        addText(item, 10);
+      });
+      yPosition += 10;
+    };
+
+  
+    addText('MAIGREAT GROUP', 20, true, true);
+    addText('PROPERTY BROCHURE', 16, true, true);
+    yPosition += 10;
+
+    addText(property.title, 16, true, true);
+    addText(property.location, 12, false, true);
+    yPosition += 15;
+
+   
+    addSection('PROPERTY OVERVIEW', [
+      `Property ID: ${property.propertyId}`,
+      `Property Type: ${property.type}`,
+      `Price: ${property.price}`,
+      `Status: ${property.status}`,
+      `Area: ${property.area}`,
+      ...(property.beds ? [`Bedrooms: ${property.beds}`] : []),
+      ...(property.baths ? [`Bathrooms: ${property.baths}`] : [])
+    ]);
+
+   
+    addSection('PROPERTY DETAILS', [
+      `Facing: ${property.facing}`,
+      `Furnished: ${property.furnished}`,
+      `Floor: ${property.floor} of ${property.totalFloors}`,
+      `Age: ${property.age}`,
+      `Parking: ${property.parking}`
+    ]);
+
+   
+    addSection('DESCRIPTION', [property.description]);
+
+    addSection('KEY FEATURES', property.features.map(feature => `• ${feature}`));
+
+    addSection('AMENITIES', property.amenities.map(amenity => `• ${amenity}`));
+
+   
+    addSection('BUILDER INFORMATION', [
+      `Builder: ${property.builder.name}`,
+      `Experience: ${property.builder.experience}`,
+      `Projects Completed: ${property.builder.projects}`,
+      `Rating: ${property.builder.rating}/5`,
+      `Established: ${property.builder.established}`
+    ]);
+
+    addSection('INVESTMENT HIGHLIGHTS', [
+      `Prime Location in ${property.location}`,
+      `${property.status} - Ready for immediate possession/investment`,
+      `Professional Builder with ${property.builder.experience}`,
+      'High-quality construction and premium finishes',
+      'Excellent connectivity and infrastructure',
+      'Strong appreciation potential'
+    ]);
+
+
+    addSection('CONTACT INFORMATION', [
+      'Phone: +91-9354527118',
+      'Email: info@maigreatgroup.com',
+      'Website: www.maigreatgroup.com'
+    ]);
+
+ 
+    if (yPosition > 220) {
+      pdf.addPage();
+      yPosition = 30;
+    }
+    yPosition += 20;
+    addText(`Generated on: ${new Date().toLocaleDateString('en-IN')} at ${new Date().toLocaleTimeString('en-IN')}`, 8, false, true);
+    addText('MAIGREAT GROUP - Your Trusted Partner in Real Estate', 10, true, true);
+    addText('"Fulfil Your Trust To Find Your Dream Property"', 9, false, true);
+
+    pdf.save(`${property.title.replace(/\s+/g, '-')}-Property-Brochure.pdf`);
+    showNotification('Property brochure PDF downloaded successfully!', 'success', 3000);
+  };
   return (
     <div className="min-h-screen bg-gray-50 page-transition">
       <Navbar />
@@ -269,7 +379,6 @@ const PropertyDetail = () => {
             )}
           </div>
         </div>
-
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
    
           <div ref={contentRef} className="lg:col-span-2">
@@ -399,6 +508,36 @@ const PropertyDetail = () => {
                     {amenity}
                   </span>
                 ))}
+              </div>
+
+              {/* Property Brochure Section */}
+              <div className="bg-gradient-to-r from-orange-50 to-red-50 border border-orange-200 rounded-lg p-4 sm:p-6 mb-6">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div className="flex items-start space-x-3 sm:space-x-4">
+                    <div className="bg-orange-500 p-3 rounded-full flex-shrink-0">
+                      <FaFilePdf className="text-white text-xl sm:text-2xl" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-1">Property Brochure</h3>
+                      <p className="text-sm sm:text-base text-gray-600 mb-2">
+                        Get detailed information about this property including floor plans, specifications, and pricing details.
+                      </p>
+                      <div className="flex flex-wrap gap-2 text-xs sm:text-sm text-gray-500">
+                        <span>• Floor Plans</span>
+                        <span>• Specifications</span>
+                        <span>• Pricing Details</span>
+                        <span>• Location Map</span>
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={handlePropertyBrochureDownload}
+                    className="flex items-center space-x-2 bg-orange-500 hover:bg-orange-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold transition shadow-lg hover:shadow-xl text-sm sm:text-base whitespace-nowrap"
+                  >
+                    <FaDownload />
+                    <span>Download PDF</span>
+                  </button>
+                </div>
               </div>
 
               {/* Location Map */}
@@ -557,6 +696,16 @@ const PropertyDetail = () => {
                   <FaEnvelope />
                   <span>Email</span>
                 </a>
+
+                {/* Property Brochure Download */}
+                <button
+                  onClick={handlePropertyBrochureDownload}
+                  className="flex items-center justify-center space-x-3 bg-orange-500 hover:bg-orange-600 text-white py-2.5 sm:py-3 rounded-lg transition text-sm sm:text-base w-full"
+                >
+                  <FaFilePdf />
+                  <span>Download Brochure</span>
+                  <FaDownload className="text-xs" />
+                </button>
               </div>
               <div className="border-t pt-4 sm:pt-6">
                 <h4 className="font-bold text-gray-800 mb-3 sm:mb-4 text-base sm:text-lg">Schedule a Visit</h4>

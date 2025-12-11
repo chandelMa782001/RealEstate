@@ -7,6 +7,7 @@ import NotificationContainer from './component/NotificationContainer';
 import Home from './pages/Home';
 import AboutUs from './pages/AboutUs';
 import Projects from './pages/Projects';
+import Offers from './pages/Offers';
 import PropertyDetail from './pages/PropertyDetail';
 import ContactUs from './pages/ContactUs';
 import Builders from './pages/Builders';
@@ -25,6 +26,7 @@ const AppContent = () => {
         <Route path="/" element={<Home />} />
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/projects" element={<Projects />} />
+        <Route path="/offers" element={<Offers />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/builders" element={<Builders />} />
         <Route path="/builder/:id" element={<BuilderDetail />} />
