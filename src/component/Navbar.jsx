@@ -549,11 +549,11 @@ const Navbar = () => {
         </div>
         {isMenuOpen && (
           <div className="md:hidden mt-4 space-y-3 pb-4">
-            {/* Mobile Search Section */}
-            <div className="bg-gray-50 p-4 rounded-lg mb-4">
+            {/* For mobile screen budget */}
+{/*   
+             <div className="bg-gray-50 p-4 rounded-lg mb-4">
               <h3 className="text-lg font-semibold text-gray-800 mb-3">Search Properties</h3>
-              
-              {/* Property Type */}
+         
               <select
                 value={propertyType}
                 onChange={(e) => setPropertyType(e.target.value)}
@@ -565,7 +565,7 @@ const Navbar = () => {
                 <option>Industrial</option>
               </select>
 
-              {/* City Search */}
+             
               <div className="relative mb-3">
                 <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
                 <input
@@ -577,7 +577,7 @@ const Navbar = () => {
                 />
               </div>
 
-              {/* Budget Filter for Mobile */}
+             
               <div className="mb-3">
                 <button
                   onClick={() => setShowBudgetSlider(!showBudgetSlider)}
@@ -600,7 +600,7 @@ const Navbar = () => {
                       </div>
                     </div>
                     
-                    {/* Mobile Budget Sliders */}
+               
                     <div className="space-y-3 mb-4">
                       <div>
                         <label className="text-xs text-gray-600 mb-1 block">Min: ₹{budgetRange.min} Lacs</label>
@@ -628,7 +628,7 @@ const Navbar = () => {
                       </div>
                     </div>
 
-                    {/* Quick Budget Options for Mobile */}
+                
                     <div className="grid grid-cols-2 gap-2">
                       {[
                         { label: '₹30L - ₹50L', min: 30, max: 50 },
@@ -649,11 +649,11 @@ const Navbar = () => {
                 )}
               </div>
 
-              {/* Search Button */}
+          
               <button className="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition text-sm">
                 🔍 Search Properties
               </button>
-            </div>
+            </div>  */}
 
             <Link 
               to="/" 
