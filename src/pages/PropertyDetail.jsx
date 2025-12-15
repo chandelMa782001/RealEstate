@@ -332,7 +332,7 @@ const PropertyDetail = () => {
                   <button
                     key={index}
                     onClick={() => setCurrentImageIndex(index)}
-                    className={`w-3 h-3 rounded-full transition ${
+                    className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition ${
                       index === currentImageIndex ? 'bg-white' : 'bg-white/50'
                     }`}
                   />

@@ -28,7 +28,6 @@ const Filter = ({
         </button>
       </div>
 
-      {/* Filters Sidebar */}
       <div className={`lg:w-1/4 ${showFilters ? 'block' : 'hidden lg:block'}`}>
         <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 lg:sticky lg:top-4 filter-sidebar">
           <div className="flex items-center justify-between mb-6">
