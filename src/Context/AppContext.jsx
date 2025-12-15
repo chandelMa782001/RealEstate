@@ -40,7 +40,7 @@ export const AppProvider = ({ children }) => {
     setIsAuthenticated(true);
     setIsLoginModalOpen(false);
     localStorage.setItem('user', JSON.stringify(userData));
-    showNotification(`Welcome back, ${userData.name || userData.email}!`, 'success');
+    // showNotification(`Welcome back, ${userData.name || userData.email}!`, 'success');
   };
 
   const logout = () => {

@@ -114,12 +114,12 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
 
     if (Object.keys(validationErrors).length > 0) {
       setIsSubmitting(false);
-      showNotification('Please fix the errors before submitting', 'error', 3000);
+      showNotification('Enter the Required filed', 'error', 3000);
       return;
     }
 
     try {
-      // Simulate API call
+      
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       const userData = { 

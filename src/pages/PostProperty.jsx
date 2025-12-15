@@ -16,6 +16,13 @@ const PostProperty = () => {
     price: '',
     area: '',
     description: '',
+    goldOffer: {
+      enabled: false,
+      goldWeight: '',
+      goldPurity: '24K',
+      goldValue: '',
+      goldDescription: ''
+    },
     images: {
       exterior: [],
       interior: [],
@@ -40,6 +47,38 @@ const PostProperty = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleGoldOfferChange = (field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      goldOffer: {
+        ...prev.goldOffer,
+        [field]: value
+      }
+    }));
+  };
+
+  // Calculate gold value based on current market rates (example rates)
+  const calculateGoldValue = (weight, purity) => {
+    const goldRates = {
+      '24K': 6200, // per gram
+      '22K': 5700,
+      '18K': 4650,
+      '14K': 3600
+    };
+    
+    if (weight && purity) {
+      return Math.round(parseFloat(weight) * goldRates[purity]);
+    }
+    return 0;
+  };
+
+  // Calculate effective property price after gold deduction
+  const getEffectivePrice = () => {
+    const basePrice = parseFloat(formData.price) || 0;
+    const goldValue = formData.goldOffer.enabled ? (parseFloat(formData.goldOffer.goldValue) || 0) : 0;
+    return Math.max(0, basePrice - goldValue);
   };
 
   const handleNext = () => {
@@ -255,6 +294,125 @@ const PostProperty = () => {
                       rows="4"
                       required
                     />
+                  </div>
+
+                  {/* Gold Offer Section */}
+                  <div className="gold-offer-section">
+                    <div className="gold-offer-header">
+                      <div className="gold-offer-toggle">
+                        <input
+                          type="checkbox"
+                          id="goldOfferEnabled"
+                          checked={formData.goldOffer.enabled}
+                          onChange={(e) => handleGoldOfferChange('enabled', e.target.checked)}
+                          className="gold-checkbox"
+                        />
+                        <label htmlFor="goldOfferEnabled" className="gold-offer-label">
+                          <span className="gold-icon">🏆</span>
+                          <div className="gold-offer-text">
+                            <h3>Include Gold Offer with Property</h3>
+                            <p>Attract buyers by offering gold jewelry/coins that will reduce the property price</p>
+                          </div>
+                        </label>
+                      </div>
+                    </div>
+
+                    {formData.goldOffer.enabled && (
+                      <div className="gold-offer-details">
+                        <div className="gold-offer-card">
+                          <h4 className="gold-details-title">Gold Offer Details</h4>
+                          
+                          <div className="form-grid">
+                            <div className="form-group">
+                              <label>Gold Weight (grams)</label>
+                              <input
+                                type="number"
+                                value={formData.goldOffer.goldWeight}
+                                onChange={(e) => {
+                                  const weight = e.target.value;
+                                  handleGoldOfferChange('goldWeight', weight);
+                                  const calculatedValue = calculateGoldValue(weight, formData.goldOffer.goldPurity);
+                                  handleGoldOfferChange('goldValue', calculatedValue);
+                                }}
+                                placeholder="Enter gold weight"
+                                min="0"
+                                step="0.1"
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label>Gold Purity</label>
+                              <select
+                                value={formData.goldOffer.goldPurity}
+                                onChange={(e) => {
+                                  const purity = e.target.value;
+                                  handleGoldOfferChange('goldPurity', purity);
+                                  const calculatedValue = calculateGoldValue(formData.goldOffer.goldWeight, purity);
+                                  handleGoldOfferChange('goldValue', calculatedValue);
+                                }}
+                              >
+                                <option value="24K">24K (99.9% Pure)</option>
+                                <option value="22K">22K (91.6% Pure)</option>
+                                <option value="18K">18K (75% Pure)</option>
+                                <option value="14K">14K (58.3% Pure)</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div className="form-group">
+                            <label>Estimated Gold Value (₹)</label>
+                            <input
+                              type="number"
+                              value={formData.goldOffer.goldValue}
+                              onChange={(e) => handleGoldOfferChange('goldValue', e.target.value)}
+                              placeholder="Auto-calculated or enter manually"
+                              className="gold-value-input"
+                            />
+                            <small className="gold-rate-info">
+                              Current rate: ₹{formData.goldOffer.goldPurity === '24K' ? '6,200' : 
+                                           formData.goldOffer.goldPurity === '22K' ? '5,700' : 
+                                           formData.goldOffer.goldPurity === '18K' ? '4,650' : '3,600'}/gram
+                            </small>
+                          </div>
+
+                          <div className="form-group">
+                            <label>Gold Item Description</label>
+                            <textarea
+                              value={formData.goldOffer.goldDescription}
+                              onChange={(e) => handleGoldOfferChange('goldDescription', e.target.value)}
+                              placeholder="Describe the gold items (e.g., 22K gold necklace set, gold coins, etc.)"
+                              rows="3"
+                            />
+                          </div>
+
+                          {/* Price Summary */}
+                          <div className="price-summary">
+                            <div className="price-breakdown">
+                              <div className="price-row">
+                                <span>Original Property Price:</span>
+                                <span className="price-amount">₹{formData.price ? parseFloat(formData.price).toLocaleString('en-IN') : '0'}</span>
+                              </div>
+                              <div className="price-row gold-deduction">
+                                <span>Gold Offer Value:</span>
+                                <span className="price-amount">- ₹{formData.goldOffer.goldValue ? parseFloat(formData.goldOffer.goldValue).toLocaleString('en-IN') : '0'}</span>
+                              </div>
+                              <div className="price-row total-price">
+                                <span>Effective Property Price:</span>
+                                <span className="price-amount">₹{getEffectivePrice().toLocaleString('en-IN')}</span>
+                              </div>
+                            </div>
+                            <div className="gold-offer-benefits">
+                              <h5>Benefits of Gold Offer:</h5>
+                              <ul>
+                                <li>✨ Attracts more buyers</li>
+                                <li>💰 Reduces effective property cost</li>
+                                <li>🏆 Premium listing feature</li>
+                                <li>⚡ Faster property sale</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}

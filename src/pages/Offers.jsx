@@ -5,6 +5,7 @@ import Footer from '../component/Footer';
 import { FaBed, FaBath, FaRulerCombined, FaMapMarkerAlt, FaTag, FaPercent, FaClock } from 'react-icons/fa';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import {offerProperties} from "../../Constant/Constants"
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,124 +13,10 @@ const Offers = () => {
   const navigate = useNavigate();
   const [filter, setFilter] = useState('All');
   const cardsRef = useRef([]);
-
-  const offerProperties = [
-    {
-      id: 1,
-      title: 'Luxury Villa in Gurgaon',
-      location: 'Sector 47, Gurgaon',
-      originalPrice: '₹3.0 Cr',
-      offerPrice: '₹2.5 Cr',
-      discount: '17%',
-      type: 'Villa',
-      beds: 4,
-      baths: 3,
-      area: '3500 sq.ft',
-      image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600',
-      status: 'Ready to Move',
-      offerType: 'Limited Time',
-      offerEndDate: '2024-12-31',
-      offerDescription: 'Year-end special offer! Save ₹50 Lacs on this premium villa.',
-      badge: 'HOT DEAL'
-    },
-    {
-      id: 2,
-      title: 'Modern Apartment',
-      location: 'Dwarka, New Delhi',
-      originalPrice: '₹1.0 Cr',
-      offerPrice: '₹85 Lac',
-      discount: '15%',
-      type: 'Apartment',
-      beds: 3,
-      baths: 2,
-      area: '1800 sq.ft',
-      image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600',
-      status: 'Ready to Move',
-      offerType: 'Festival Offer',
-      offerEndDate: '2024-12-25',
-      offerDescription: 'Festival special pricing with free registration and stamp duty.',
-      badge: 'FESTIVAL SPECIAL'
-    },
-    {
-      id: 5,
-      title: 'Premium Penthouse',
-      location: 'Vasant Kunj, Delhi',
-      originalPrice: '₹4.5 Cr',
-      offerPrice: '₹3.8 Cr',
-      discount: '16%',
-      type: 'Penthouse',
-      beds: 5,
-      baths: 4,
-      area: '4200 sq.ft',
-      image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600',
-      status: 'Under Construction',
-      offerType: 'Pre-Launch',
-      offerEndDate: '2025-01-15',
-      offerDescription: 'Pre-launch offer with flexible payment plans and guaranteed returns.',
-      badge: 'PRE-LAUNCH'
-    },
-    {
-      id: 6,
-      title: 'Studio Apartment',
-      location: 'Noida Sector 62',
-      originalPrice: '₹50 Lac',
-      offerPrice: '₹42 Lac',
-      discount: '16%',
-      type: 'Apartment',
-      beds: 1,
-      baths: 1,
-      area: '650 sq.ft',
-      image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600',
-      status: 'Ready to Move',
-      offerType: 'First Time Buyer',
-      offerEndDate: '2024-12-30',
-      offerDescription: 'Special offer for first-time home buyers with easy EMI options.',
-      badge: 'FIRST BUYER'
-    },
-    {
-      id: 7,
-      title: 'Office Space',
-      location: 'Cyber City, Gurgaon',
-      originalPrice: '₹10 Cr',
-      offerPrice: '₹8 Cr',
-      discount: '20%',
-      type: 'Commercial',
-      beds: null,
-      baths: 3,
-      area: '3800 sq.ft',
-      image: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=600',
-      status: 'Ready to Move',
-      offerType: 'Business Special',
-      offerEndDate: '2025-01-31',
-      offerDescription: 'Corporate discount for bulk bookings and immediate possession.',
-      badge: 'CORPORATE DEAL'
-    },
-    {
-      id: 9,
-      title: 'Luxury Penthouse in South Delhi',
-      location: 'Greater Kailash, New Delhi',
-      originalPrice: '₹5.2 Cr',
-      offerPrice: '₹4.5 Cr',
-      discount: '13%',
-      type: 'Penthouse',
-      beds: 4,
-      baths: 4,
-      area: '3800 sq.ft',
-      image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600',
-      status: 'Ready to Move',
-      offerType: 'Luxury Deal',
-      offerEndDate: '2025-02-14',
-      offerDescription: 'Valentine special on luxury penthouse with premium amenities.',
-      badge: 'LUXURY DEAL'
-    }
-  ];
-
   const filters = ['All', 'Villa', 'Apartment', 'Commercial', 'Penthouse'];
-
   const filteredProperties = filter === 'All' 
     ? offerProperties 
     : offerProperties.filter(property => property.type === filter);
-
   useEffect(() => {
     cardsRef.current.forEach((card, index) => {
       if (card) {

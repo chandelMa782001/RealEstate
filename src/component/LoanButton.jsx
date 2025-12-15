@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './LoanButton.css';
 
-const LoanButton = () => {
+const LoanButton = ({ isVisible = true }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -26,7 +26,13 @@ const LoanButton = () => {
 
   return (
     <>
-      <button className="loan-button" onClick={() => setIsModalOpen(true)}>
+      <button 
+        className={`loan-button ${!isVisible ? 'loan-button-hidden' : ''}`} 
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsModalOpen(true);
+        }}
+      >
         <span className="coin-icon">🪙</span>
         <span className="loan-text">Home Loan</span>
       </button>

@@ -1,18 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import { FaCheckCircle, FaInfoCircle, FaExclamationTriangle, FaTimesCircle, FaTimes } from 'react-icons/fa';
 import gsap from 'gsap';
-
 const Notification = ({ type = 'info', message, onClose, duration = 3000 }) => {
   const notificationRef = useRef(null);
-
   useEffect(() => {
-  
     gsap.fromTo(
       notificationRef.current,
       { x: 400, opacity: 0 },
       { x: 0, opacity: 1, duration: 0.5, ease: 'power3.out' }
     );
-
     if (duration) {
       const timer = setTimeout(() => {
       
@@ -37,21 +33,18 @@ const Notification = ({ type = 'info', message, onClose, duration = 3000 }) => {
       onComplete: onClose
     });
   };
-
   const icons = {
     success: <FaCheckCircle className="text-green-500" size={24} />,
     error: <FaTimesCircle className="text-red-500" size={24} />,
     warning: <FaExclamationTriangle className="text-yellow-500" size={24} />,
     info: <FaInfoCircle className="text-blue-500" size={24} />
   };
-
   const bgColors = {
     success: 'bg-green-50 border-green-200',
     error: 'bg-red-50 border-red-200',
     warning: 'bg-yellow-50 border-yellow-200',
     info: 'bg-blue-50 border-blue-200'
   };
-
   return (
     <div 
       ref={notificationRef}
@@ -70,5 +63,4 @@ const Notification = ({ type = 'info', message, onClose, duration = 3000 }) => {
     </div>
   );
 };
-
 export default Notification;

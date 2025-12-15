@@ -131,7 +131,7 @@ const BuilderDetail = () => {
 
     if (Object.keys(validationErrors).length > 0) {
       setIsSubmitting(false);
-      showNotification('Please fix the errors before submitting', 'error', 3000);
+      showNotification('Enter the Required Field', 'error', 3000);
       return;
     }
 

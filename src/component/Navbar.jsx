@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { CgProfile } from "react-icons/cg";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { FaSearch, FaSignOutAlt } from "react-icons/fa";
@@ -9,6 +9,7 @@ import LoginModal from './LoginModal';
 import SignupModal from './SignupModal';
 import PostRequirementModal from './PostRequirementModal';
 const Navbar = () => {
+  const navigate = useNavigate();
   const { 
     isAuthenticated, 
     user, 
@@ -196,7 +197,10 @@ const Navbar = () => {
                     </div>
 
                     {/* Explore Button */}
-                    <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition text-sm">
+                    <button 
+                      onClick={() => navigate('/properties')}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition text-sm"
+                    >
                       Explore
                     </button>
                   </div>
@@ -239,6 +243,7 @@ const Navbar = () => {
               )}
             </div>
             <Link to="/about-us" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base">About Us</Link>
+          
             <Link to="/offers" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base relative">
               View Offers
              
@@ -290,6 +295,7 @@ const Navbar = () => {
                       <div className="col-span-1 md:col-span-5 bg-white p-4 md:p-6">
                         <h3 className="text-gray-500 text-xs font-semibold mb-3 uppercase tracking-wider">PROPERTIES IN DELHI SOUTH WEST</h3>
                         <div className="space-y-2 text-sm">
+                          <Link to="/properties" className="block text-gray-700 hover:text-orange-500 transition font-medium">View All Properties</Link>
                           <a href="#" className="block text-gray-700 hover:text-orange-500 transition">Flats</a>
                           <a href="#" className="block text-gray-700 hover:text-orange-500 transition">Builder Floors</a>
                           <a href="#" className="block text-gray-700 hover:text-orange-500 transition">Independent House</a>
@@ -492,9 +498,13 @@ const Navbar = () => {
                     <Link to="/dashboard" className="block px-6 py-3 text-gray-700 hover:bg-gray-50 transition font-semibold">
                      My Dashboard
                     </Link>
-                    <a href="#" className="block px-6 py-3 text-gray-700 hover:bg-gray-50 transition">
+                    <Link 
+                      to="/activity" 
+                      className="block px-6 py-3 text-gray-700 hover:bg-gray-50 transition"
+                      onClick={() => setIsUserMenuOpen(false)}
+                    >
                       My Activity
-                    </a>
+                    </Link>
                     <a href="#" className="block px-6 py-3 text-gray-700 hover:bg-gray-50 transition">
                       Recently Searched
                     </a>
@@ -660,7 +670,7 @@ const Navbar = () => {
               onClick={() => setIsMenuOpen(false)}
               className="block text-gray-700 hover:text-orange-500 transition py-2"
             >
-              🏠 Home
+              Home
             </Link>
             <Link 
               to="/about-us" 
@@ -675,6 +685,13 @@ const Navbar = () => {
               className="block text-gray-700 hover:text-orange-500 transition py-2"
             >
               Projects
+            </Link>
+            <Link 
+              to="/properties" 
+              onClick={() => setIsMenuOpen(false)}
+              className="block text-gray-700 hover:text-orange-500 transition py-2"
+            >
+            Properties
             </Link>
             <Link 
               to="/offers" 
@@ -699,13 +716,22 @@ const Navbar = () => {
               Contact Us
             </Link>
             {isAuthenticated && (
-              <Link 
-                to="/dashboard" 
-                onClick={() => setIsMenuOpen(false)}
-                className="block text-gray-700 hover:text-orange-500 transition py-2"
-              >
-                📊 My Dashboard
-              </Link>
+              <>
+                <Link 
+                  to="/dashboard" 
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block text-gray-700 hover:text-orange-500 transition py-2"
+                >
+                  📊 My Dashboard
+                </Link>
+                <Link 
+                  to="/activity" 
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block text-gray-700 hover:text-orange-500 transition py-2"
+                >
+                  📈 My Activity
+                </Link>
+              </>
             )}
             <Link 
               to="/post-property" 
@@ -739,7 +765,6 @@ const Navbar = () => {
         )}
       </div>
 
-   
       <LoginModal 
         isOpen={isLoginModalOpen} 
         onClose={() => setIsLoginModalOpen(false)}
@@ -749,7 +774,6 @@ const Navbar = () => {
         }}
       />
       
-     
       <SignupModal 
         isOpen={isSignupModalOpen} 
         onClose={() => setIsSignupModalOpen(false)}
@@ -758,7 +782,6 @@ const Navbar = () => {
           setIsLoginModalOpen(true);
         }}
       />
-
       <PostRequirementModal 
         isOpen={isPostRequirementOpen} 
         onClose={() => setIsPostRequirementOpen(false)}

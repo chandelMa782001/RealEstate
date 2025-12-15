@@ -87,6 +87,13 @@ const Dashboard = () => {
                     <span>My Properties</span>
                   </button>
                   <Link
+                    to="/activity"
+                    className="sidebar-item"
+                  >
+                    <span className="sidebar-icon">📊</span>
+                    <span>My Activity</span>
+                  </Link>
+                  <Link
                     to="/post-property"
                     className="sidebar-item"
                   >

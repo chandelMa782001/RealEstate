@@ -1,0 +1,158 @@
+/* Hero Component Responsive Styles */
+
+/* Extra small screens (320px and up) */
+@media (max-width: 479px) {
+  .hero-container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  
+  .hero-search-container {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    border-radius: 0.75rem;
+  }
+  
+  .hero-tab {
+    font-size: 0.625rem;
+    padding: 0.5rem 0.25rem;
+  }
+  
+  .hero-dropdown {
+    min-width: 5rem;
+    font-size: 0.625rem;
+  }
+  
+  .hero-search-input {
+    font-size: 0.75rem;
+    padding-left: 2rem;
+    padding-right: 3rem;
+  }
+}
+
+/* Small screens (480px to 639px) */
+@media (min-width: 480px) and (max-width: 639px) {
+  .hero-tab {
+    font-size: 0.75rem;
+  }
+  
+  .hero-dropdown {
+    min-width: 6rem;
+  }
+}
+
+/* Medium screens and up - handled by Tailwind classes */
+@media (min-width: 640px) {
+  .hero-search-container {
+    border-radius: 1rem;
+  }
+}
+
+/* Ensure dropdowns are always on top */
+.dropdown-container {
+  position: relative;
+}
+
+.dropdown-container .absolute {
+  z-index: 9999 !important;
+  position: absolute !important;
+}
+
+/* Ensure parent containers don't clip dropdowns */
+.hero-search-container {
+  overflow: visible !important;
+}
+
+/* Budget dropdown specific styles */
+.budget-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 0.5rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  z-index: 9999;
+  min-width: 320px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* Smooth transitions for all interactive elements */
+.hero-tab,
+.hero-dropdown,
+.hero-search-input {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Focus states for accessibility */
+.hero-search-input:focus,
+.hero-dropdown:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Hover states for better UX */
+.hero-tab:hover,
+.hero-dropdown:hover {
+  transform: translateY(-1px);
+}
+
+/* Active states */
+.hero-tab.active {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Range Slider Styles */
+.range-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.range-slider::-webkit-slider-track {
+  background: transparent;
+}
+
+.range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: #3b82f6;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.range-slider::-moz-range-track {
+  background: transparent;
+  border: none;
+}
+
+.range-slider::-moz-range-thumb {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: #3b82f6;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  border: none;
+}
+
+/* Remove default focus outline */
+.range-slider:focus {
+  outline: none;
+}
+
+.range-slider:focus::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+.range-slider:focus::-moz-range-thumb {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}

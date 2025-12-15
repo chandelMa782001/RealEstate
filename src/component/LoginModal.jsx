@@ -75,28 +75,28 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Mark all fields as touched
+  
     setTouched({ email: true, password: true });
 
-    // Validate all fields
+   
     const emailValid = validateField('email', email);
     const passwordValid = validateField('password', password);
 
     if (!emailValid || !passwordValid) {
       setIsSubmitting(false);
-      showNotification('Please fix the errors before submitting', 'error', 3000);
+      showNotification('Enter the Required Field', 'error', 3000);
       return;
     }
 
     try {
-      // Simulate API call
+   
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       const userData = { email, name: email.split('@')[0] };
       login(userData);
       showNotification('Login successful!', 'success', 3000);
       
-      // Reset form
+  
       setEmail('');
       setPassword('');
       setErrors({});
@@ -125,21 +125,16 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
   return (
     <div ref={overlayRef} className="fixed inset-0 bg-transparent flex items-center justify-center z-[60]">
       <div ref={modalRef} className="bg-white rounded-lg shadow-2xl w-full max-w-md mx-4 relative">
-        
         <button
           onClick={handleClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition"
         >
           <FaTimes size={20} />
         </button>
-
         <div className="p-8">
-    
           <h2 className="text-2xl font-bold text-gray-800 mb-6 border-l-4 border-orange-500 pl-3">
             Login
           </h2>
-
-        
           <form onSubmit={handleLogin} className="space-y-5" noValidate>
         
             <div>
@@ -164,8 +159,6 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
                 <p className="text-red-500 text-xs mt-1 ml-1">{errors.email}</p>
               )}
             </div>
-
-        
             <div>
               <div className="relative">
                 <input
@@ -188,8 +181,6 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
                 <p className="text-red-500 text-xs mt-1 ml-1">{errors.password}</p>
               )}
             </div>
-
-         
             <div className="flex items-center justify-between pt-2">
               <div>
                 <p className="text-sm text-gray-600">New to Maigreat Group ?</p>
@@ -202,8 +193,6 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
                 Register For a New Account
               </button>
             </div>
-
-       
             <div className="flex space-x-4 pt-4">
               <button
                 type="submit"
@@ -231,5 +220,4 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
     </div>
   );
 };
-
 export default LoginModal;

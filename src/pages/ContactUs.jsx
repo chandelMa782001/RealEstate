@@ -55,17 +55,16 @@ const ContactUs = () => {
 
     if (Object.keys(validationErrors).length > 0) {
       setIsSubmitting(false);
-      showNotification('Please fix the errors before submitting', 'error', 3000);
+      showNotification('Enter the Required Field', 'error', 3000);
       return;
     }
 
     try {
-      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       showNotification('Message sent successfully! We will get back to you soon.', 'success', 4000);
       
-      // Reset form
+     
       setFormData({
         name: '',
         email: '',

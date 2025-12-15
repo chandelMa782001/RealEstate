@@ -6,6 +6,7 @@ import Navbar from '../component/Navbar';
 import Footer from '../component/Footer';
 import gsap from 'gsap';
 import { useAppContext } from '../Context/AppContext';
+import {properties} from "../../Constant/Constants"
 import jsPDF from 'jspdf';
 
 const PropertyDetail = () => {
@@ -21,7 +22,7 @@ const PropertyDetail = () => {
   const shareMenuRef = useRef(null);
 
   useEffect(() => {
-    // Animate page content on mount
+  
     const tl = gsap.timeline();
     
     tl.fromTo(
@@ -63,82 +64,7 @@ const PropertyDetail = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [showShareMenu]);
-  const properties = {
-    1: {
-      title: 'Luxury Villa in Gurgaon',
-      location: 'Sector 47, Gurgaon',
-      coordinates: { lat: 28.4211, lng: 77.0797 }, 
-      price: '₹2.5 Cr',
-      type: 'Villa',
-      beds: 4,
-      baths: 3,
-      area: '3500 sq.ft',
-      images: [
-        'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1200',
-        'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200',
-        'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200'
-      ],
-      description: 'Experience luxury living in this stunning villa located in the heart of Gurgaon. This property features modern architecture, spacious rooms, and premium finishes throughout.',
-      features: ['Swimming Pool', 'Garden', 'Parking for 3 cars', 'Modular Kitchen', 'Gym', 'Security System'],
-      amenities: ['24/7 Security', 'Power Backup', 'Water Supply', 'Club House', 'Children Play Area'],
-      propertyId: 'MG001',
-      status: 'Ready to Move',
-      facing: 'North',
-      furnished: 'Semi-Furnished',
-      floor: 'Ground Floor',
-      totalFloors: '2',
-      age: 'Under Construction',
-      parking: '3 Covered',
-      builder: {
-        id: 1,
-        name: 'Raghav Kumar',
-        logo: images.companylogo,
-        experience: '10+ Years',
-        projects: '50+ Projects',
-        description: 'Experienced real estate dealer with over 10 years of expertise in delivering quality residential and commercial projects.',
-        rating: 4.5,
-        established: '2015'
-      }
-    },
-    2: {
-      title: 'Modern Apartment',
-      location: 'Dwarka, New Delhi',
-      coordinates: { lat: 28.5921, lng: 77.0460 }, 
-      price: '₹85 Lac',
-      type: 'Apartment',
-      beds: 3,
-      baths: 2,
-      area: '1800 sq.ft',
-      images: [
-        'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200',
-        'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200',
-        'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200'
-      ],
-      description: 'Beautiful modern apartment with excellent connectivity and amenities. Perfect for families looking for a comfortable living space in Delhi.',
-      features: ['Balcony', 'Modular Kitchen', 'Wooden Flooring', 'Wardrobe', 'False Ceiling'],
-      amenities: ['Lift', 'Security', 'Power Backup', 'Park', 'Gym'],
-      propertyId: 'MG002',
-      status: 'Ready to Move',
-      facing: 'East',
-      furnished: 'Fully Furnished',
-      floor: '5th Floor',
-      totalFloors: '12',
-      age: '2 Years',
-      parking: '1 Covered',
-      builder: {
-        id: 1,
-        name: 'Raghav Kumar',
-        logo: images.companylogo,
-        experience: '10+ Years',
-        projects: '50+ Projects',
-        description: 'Experienced real estate dealer with over 10 years of expertise in delivering quality residential and commercial projects.',
-        rating: 4.5,
-        established: '2015'
-      }
-    }
-  };
   const property = properties[id] || properties[1];
-  
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % property.images.length);
   };
@@ -610,8 +536,6 @@ const PropertyDetail = () => {
                 </div>
               )}
             </div>
-
-          
             <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-3">
                 <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Builder Details</h2>
@@ -664,8 +588,6 @@ const PropertyDetail = () => {
               </div>
             </div>
           </div>
-
-   
           <div ref={sidebarRef} className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 lg:sticky lg:top-24">
               <h3 className="text-2xl sm:text-3xl font-bold text-orange-500 mb-4 sm:mb-6">{property.price}</h3>
@@ -696,8 +618,6 @@ const PropertyDetail = () => {
                   <FaEnvelope />
                   <span>Email</span>
                 </a>
-
-                {/* Property Brochure Download */}
                 <button
                   onClick={handlePropertyBrochureDownload}
                   className="flex items-center justify-center space-x-3 bg-orange-500 hover:bg-orange-600 text-white py-2.5 sm:py-3 rounded-lg transition text-sm sm:text-base w-full"

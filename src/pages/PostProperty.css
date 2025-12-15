@@ -352,6 +352,191 @@
   color: #f97316;
 }
 
+/* Gold Offer Styles */
+.gold-offer-section {
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 2px solid #f1f5f9;
+}
+
+.gold-offer-header {
+  margin-bottom: 20px;
+}
+
+.gold-offer-toggle {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.gold-checkbox {
+  width: 20px;
+  height: 20px;
+  margin-top: 5px;
+  accent-color: #f97316;
+  cursor: pointer;
+}
+
+.gold-offer-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  flex: 1;
+}
+
+.gold-icon {
+  font-size: 24px;
+  margin-top: 2px;
+}
+
+.gold-offer-text h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 5px 0;
+}
+
+.gold-offer-text p {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.gold-offer-details {
+  margin-top: 20px;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.gold-offer-card {
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+  border: 2px solid #fed7aa;
+  border-radius: 15px;
+  padding: 25px;
+  position: relative;
+  overflow: hidden;
+}
+
+.gold-offer-card::before {
+  content: '✨';
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 24px;
+  opacity: 0.3;
+}
+
+.gold-details-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #9a3412;
+  margin: 0 0 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gold-details-title::before {
+  content: '🏆';
+  font-size: 18px;
+}
+
+.gold-value-input {
+  background: #fef3c7 !important;
+  border-color: #f59e0b !important;
+}
+
+.gold-rate-info {
+  color: #92400e;
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 5px;
+  display: block;
+}
+
+.price-summary {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 2px solid #fed7aa;
+}
+
+.price-breakdown {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #fbbf24;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 14px;
+}
+
+.price-row:not(:last-child) {
+  border-bottom: 1px solid #fef3c7;
+}
+
+.gold-deduction {
+  color: #dc2626;
+  font-weight: 500;
+}
+
+.total-price {
+  font-size: 16px;
+  font-weight: 700;
+  color: #059669;
+  border-top: 2px solid #fbbf24 !important;
+  padding-top: 12px !important;
+  margin-top: 8px;
+}
+
+.price-amount {
+  font-weight: 600;
+}
+
+.gold-offer-benefits {
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  border: 1px solid #fbbf24;
+}
+
+.gold-offer-benefits h5 {
+  margin: 0 0 10px 0;
+  color: #92400e;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.gold-offer-benefits ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gold-offer-benefits li {
+  font-size: 12px;
+  color: #451a03;
+  margin-bottom: 5px;
+  padding-left: 0;
+}
+
 @media (max-width: 768px) {
   .post-property-title {
     font-size: 28px;
@@ -389,5 +574,22 @@
 
   .btn-primary {
     margin-left: 0;
+  }
+
+  .gold-offer-toggle {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .gold-offer-card {
+    padding: 20px 15px;
+  }
+
+  .price-row {
+    font-size: 13px;
+  }
+
+  .total-price {
+    font-size: 15px;
   }
 }

@@ -4,139 +4,14 @@ import { FaSearch, FaMapMarkerAlt, FaStar, FaBuilding, FaPhone, FaEnvelope } fro
 import Navbar from '../component/Navbar';
 import Footer from '../component/Footer';
 import gsap from 'gsap';
-import { images } from '../../utils/Image';
+import { builders } from '../../Constant/Constants';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
 gsap.registerPlugin(ScrollTrigger);
-
 const Builders = () => {
   const navigate = useNavigate();
   const [searchLocation, setSearchLocation] = useState('');
   const [filteredBuilders, setFilteredBuilders] = useState([]);
   const cardsRef = useRef([]);
-
-  const builders = [
-    {
-      id: 1,
-      name: 'Raghav Kumar',
-      location: 'Gurgaon, Haryana',
-      experience: '10+ Years',
-      projects: 50,
-      rating: 4.5,
-      specialization: 'Residential & Commercial',
-      phone: '+91 9354527118',
-      email: 'raghav.kumar@realestate.com',
-      // image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600',
-      image:images.builder_1,
-      description: 'Experienced real estate dealer with over 10 years of expertise in delivering quality residential and commercial projects.',
-      completedProjects: ['Luxury Villas', 'Modern Apartments', 'Commercial Spaces']
-    },
-    {
-      id: 2,
-      name: 'Priya Sharma',
-      location: 'New Delhi, Delhi',
-      experience: '15+ Years',
-      projects: 80,
-      rating: 4.8,
-      specialization: 'Luxury Residential',
-      phone: '+91 124 4567890',
-      email: 'priya.sharma@properties.com',
-      // image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600',
-      image:images.builder_2,
-      description: 'Trusted property dealer specializing in luxury residential properties across Delhi NCR.',
-      completedProjects: ['Premium Apartments', 'Luxury Penthouses', 'Villa Projects']
-    },
-    {
-      id: 3,
-      name: 'Amit Verma',
-      location: 'Noida, Uttar Pradesh',
-      experience: '12+ Years',
-      projects: 65,
-      rating: 4.6,
-      specialization: 'Sustainable Housing',
-      phone: '+91 120 4567890',
-      email: 'amit.verma@builders.com',
-      // image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600',
-      image:images.builder_3,
-      description: 'Committed to delivering innovative and sustainable real estate solutions with a focus on eco-friendly projects.',
-      completedProjects: ['Green Apartments', 'Eco Villas', 'Smart Homes']
-    },
-    {
-      id: 4,
-      name: 'Neha Gupta',
-      location: 'Gurgaon, Haryana',
-      experience: '8+ Years',
-      projects: 45,
-      rating: 4.7,
-      specialization: 'Affordable & Premium',
-      phone: '+91 124 7890123',
-      email: 'neha.gupta@realty.com',
-      // image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600',
-      image:images.builder_4,
-      description: 'Building trust through quality properties, specializing in both affordable and premium segments.',
-      completedProjects: ['Budget Apartments', 'Premium Flats', 'Residential Plots']
-    },
-    {
-      id: 5,
-      name: 'Vikram Singh',
-      location: 'Dwarka, New Delhi',
-      experience: '20+ Years',
-      projects: 120,
-      rating: 4.5,
-      specialization: 'Premium Residential',
-      phone: '+91 11 4567890',
-      email: 'vikram.singh@estates.com',
-      // image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600',
-      image:images.builder_5,
-      description: 'Renowned for uncompromising quality and customer satisfaction in premium residential projects.',
-      completedProjects: ['Luxury Towers', 'Premium Societies', 'High-Rise Apartments']
-    },
-    {
-      id: 6,
-      name: 'Anjali Mehta',
-      location: 'Noida, Uttar Pradesh',
-      experience: '14+ Years',
-      projects: 70,
-      rating: 4.6,
-      specialization: 'Mixed-Use Development',
-      phone: '+91 120 9876543',
-      email: 'anjali.mehta@properties.com',
-      // image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600',
-      image:images.builder_6,
-      description: 'Creating landmark projects across residential, commercial, and retail segments with expertise.',
-      completedProjects: ['Mixed-Use Complexes', 'Shopping Centers', 'Residential Towers']
-    },
-    {
-      id: 7,
-      name: 'Rohit Malhotra',
-      location: 'Gurgaon, Haryana',
-      experience: '18+ Years',
-      projects: 95,
-      rating: 4.4,
-      specialization: 'Integrated Townships',
-      phone: '+91 124 3456789',
-      email: 'rohit.malhotra@builders.com',
-      // image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600',
-      image:images.builder_7,
-      description: 'Pioneer in creating integrated lifestyle communities with modern amenities and facilities.',
-      completedProjects: ['Township Projects', 'Gated Communities', 'Residential Complexes']
-    },
-    {
-      id: 8,
-      name: 'Kavita Reddy',
-      location: 'New Delhi, Delhi',
-      experience: '16+ Years',
-      projects: 85,
-      rating: 4.7,
-      specialization: 'Luxury & Ultra-Luxury',
-      phone: '+91 11 8765432',
-      email: 'kavita.reddy@luxury.com',
-      image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600',
-      description: 'Premier real estate dealer known for luxury and ultra-luxury property projects across Delhi NCR.',
-      completedProjects: ['Ultra-Luxury Villas', 'Premium Penthouses', 'Luxury Apartments']
-    }
-  ];
-
   useEffect(() => {
     setFilteredBuilders(builders);
   }, []);
@@ -151,7 +26,6 @@ const Builders = () => {
       setFilteredBuilders(filtered);
     }
   }, [searchLocation]);
-
   useEffect(() => {
     cardsRef.current.forEach((card, index) => {
       if (card) {
@@ -183,7 +57,6 @@ const Builders = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-      
       <div className="bg-gradient-to-r from-green-900 to-green-700 py-8 sm:py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4">
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4 text-center">
@@ -289,10 +162,8 @@ const Builders = () => {
           </div>
         )}
       </div>
-
       <Footer />
     </div>
   );
 };
-
 export default Builders;
