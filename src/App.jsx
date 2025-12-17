@@ -16,6 +16,7 @@ import BuilderDetail from './pages/BuilderDetail';
 import PostProperty from './pages/PostProperty';
 import Dashboard from './pages/Dashboard';
 import Activity from './pages/Activity';
+import RecentlyViewed from './pages/RecentlyViewed';
 import NotFound from './pages/NotFound';
 
 const AppContent = () => {
@@ -88,6 +89,14 @@ const AppContent = () => {
           element={
             <ProtectedRoute message="Please login to view your activity">
               <Activity />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/recently-viewed" 
+          element={
+            <ProtectedRoute message="Please login to view your recently viewed properties">
+              <RecentlyViewed />
             </ProtectedRoute>
           } 
         />

@@ -1,9 +1,9 @@
+
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import LoanButton from './LoanButton';
 import "../component/Hero.css"
-
 const Hero = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('Buy');
@@ -31,10 +31,7 @@ const Hero = () => {
   const titleRef = useRef(null);
   const subtitleRef = useRef(null);
   const searchBoxRef = useRef(null);
-
   const tabs = ['Buy', 'Rent', 'New Launch', 'Commercial', 'Plots/Land', 'Projects', 'Post Property'];
-  
-  // Budget range values in crores
   const budgetValues = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
   const formatBudgetValue = (value) => {
     if (value === 0) return '0';
@@ -44,10 +41,9 @@ const Hero = () => {
   const bedroomOptions = ['1 RK', '1 BHK', '2 BHK', '3 BHK', '4 BHK', '4+ BHK'];
   const constructionOptions = ['New Launch', 'Under Construction', 'Ready to Move'];
   const postedByOptions = ['Owner', 'Dealer', 'Builder'];
-
   const handleTabChange = (tab) => {
     setActiveTab(tab);
-    // Reset property types when changing tabs
+  
     setSelectedPropertyTypes({
       'Flat/Apartment': false,
       'Independent/Builder Floor': false,
@@ -60,14 +56,24 @@ const Hero = () => {
     });
     setShowPropertyTypes(false);
   };
-
   const handlePropertyTypeChange = (type) => {
     setSelectedPropertyTypes(prev => ({
       ...prev,
       [type]: !prev[type]
     }));
   };
-
+  const getSelectedPropertyTypesCount = () => {
+    return Object.values(selectedPropertyTypes).filter(Boolean).length;
+  };
+  const getPropertyTypeDisplayText = () => {
+    const count = getSelectedPropertyTypesCount();
+    if (count === 0) return 'All Residential';
+    if (count === 1) {
+      const selectedType = Object.keys(selectedPropertyTypes).find(type => selectedPropertyTypes[type]);
+      return selectedType;
+    }
+    return `${count} Property Types`;
+  };
   const handleMinBudgetChange = (e) => {
     const value = parseInt(e.target.value);
     setBudgetRange(prev => ({
@@ -75,7 +81,6 @@ const Hero = () => {
       min: Math.min(value, prev.max)
     }));
   };
-
   const handleMaxBudgetChange = (e) => {
     const value = parseInt(e.target.value);
     setBudgetRange(prev => ({
@@ -83,7 +88,6 @@ const Hero = () => {
       max: Math.max(value, prev.min)
     }));
   };
-
   const getSelectedBudgetDisplay = () => {
     if (budgetRange.min === 0 && budgetRange.max === 100) {
       return 'Budget';
@@ -100,13 +104,13 @@ const Hero = () => {
       params.set('search', searchQuery.trim());
     }
     
-    // Add selected property types
+   
     const selectedTypes = Object.keys(selectedPropertyTypes).filter(type => selectedPropertyTypes[type]);
     if (selectedTypes.length > 0) {
       params.set('propertyTypes', selectedTypes.join(','));
     }
     
-    // Add budget range
+   
     if (budgetRange.min !== 0 || budgetRange.max !== 100) {
       params.set('budgetMin', budgetRange.min.toString());
       params.set('budgetMax', budgetRange.max.toString());
@@ -129,10 +133,8 @@ const Hero = () => {
       handleSearch();
     }
   };
-
   useEffect(() => {
     const tl = gsap.timeline();
-    
     tl.fromTo(
       titleRef.current,
       { opacity: 0, y: -50 },
@@ -151,8 +153,6 @@ const Hero = () => {
       '-=0.4'
     );
   }, []);
-
-  // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (!event.target.closest('.dropdown-container')) {
@@ -163,7 +163,6 @@ const Hero = () => {
         setShowPostedByDropdown(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -173,7 +172,6 @@ const Hero = () => {
   const handleHeroClick = (e) => {
     setIsLoanButtonVisible(false);
   };
-
   return (
     <div className="relative min-h-screen" onClick={handleHeroClick}>
       <div 
@@ -194,13 +192,13 @@ const Hero = () => {
           </h2>
         </div>
         
-        {/* Modern Search Container */}
+        
         <div 
           ref={searchBoxRef} 
           className="max-w-7xl mx-auto bg-white rounded-xl sm:rounded-2xl shadow-2xl overflow-visible hero-search-container"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Tab Navigation */}
+         
           <div className="flex flex-wrap border-b border-gray-200">
             {tabs.map((tab) => (
               <button
@@ -227,24 +225,28 @@ const Hero = () => {
           </div>
 
           <div className="p-3 xs:p-4 sm:p-6 relative">
-            {/* Property Type Selector and Search */}
+      
             <div className="flex flex-col gap-3 sm:gap-4 mb-4">
-              {/* Top Row: Property Type and Search */}
+             
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                {/* Property Type Dropdown */}
+                
                 <div className="relative dropdown-container">
                   <button
                     onClick={() => setShowPropertyTypes(!showPropertyTypes)}
-                    className="flex items-center justify-between w-full sm:w-auto sm:min-w-48 px-3 sm:px-4 py-2.5 sm:py-3 bg-gray-50 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
+                    className={`flex items-center justify-between w-full sm:w-auto sm:min-w-48 px-3 sm:px-4 py-2.5 sm:py-3 border rounded-lg transition-colors ${
+                      getSelectedPropertyTypesCount() > 0 
+                        ? 'bg-blue-50 border-blue-300 text-blue-700' 
+                        : 'bg-gray-50 border-gray-300 text-gray-700 hover:bg-gray-100'
+                    }`}
                   >
-                    <span className="text-xs sm:text-sm font-medium text-gray-700">All Residential</span>
+                    <span className="text-xs sm:text-sm font-medium">{getPropertyTypeDisplayText()}</span>
                     <svg className={`w-4 h-4 transition-transform ${showPropertyTypes ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
                 </div>
 
-                {/* Search Input */}
+       
                 <div className="flex-1 relative">
                   <div className="relative">
                     <svg className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -274,7 +276,7 @@ const Hero = () => {
                   </div>
                 </div>
 
-                {/* Search Button */}
+           
                 <button
                   onClick={handleSearch}
                   className="px-4 sm:px-8 py-2.5 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold text-xs sm:text-sm w-full sm:w-auto"
@@ -283,28 +285,90 @@ const Hero = () => {
                 </button>
               </div>
             </div>
-            {/* Property Type Checkboxes */}
+         
             {showPropertyTypes && (
               <div className="bg-gray-50 rounded-lg p-3 sm:p-4 mb-4">
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="font-semibold text-gray-800 text-sm sm:text-base">Property Type</h3>
-                  <button
-                    onClick={() => setShowPropertyTypes(false)}
-                    className="text-blue-600 hover:text-blue-800 text-xs sm:text-sm font-medium"
-                  >
-                    Clear
-                  </button>
+                  <div className="flex items-center space-x-2">
+                    {getSelectedPropertyTypesCount() < Object.keys(selectedPropertyTypes).length && (
+                      <button
+                        onClick={() => setSelectedPropertyTypes({
+                          'Flat/Apartment': true,
+                          'Independent/Builder Floor': true,
+                          'Independent House/Villa': true,
+                          'Residential Land': true,
+                          '1 RK/ Studio Apartment': true,
+                          'Farm House': true,
+                          'Serviced Apartments': true,
+                          'Other': true
+                        })}
+                        className="text-green-600 hover:text-green-800 text-xs sm:text-sm font-medium"
+                      >
+                        Select All
+                      </button>
+                    )}
+                    {getSelectedPropertyTypesCount() > 0 && (
+                      <button
+                        onClick={() => setSelectedPropertyTypes({
+                          'Flat/Apartment': false,
+                          'Independent/Builder Floor': false,
+                          'Independent House/Villa': false,
+                          'Residential Land': false,
+                          '1 RK/ Studio Apartment': false,
+                          'Farm House': false,
+                          'Serviced Apartments': false,
+                          'Other': false
+                        })}
+                        className="text-red-600 hover:text-red-800 text-xs sm:text-sm font-medium"
+                      >
+                        Clear All
+                      </button>
+                    )}
+                    <button
+                      onClick={() => setShowPropertyTypes(false)}
+                      className="text-blue-600 hover:text-blue-800 text-xs sm:text-sm font-medium"
+                    >
+                      Done
+                    </button>
+                  </div>
                 </div>
                 <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
                   {Object.keys(selectedPropertyTypes).map((type) => (
-                    <label key={type} className="flex items-center space-x-2 cursor-pointer p-2 hover:bg-white rounded transition-colors">
-                      <input
-                        type="checkbox"
-                        checked={selectedPropertyTypes[type]}
-                        onChange={() => handlePropertyTypeChange(type)}
-                        className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                      />
-                      <span className="text-xs sm:text-sm text-gray-700 leading-tight">{type}</span>
+                    <label 
+                      key={type} 
+                      className={`flex items-center space-x-2 cursor-pointer p-2 rounded transition-all duration-200 ${
+                        selectedPropertyTypes[type] 
+                          ? 'bg-blue-100 border border-blue-300 shadow-sm' 
+                          : 'hover:bg-white border border-transparent'
+                      }`}
+                    >
+                      <div className="relative">
+                        <input
+                          type="checkbox"
+                          checked={selectedPropertyTypes[type]}
+                          onChange={() => handlePropertyTypeChange(type)}
+                          className="w-4 h-4 text-blue-600 border-2 border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 transition-all duration-200"
+                        />
+                        {selectedPropertyTypes[type] && (
+                          <svg 
+                            className="absolute top-0 left-0 w-4 h-4 text-blue-600 pointer-events-none" 
+                            fill="currentColor" 
+                            viewBox="0 0 20 20"
+                          >
+                            <path 
+                              fillRule="evenodd" 
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" 
+                              clipRule="evenodd" 
+                            />
+                          </svg>
+                        )}
+                      </div>
+                      <span className={`text-xs sm:text-sm leading-tight transition-colors duration-200 ${
+                        selectedPropertyTypes[type] ? 'text-blue-800 font-medium' : 'text-gray-700'
+                      }`}>
+                        {type}
+                      </span>
                     </label>
                   ))}
                 </div>
@@ -314,14 +378,13 @@ const Hero = () => {
               </div>
             )}
 
-            {/* Filter Dropdowns - Hidden on mobile, visible on desktop */}
             <div className="hidden lg:flex flex-wrap gap-2 sm:gap-3 relative z-10">
-              {/* Budget Filter */}
+            
               <div className="relative dropdown-container">
                 <button
                   onClick={() => {
                     setShowBudgetDropdown(!showBudgetDropdown);
-                    // Close other dropdowns
+                   
                     setShowBedroomDropdown(false);
                     setShowConstructionDropdown(false);
                     setShowPostedByDropdown(false);
@@ -353,31 +416,30 @@ const Hero = () => {
                     <div>
                       <h3 className="font-semibold text-gray-800 text-base mb-4">Select Price Range</h3>
                       
-                      {/* Budget Range Display */}
+                    
                       <div className="mb-6">
                         <div className="text-sm text-gray-600 mb-2">
                           ₹{formatBudgetValue(budgetRange.min)} - ₹{formatBudgetValue(budgetRange.max)}
                         </div>
                       </div>
 
-                      {/* Dual Range Slider */}
+                   
                       <div className="relative mb-8">
                         <div className="flex items-center justify-between mb-4">
-                          {/* Min Value Input */}
+                         
                           <div className="flex items-center bg-blue-900 text-white px-3 py-1 rounded text-sm font-medium">
                             {budgetRange.min}
                           </div>
-                          
-                          {/* Max Value Input */}
+                      
                           <div className="flex items-center bg-blue-900 text-white px-3 py-1 rounded text-sm font-medium">
                             {budgetRange.max}+ Crores
                           </div>
                         </div>
 
-                        {/* Range Slider Track */}
+                       
                         <div className="relative">
                           <div className="h-2 bg-gray-200 rounded-full relative">
-                            {/* Active Range */}
+                          
                             <div 
                               className="absolute h-2 bg-blue-500 rounded-full"
                               style={{
@@ -387,7 +449,7 @@ const Hero = () => {
                             ></div>
                           </div>
                           
-                          {/* Min Range Input */}
+                     
                           <input
                             type="range"
                             min="0"
@@ -397,8 +459,7 @@ const Hero = () => {
                             className="absolute top-0 left-0 w-full h-2 bg-transparent appearance-none cursor-pointer range-slider"
                             style={{ zIndex: 1 }}
                           />
-                          
-                          {/* Max Range Input */}
+                    
                           <input
                             type="range"
                             min="0"
@@ -411,7 +472,7 @@ const Hero = () => {
                         </div>
                       </div>
 
-                      {/* Apply Button */}
+                      
                       <div className="flex justify-end">
                         <button
                           onClick={() => setShowBudgetDropdown(false)}
@@ -425,12 +486,12 @@ const Hero = () => {
                 )}
               </div>
 
-              {/* Bedroom Filter */}
+            
               <div className="relative dropdown-container">
                 <button
                   onClick={() => {
                     setShowBedroomDropdown(!showBedroomDropdown);
-                    // Close other dropdowns
+                   
                     setShowBudgetDropdown(false);
                     setShowConstructionDropdown(false);
                     setShowPostedByDropdown(false);
@@ -475,12 +536,12 @@ const Hero = () => {
                 )}
               </div>
 
-              {/* Construction Status Filter */}
+           
               <div className="relative dropdown-container">
                 <button
                   onClick={() => {
                     setShowConstructionDropdown(!showConstructionDropdown);
-                    // Close other dropdowns
+            
                     setShowBudgetDropdown(false);
                     setShowBedroomDropdown(false);
                     setShowPostedByDropdown(false);
@@ -525,12 +586,12 @@ const Hero = () => {
                 )}
               </div>
 
-              {/* Posted By Filter */}
+            
               <div className="relative dropdown-container">
                 <button
                   onClick={() => {
                     setShowPostedByDropdown(!showPostedByDropdown);
-                    // Close other dropdowns
+                  
                     setShowBudgetDropdown(false);
                     setShowBedroomDropdown(false);
                     setShowConstructionDropdown(false);
@@ -577,8 +638,6 @@ const Hero = () => {
             </div>
           </div>
         </div>
-
-
       </div>
       <LoanButton isVisible={isLoanButtonVisible} />
     </div>

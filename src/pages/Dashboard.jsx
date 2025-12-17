@@ -94,6 +94,13 @@ const Dashboard = () => {
                     <span>My Activity</span>
                   </Link>
                   <Link
+                    to="/recently-viewed"
+                    className="sidebar-item"
+                  >
+                    <span className="sidebar-icon">👁️</span>
+                    <span>Recently Searched</span>
+                  </Link>
+                  <Link
                     to="/post-property"
                     className="sidebar-item"
                   >

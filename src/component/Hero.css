@@ -1,6 +1,4 @@
-/* Hero Component Responsive Styles */
 
-/* Extra small screens (320px and up) */
 @media (max-width: 479px) {
   .hero-container {
     padding-left: 0.75rem;
@@ -30,7 +28,7 @@
   }
 }
 
-/* Small screens (480px to 639px) */
+
 @media (min-width: 480px) and (max-width: 639px) {
   .hero-tab {
     font-size: 0.75rem;
@@ -41,14 +39,13 @@
   }
 }
 
-/* Medium screens and up - handled by Tailwind classes */
 @media (min-width: 640px) {
   .hero-search-container {
     border-radius: 1rem;
   }
 }
 
-/* Ensure dropdowns are always on top */
+
 .dropdown-container {
   position: relative;
 }
@@ -58,12 +55,12 @@
   position: absolute !important;
 }
 
-/* Ensure parent containers don't clip dropdowns */
+
 .hero-search-container {
   overflow: visible !important;
 }
 
-/* Budget dropdown specific styles */
+
 .budget-dropdown {
   position: absolute;
   top: 100%;
@@ -79,7 +76,7 @@
   overflow-y: auto;
 }
 
-/* Smooth transitions for all interactive elements */
+
 .hero-tab,
 .hero-dropdown,
 .hero-search-input {
@@ -104,7 +101,54 @@
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
-/* Range Slider Styles */
+/* Custom Checkbox Styles */
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: white;
+  border: 2px solid #d1d5db;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease-in-out;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+}
+
+input[type="checkbox"]:hover {
+  border-color: #9ca3af;
+}
+
+input[type="checkbox"]:checked:hover {
+  background-color: #2563eb;
+  border-color: #2563eb;
+}
+
+input[type="checkbox"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+
+.property-type-item {
+  transition: all 0.2s ease-in-out;
+}
+
+.property-type-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.property-type-item.selected {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  border-color: #3b82f6;
+}
+
+
 .range-slider {
   -webkit-appearance: none;
   appearance: none;
@@ -144,7 +188,7 @@
   border: none;
 }
 
-/* Remove default focus outline */
+
 .range-slider:focus {
   outline: none;
 }

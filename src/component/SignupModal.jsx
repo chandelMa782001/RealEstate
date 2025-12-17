@@ -319,7 +319,7 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
               <button 
                 type="button"
                 onClick={onSwitchToLogin}
-                className="text-sm text-blue-600 hover:text-blue-700 font-semibold"
+                className="text-sm text-blue-600 cursor-pointer hover:text-blue-700 font-semibold"
               >
                 Login Here
               </button>

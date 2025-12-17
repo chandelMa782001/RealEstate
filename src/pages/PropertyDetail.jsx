@@ -12,7 +12,7 @@ import jsPDF from 'jspdf';
 const PropertyDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { showNotification } = useAppContext();
+  const { showNotification, addToRecentlyViewed } = useAppContext();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [userLocation, setUserLocation] = useState(null);
@@ -64,6 +64,14 @@ const PropertyDetail = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [showShareMenu]);
+
+  // Add property to recently viewed when component mounts
+  useEffect(() => {
+    if (id) {
+      addToRecentlyViewed(parseInt(id));
+    }
+  }, [id, addToRecentlyViewed]);
+
   const property = properties[id] || properties[1];
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % property.images.length);
@@ -332,7 +340,7 @@ const PropertyDetail = () => {
                   <button
                     key={index}
                     onClick={() => setCurrentImageIndex(index)}
-                    className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition ${
+                    className={`w-2 h-2  rounded-full transition ${
                       index === currentImageIndex ? 'bg-white' : 'bg-white/50'
                     }`}
                   />

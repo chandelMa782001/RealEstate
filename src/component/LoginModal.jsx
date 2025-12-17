@@ -188,7 +188,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
               <button 
                 type="button"
                 onClick={onSwitchToSignup}
-                className="text-sm text-blue-600 hover:text-blue-700 font-semibold"
+                className="text-sm text-blue-600 cursor-pointer hover:text-blue-700 font-semibold"
               >
                 Register For a New Account
               </button>

@@ -505,9 +505,13 @@ const Navbar = () => {
                     >
                       My Activity
                     </Link>
-                    <a href="#" className="block px-6 py-3 text-gray-700 hover:bg-gray-50 transition">
+                    <Link 
+                      to="/recently-viewed" 
+                      className="block px-6 py-3 text-gray-700 hover:bg-gray-50 transition"
+                      onClick={() => setIsUserMenuOpen(false)}
+                    >
                       Recently Searched
-                    </a>
+                    </Link>
                     <button 
                       onClick={() => {
                         setIsPostRequirementOpen(true);
@@ -730,6 +734,13 @@ const Navbar = () => {
                   className="block text-gray-700 hover:text-orange-500 transition py-2"
                 >
                   📈 My Activity
+                </Link>
+                <Link 
+                  to="/recently-viewed" 
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block text-gray-700 hover:text-orange-500 transition py-2"
+                >
+                  👁️ Recently Searched
                 </Link>
               </>
             )}
