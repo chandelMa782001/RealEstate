@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './LoanButton.css';
-
 const LoanButton = ({ isVisible = true }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -10,11 +9,10 @@ const LoanButton = ({ isVisible = true }) => {
     loanAmount: '',
     propertyType: ''
   });
-
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Loan application submitted:', formData);
-    // Add your submission logic here
+  
     alert('Loan application submitted successfully!');
     setIsModalOpen(false);
     setFormData({ name: '', email: '', phone: '', loanAmount: '', propertyType: '' });
@@ -109,5 +107,4 @@ const LoanButton = ({ isVisible = true }) => {
     </>
   );
 };
-
 export default LoanButton;

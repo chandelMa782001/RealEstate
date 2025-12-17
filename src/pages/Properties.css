@@ -1,6 +1,4 @@
-/* Custom styles for Properties page */
 
-/* Custom toggle switch */
 .toggle-switch {
   position: relative;
   display: inline-block;
@@ -46,7 +44,7 @@ input:checked + .toggle-slider:before {
   transform: translateX(20px);
 }
 
-/* Property card hover effects */
+
 .property-card {
   transition: all 0.3s ease;
 }
@@ -56,7 +54,7 @@ input:checked + .toggle-slider:before {
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
-/* Filter animations */
+
 .filter-section {
   transition: all 0.3s ease;
 }
@@ -310,8 +308,8 @@ ile tab navigation scrolling */
 @media (max-width: 640px) {
   /* Larger tap targets */
   button, .cursor-pointer {
-    min-height: 44px;
-    min-width: 44px;
+    /* min-height: 44px;
+    min-width: 44px; */
   }
   
   /* Better focus states for mobile */

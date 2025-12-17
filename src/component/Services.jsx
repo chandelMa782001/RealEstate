@@ -6,15 +6,19 @@ const Services = () => {
   const navigate = useNavigate();
   const { isAuthenticated, setIsLoginModalOpen, showNotification } = useAppContext();
   
-  const handleProtectedAction = (actionType) => {
-    if (!isAuthenticated) {
-      showNotification(`Please login to ${actionType.toLowerCase()}`, 'warning', 3000);
+  const handleServiceClick = (service) => {
+    if (service.requiresAuth && !isAuthenticated) {
+      showNotification(`Please login to ${service.actionType.toLowerCase()}`, 'warning', 3000);
       setTimeout(() => {
         setIsLoginModalOpen(true);
       }, 500);
       return;
     }
-    switch (actionType) {
+    
+    switch (service.actionType) {
+      case 'Buy Property':
+        navigate('/properties');
+        break;
       case 'Sell Property':
         navigate('/post-property');
         break;
@@ -22,7 +26,7 @@ const Services = () => {
         navigate('/properties');
         break;
       case 'Property Valuation':
-        showNotification('Property valuation service coming soon!', 'info', 2000);
+        navigate('/property/estimate');
         break;
       default:
         break;
@@ -38,10 +42,8 @@ const Services = () => {
           {services.map((service, index) => (
             <div 
               key={index} 
-              onClick={service.action}
-              className={`text-center p-6 rounded-lg hover:shadow-lg transition group relative ${
-                service.action ? 'cursor-pointer hover:bg-gray-50' : ''
-              }`}
+              onClick={() => handleServiceClick(service)}
+              className="text-center p-6 rounded-lg hover:shadow-lg transition group relative cursor-pointer hover:bg-gray-50"
             >
               {service.requiresAuth && !isAuthenticated && (
                 <div className="absolute top-3 right-3 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
@@ -51,15 +53,13 @@ const Services = () => {
               <div className="text-6xl mb-4 group-hover:scale-110 transition">{service.icon}</div>
               <h3 className="text-xl font-bold text-gray-800 mb-3">{service.title}</h3>
               <p className="text-gray-600">{service.description}</p>
-              {service.action && (
-                <button className={`mt-4 px-4 py-2 rounded-lg text-sm transition-all ${
-                  service.requiresAuth && !isAuthenticated 
-                    ? 'bg-gray-400 text-white cursor-not-allowed' 
-                    : 'bg-orange-500 hover:bg-orange-600 text-white'
-                }`}>
-                  {service.requiresAuth && !isAuthenticated ? 'Login to Access' : 'Explore Now'}
-                </button>
-              )}
+              <button className={`mt-4 px-4 py-2 rounded-lg text-sm transition-all ${
+                service.requiresAuth && !isAuthenticated 
+                  ? 'bg-gray-400 text-white cursor-not-allowed' 
+                  : 'bg-orange-500 hover:bg-orange-600 text-white'
+              }`}>
+                {service.requiresAuth && !isAuthenticated ? 'Login to Access' : 'Explore Now'}
+              </button>
             </div>
           ))}
         </div>

@@ -65,7 +65,7 @@ const PropertyDetail = () => {
     };
   }, [showShareMenu]);
 
-  // Add property to recently viewed when component mounts
+
   useEffect(() => {
     if (id) {
       addToRecentlyViewed(parseInt(id));
@@ -474,7 +474,7 @@ const PropertyDetail = () => {
                 </div>
               </div>
 
-              {/* Location Map */}
+            
               {showMap && userLocation && (
                 <div className="mt-6">
                   <div className="flex items-center justify-between mb-4">

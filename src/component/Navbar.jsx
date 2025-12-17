@@ -175,7 +175,7 @@ const Navbar = () => {
                             />
                           </div>
 
-                          {/* Quick Budget Options */}
+                        
                           <div className="grid grid-cols-2 gap-2 mb-3">
                             {[
                               { label: '₹30L - ₹50L', min: 30, max: 50 },
@@ -196,7 +196,7 @@ const Navbar = () => {
                       )}
                     </div>
 
-                    {/* Explore Button */}
+        
                     <button 
                       onClick={() => navigate('/properties')}
                       className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition text-sm"
@@ -250,7 +250,7 @@ const Navbar = () => {
             </Link>
             <a href="#" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base">For Buyers</a>
             
-            {/* For Tenants Dropdown */}
+ 
             <div 
               className="relative"
               onMouseEnter={() => setIsTenantsMenuOpen(true)}
@@ -291,7 +291,7 @@ const Navbar = () => {
                         </div>
                       </div>
                       
-                      {/* Middle Section - Property Lists */}
+                  
                       <div className="col-span-1 md:col-span-5 bg-white p-4 md:p-6">
                         <h3 className="text-gray-500 text-xs font-semibold mb-3 uppercase tracking-wider">PROPERTIES IN DELHI SOUTH WEST</h3>
                         <div className="space-y-2 text-sm">
@@ -304,7 +304,7 @@ const Navbar = () => {
                         </div>
                       </div>
                       
-                      {/* Right Section - Popular Searches & Insights */}
+                    
                       <div className="col-span-1 md:col-span-4 bg-white p-4 md:p-6 border-l border-gray-100">
                         <div className="mb-6">
                           <h3 className="text-gray-500 text-xs font-semibold mb-3 uppercase tracking-wider">POPULAR SEARCHES</h3>
@@ -349,7 +349,7 @@ const Navbar = () => {
                       </div>
                     </div>
                     
-                    {/* Bottom Contact Bar */}
+
                     <div className="bg-gray-50 px-4 md:px-6 py-2 md:py-3 flex flex-col md:flex-row items-start md:items-center justify-center gap-2 text-xs md:text-sm border-t border-gray-200">
                       <div className="text-gray-600 text-center">
                         <span className="font-semibold">contact us toll free on</span>
@@ -366,7 +366,7 @@ const Navbar = () => {
               )}
             </div>
             
-            {/* For Owners Dropdown */}
+       
             <div 
               className="relative"
               onMouseEnter={() => setIsOwnersMenuOpen(true)}
@@ -383,7 +383,7 @@ const Navbar = () => {
                 <div className="absolute left-1/2 -translate-x-1/2 top-full pt-2 z-50">
                   <div className="bg-white text-gray-800 rounded-xl shadow-2xl w-[850px] max-w-[95vw] border border-gray-200 overflow-hidden">
                     <div className="grid grid-cols-1 md:grid-cols-12 gap-0">
-                      {/* Left Section - Menu Categories */}
+                      
                       <div className="col-span-1 md:col-span-3 bg-gray-50 p-4 md:p-6 space-y-3">
                         <div>
                           <h3 className="text-gray-700 font-bold text-sm md:text-base mb-2 uppercase tracking-wide">OWNER OFFERINGS</h3>
@@ -398,7 +398,7 @@ const Navbar = () => {
                         </div>
                       </div>
                       
-                      {/* Middle Section - Owner Services */}
+                   
                       <div className="col-span-1 md:col-span-4 bg-white p-4 md:p-6">
                         <h3 className="text-gray-500 text-xs font-semibold mb-3 uppercase tracking-wider">OWNER OFFERINGS</h3>
                         <div className="space-y-2">
@@ -412,7 +412,7 @@ const Navbar = () => {
                         </div>
                       </div>
                       
-                      {/* Right Section - Promotional Card */}
+                    
                       <div className="col-span-1 md:col-span-5 bg-gradient-to-br from-green-50 to-blue-50 p-4 md:p-6 flex flex-col md:flex-row items-center justify-between gap-4">
                         <div className="flex-1 text-center md:text-left">
                           <h2 className="text-lg md:text-xl font-bold text-gray-800 mb-2">

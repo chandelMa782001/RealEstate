@@ -531,28 +531,28 @@ export   const propertiess = [
       icon: '🏠',
       title: 'Buy Property',
       description: 'Find your dream home from thousands of verified listings',
-      action: () => navigate('/properties'),
+      actionType: 'Buy Property',
       requiresAuth: false
     },
     {
       icon: '💰',
       title: 'Sell Property',
       description: 'List your property and reach millions of buyers',
-      action: () => handleProtectedAction('Sell Property'),
+      actionType: 'Sell Property',
       requiresAuth: true
     },
     {
       icon: '🔑',
       title: 'Rent Property',
       description: 'Discover rental properties that match your needs',
-      action: () => handleProtectedAction('Rent Property'),
+      actionType: 'Rent Property',
       requiresAuth: true
     },
     {
       icon: '📊',
       title: 'Property Valuation',
       description: 'Get accurate market value of your property',
-      action: () => handleProtectedAction('Property Valuation'),
+      actionType: 'Property Valuation',
       requiresAuth: true
     }
   ];

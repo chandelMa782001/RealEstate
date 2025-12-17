@@ -18,6 +18,7 @@ import Dashboard from './pages/Dashboard';
 import Activity from './pages/Activity';
 import RecentlyViewed from './pages/RecentlyViewed';
 import NotFound from './pages/NotFound';
+import PropertyEvalution from './component/PropertyEvalution/PropertyEvalution';
 
 const AppContent = () => {
   const { notifications, removeNotification } = useAppContext();
@@ -67,6 +68,14 @@ const AppContent = () => {
               <PropertyDetail />
             </ProtectedRoute>
           } 
+        />
+        <Route 
+          path='/property/estimate' 
+          element={
+            <ProtectedRoute message="Please login to access property valuation">
+              <PropertyEvalution/>
+            </ProtectedRoute>
+          }
         />
         <Route 
           path="/post-property" 

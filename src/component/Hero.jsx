@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
@@ -42,6 +41,7 @@ const Hero = () => {
   const constructionOptions = ['New Launch', 'Under Construction', 'Ready to Move'];
   const postedByOptions = ['Owner', 'Dealer', 'Builder'];
   const handleTabChange = (tab) => {
+    console.log("------------konsi tab switch huw h",tab)
     setActiveTab(tab);
   
     setSelectedPropertyTypes({
@@ -57,6 +57,8 @@ const Hero = () => {
     setShowPropertyTypes(false);
   };
   const handlePropertyTypeChange = (type) => {
+    console.log("konsa check hua h")
+    console.log("-------------",type)
     setSelectedPropertyTypes(prev => ({
       ...prev,
       [type]: !prev[type]
@@ -153,22 +155,6 @@ const Hero = () => {
       '-=0.4'
     );
   }, []);
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (!event.target.closest('.dropdown-container')) {
-        setShowPropertyTypes(false);
-        setShowBudgetDropdown(false);
-        setShowBedroomDropdown(false);
-        setShowConstructionDropdown(false);
-        setShowPostedByDropdown(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
   const handleHeroClick = (e) => {
     setIsLoanButtonVisible(false);
   };
@@ -285,7 +271,6 @@ const Hero = () => {
                 </button>
               </div>
             </div>
-         
             {showPropertyTypes && (
               <div className="bg-gray-50 rounded-lg p-3 sm:p-4 mb-4">
                 <div className="flex items-center justify-between mb-3">
@@ -294,6 +279,7 @@ const Hero = () => {
                     {getSelectedPropertyTypesCount() < Object.keys(selectedPropertyTypes).length && (
                       <button
                         onClick={() => setSelectedPropertyTypes({
+
                           'Flat/Apartment': true,
                           'Independent/Builder Floor': true,
                           'Independent House/Villa': true,

@@ -109,7 +109,6 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
     }
   };
 
-  // Reset form when modal closes
   useEffect(() => {
     if (!isOpen) {
       setEmail('');
