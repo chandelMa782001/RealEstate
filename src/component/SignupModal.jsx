@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { FaUser, FaEnvelope, FaPhone, FaLock, FaTimes, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { useState, useEffect, useRef } from 'react';
+import { FaUser, FaEnvelope, FaPhone, FaTimes, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useAppContext } from '../Context/AppContext';
 import { validateForm, getErrorMessage } from '../../utils/validation';
 import gsap from 'gsap';
@@ -168,7 +168,7 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
 
   if (!isOpen) return null;
   return (
-    <div ref={overlayRef} className="fixed top-[13%] inset-0 bg-transparent flex items-center justify-center">
+    <div ref={overlayRef} className="fixed inset-0 bg-transparent flex items-center justify-center z-[60]">
       <div ref={modalRef} className="bg-white rounded-lg shadow-2xl w-full max-w-md mx-4 relative">
        
         <button
@@ -191,7 +191,7 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
                   onChange={handleChange}
                   onBlur={() => handleBlur('name')}
                   placeholder="Enter your Name"
-                  className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 pr-10 ${
+                  className={`w-full px-4 py-3 border rounded focus:outline-none focus:ring-2 pr-10 ${
                     touched.name && errors.name 
                       ? 'border-red-500 focus:ring-red-500' 
                       : 'border-gray-300 focus:ring-orange-500'

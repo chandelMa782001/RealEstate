@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FaEnvelope, FaLock, FaTimes } from 'react-icons/fa';
 import { useAppContext } from '../Context/AppContext';
 import { validateEmail, validateRequired, getErrorMessage } from '../../utils/validation';

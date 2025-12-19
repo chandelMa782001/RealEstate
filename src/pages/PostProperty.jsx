@@ -144,7 +144,7 @@ const PostProperty = () => {
         </div>
 
         <div className="max-w-5xl mx-auto px-4 py-8">
-          {/* Progress Steps */}
+       
           <div className="steps-container">
             <div className={`step ${currentStep >= 1 ? 'active' : ''}`}>
               <div className="step-number">1</div>

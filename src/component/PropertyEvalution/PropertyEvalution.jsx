@@ -103,7 +103,7 @@ const PropertyEvalution = () => {
   };
 
   const calculateEstimate = () => {
-    // Enhanced estimation logic based on property details
+   
     let basePrice = 0;
     
     switch (formData.propertyType) {

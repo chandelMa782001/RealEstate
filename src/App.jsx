@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AppProvider, useAppContext } from './Context/AppContext';
 import ProtectedRoute from './component/ProtectedRoute';
@@ -19,6 +18,8 @@ import Activity from './pages/Activity';
 import RecentlyViewed from './pages/RecentlyViewed';
 import NotFound from './pages/NotFound';
 import PropertyEvalution from './component/PropertyEvalution/PropertyEvalution';
+import DealerLogin from './component/Dealer/DealerLogin';
+import LoginModal from './component/LoginModal';
 
 const AppContent = () => {
   const { notifications, removeNotification } = useAppContext();
@@ -27,12 +28,14 @@ const AppContent = () => {
     <>
       <ScrollToTop />
       <Routes>
-        {/* Public Routes - No Authentication Required */}
+       
         <Route path="/" element={<Home />} />
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/properties" element={<Properties />} />
         <Route path="/builders" element={<Builders />} />
+        <Route path='/dealer/login' element={<DealerLogin/>}/>
+        <Route path='/login' element={<LoginModal/>} />
         
         {/* Semi-Protected Routes - Login Required for Full Access */}
         <Route 

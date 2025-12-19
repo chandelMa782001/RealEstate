@@ -5,7 +5,7 @@
   background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
   color: #000;
   border: 3px solid #FFD700;
-  padding: 15px 20px;
+  padding: 10px 15px;
   border-radius: 15px;
   font-size: 16px;
   font-weight: 700;
@@ -79,7 +79,7 @@
   align-items: center;
   z-index: 2000;
   animation: fadeIn 0.3s ease;
-  padding: 20px;
+  padding: 15px;
   overflow-y: auto;
 }
 
@@ -94,11 +94,11 @@
 
 .loan-modal {
   background: linear-gradient(135deg, #ffffff 0%, #fff9e6 100%);
-  padding: 35px 40px;
+  padding: 30px 25px;
   border-radius: 25px;
   max-width: 600px;
-  width: 90%;
-  max-height: 90vh;
+  width: 80%;
+  max-height: 80vh;
   overflow-y: auto;
   position: relative;
   animation: slideUp 0.3s ease;
@@ -321,6 +321,188 @@
   }
 }
 
+/* Tab Navigation Styles */
+.tab-navigation {
+  display: flex;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px solid #e8e8e8;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 12px 16px;
+  background: #f8f8f8;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #666;
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  color: #000;
+}
+
+.tab-btn:hover:not(.active) {
+  background: #e8e8e8;
+}
+
+/* Calculator Styles */
+.calculator-section {
+  animation: fadeIn 0.3s ease;
+}
+
+.calculator-buttons {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.calculate-btn {
+  flex: 1;
+  padding: 12px;
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+.calculate-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(76, 175, 80, 0.5);
+}
+
+.reset-btn {
+  padding: 12px 20px;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.reset-btn:hover {
+  background: #d32f2f;
+  transform: translateY(-2px);
+}
+
+/* Calculation Results Styles */
+.calculation-results {
+  margin-top: 25px;
+  padding: 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 15px;
+  border: 2px solid #FFD700;
+  animation: slideUp 0.5s ease;
+}
+
+.calculation-results h3 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 18px;
+  text-align: center;
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.result-item {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e8e8e8;
+}
+
+.result-label {
+  display: block;
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.result-value {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+}
+
+.result-summary {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  border: 2px solid #FFD700;
+}
+
+.result-summary p {
+  margin: 0;
+  color: #333;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.result-summary strong {
+  color: #FF8C00;
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .tab-btn {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .calculator-buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .result-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .result-item {
+    padding: 12px;
+  }
+
+  .result-value {
+    font-size: 14px;
+  }
+
+  .calculation-results {
+    padding: 15px;
+  }
+
+  .calculation-results h3 {
+    font-size: 16px;
+  }
+}
+
 @media (max-width: 480px) {
   .loan-button {
     bottom: 70px;
@@ -340,5 +522,18 @@
 
   .loan-text {
     font-size: 9px;
+  }
+
+  .tab-btn {
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+
+  .result-summary p {
+    font-size: 12px;
+  }
+
+  .result-summary strong {
+    font-size: 14px;
   }
 }

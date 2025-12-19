@@ -242,12 +242,7 @@ const Navbar = () => {
                 </div>
               )}
             </div>
-            <Link to="/about-us" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base">About Us</Link>
-          
-            <Link to="/offers" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base relative">
-              View Offers
-             
-            </Link>
+      
             <a href="#" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base">For Buyers</a>
             
  
@@ -453,7 +448,8 @@ const Navbar = () => {
               )}
             </div>
             
-            <Link to="/builders" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base">For Dealers / Builders</Link>
+            <Link to="/builders" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base">Builders Project</Link>
+             <Link to="/dealer/login" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base">Dealer Login</Link>
           
           
             <Link to="/post-property" className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold transition whitespace-nowrap text-base inline-block">
@@ -676,13 +672,13 @@ const Navbar = () => {
             >
               Home
             </Link>
-            <Link 
+            {/* <Link 
               to="/about-us" 
               onClick={() => setIsMenuOpen(false)}
               className="block text-gray-700 hover:text-orange-500 transition py-2"
             >
               About Us
-            </Link>
+            </Link> */}
             <Link 
               to="/projects" 
               onClick={() => setIsMenuOpen(false)}
