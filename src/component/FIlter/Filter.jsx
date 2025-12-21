@@ -10,7 +10,6 @@ const Filter = ({
 }) => {
   return (
     <>
- 
       <div className="lg:hidden mb-6">
         <button
           onClick={onToggleFilters}

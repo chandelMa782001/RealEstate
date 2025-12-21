@@ -556,3 +556,127 @@ export   const propertiess = [
       requiresAuth: true
     }
   ];
+
+
+  export   const dummyLeads = [
+    {
+      id: 1,
+      name: 'Rajesh Kumar',
+      email: 'rajesh.kumar@email.com',
+      contact: '+91 9876543210',
+      property: '3BHK Apartment in Sector 62',
+      status: 'New',
+      date: '2024-12-18',
+      message: 'Interested in viewing the property this weekend'
+    },
+    {
+      id: 2,
+      name: 'Priya Sharma',
+      email: 'priya.sharma@email.com',
+      contact: '+91 9876543211',
+      property: 'Luxury Villa in Gurgaon',
+      status: 'Contacted',
+      date: '2024-12-17',
+      message: 'Looking for a 4BHK villa with garden'
+    },
+    {
+      id: 3,
+      name: 'Amit Patel',
+      email: 'amit.patel@email.com',
+      contact: '+91 9876543212',
+      property: '2BHK Flat in Noida',
+      status: 'Qualified',
+      date: '2024-12-16',
+      message: 'Budget around 50 lakhs, need loan assistance'
+    },
+    {
+      id: 4,
+      name: 'Sneha Reddy',
+      email: 'sneha.reddy@email.com',
+      contact: '+91 9876543213',
+      property: 'Commercial Space in Delhi',
+      status: 'New',
+      date: '2024-12-15',
+      message: 'Looking for office space around 2000 sq ft'
+    },
+    {
+      id: 5,
+      name: 'Vikram Singh',
+      email: 'vikram.singh@email.com',
+      contact: '+91 9876543214',
+      property: 'Penthouse in Mumbai',
+      status: 'Contacted',
+      date: '2024-12-14',
+      message: 'Interested in luxury properties with sea view'
+    },
+    {
+      id: 6,
+      name: 'Anita Desai',
+      email: 'anita.desai@email.com',
+      contact: '+91 9876543215',
+      property: '1BHK Studio Apartment',
+      status: 'Qualified',
+      date: '2024-12-13',
+      message: 'First time buyer, need guidance'
+    },
+    {
+      id: 7,
+      name: 'Rahul Verma',
+      email: 'rahul.verma@email.com',
+      contact: '+91 9876543216',
+      property: 'Farmhouse in Chattarpur',
+      status: 'New',
+      date: '2024-12-12',
+      message: 'Looking for weekend getaway property'
+    },
+    {
+      id: 8,
+      name: 'Kavita Joshi',
+      email: 'kavita.joshi@email.com',
+      contact: '+91 9876543217',
+      property: '3BHK Builder Floor',
+      status: 'Contacted',
+      date: '2024-12-11',
+      message: 'Prefer independent floors in South Delhi'
+    },
+    {
+      id: 9,
+      name: 'Suresh Nair',
+      email: 'suresh.nair@email.com',
+      contact: '+91 9876543218',
+      property: 'Plot in Greater Noida',
+      status: 'New',
+      date: '2024-12-10',
+      message: 'Want to build custom home'
+    },
+    {
+      id: 10,
+      name: 'Meera Kapoor',
+      email: 'meera.kapoor@email.com',
+      contact: '+91 9876543219',
+      property: '4BHK Duplex',
+      status: 'Qualified',
+      date: '2024-12-09',
+      message: 'Looking for spacious family home'
+    },
+    {
+      id: 11,
+      name: 'Arjun Malhotra',
+      email: 'arjun.malhotra@email.com',
+      contact: '+91 9876543220',
+      property: 'Retail Shop in Connaught Place',
+      status: 'Contacted',
+      date: '2024-12-08',
+      message: 'Interested in high footfall commercial area'
+    },
+    {
+      id: 12,
+      name: 'Divya Iyer',
+      email: 'divya.iyer@email.com',
+      contact: '+91 9876543221',
+      property: '2BHK Service Apartment',
+      status: 'New',
+      date: '2024-12-07',
+      message: 'Looking for investment property with rental income'
+    }
+  ];

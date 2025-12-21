@@ -31,7 +31,7 @@ const Navbar = () => {
   const [budgetRange, setBudgetRange] = useState({ min: 30, max: 500 });
   const [showBudgetSlider, setShowBudgetSlider] = useState(false);
 
-  // Close budget slider when clicking outside
+  
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (showBudgetSlider && !event.target.closest('.budget-filter-container')) {
@@ -105,7 +105,7 @@ const Navbar = () => {
                       <option>Industrial</option>
                     </select>
 
-                    {/* City Search */}
+                  
                     <div className="relative">
                       <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
                       <input
@@ -117,7 +117,7 @@ const Navbar = () => {
                       />
                     </div>
 
-                    {/* Budget Filter */}
+                   
                     <div className="relative budget-filter-container">
                       <button
                         onClick={() => setShowBudgetSlider(!showBudgetSlider)}
@@ -243,9 +243,8 @@ const Navbar = () => {
               )}
             </div>
       
-            <a href="#" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base">For Buyers</a>
-            
- 
+            <Link to="/properties" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base">For Buyers</Link>
+        
             <div 
               className="relative"
               onMouseEnter={() => setIsTenantsMenuOpen(true)}
@@ -381,7 +380,7 @@ const Navbar = () => {
                       
                       <div className="col-span-1 md:col-span-3 bg-gray-50 p-4 md:p-6 space-y-3">
                         <div>
-                          <h3 className="text-gray-700 font-bold text-sm md:text-base mb-2 uppercase tracking-wide">OWNER OFFERINGS</h3>
+                          <h3  className="text-gray-700 font-bold text-sm md:text-base mb-2 uppercase tracking-wide">OWNER OFFERINGS</h3>
                         </div>
                         <div>
                           <h3 className="text-blue-600 font-bold text-sm md:text-base mb-2 uppercase tracking-wide flex items-center gap-2">
@@ -395,14 +394,14 @@ const Navbar = () => {
                       
                    
                       <div className="col-span-1 md:col-span-4 bg-white p-4 md:p-6">
-                        <h3 className="text-gray-500 text-xs font-semibold mb-3 uppercase tracking-wider">OWNER OFFERINGS</h3>
+                        <h3 onClick={()=>navigate("/offers")} className="text-gray-500 text-xs font-semibold mb-3 uppercase tracking-wider">OWNER OFFERINGS</h3>
                         <div className="space-y-2">
                           <Link to="/post-property" className="flex items-center gap-2 text-sm text-gray-700 hover:text-orange-500 transition font-medium">
                             <span>Post Property</span>
                             <span className="bg-green-500 text-white text-xs px-2 py-0.5 rounded font-bold">FREE</span>
                           </Link>
                           <a href="#" className="block text-sm text-gray-700 hover:text-orange-500 transition">Owner Services</a>
-                          <a href="#" className="block text-sm text-gray-700 hover:text-orange-500 transition">My99acres</a>
+                          <Link to="/about-us" className="block text-sm text-gray-700 hover:text-orange-500 transition">MiaGreatGroup</Link>
                           <a href="#" className="block text-sm text-gray-700 hover:text-orange-500 transition">View Responses</a>
                         </div>
                       </div>

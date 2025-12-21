@@ -18,9 +18,7 @@ const PostProperty = () => {
     description: '',
     goldOffer: {
       enabled: false,
-      goldWeight: '',
-      goldPurity: '24K',
-      goldValue: '',
+      goldAmount: '',
       goldDescription: ''
     },
     images: {
@@ -59,26 +57,11 @@ const PostProperty = () => {
     }));
   };
 
-  // Calculate gold value based on current market rates (example rates)
-  const calculateGoldValue = (weight, purity) => {
-    const goldRates = {
-      '24K': 6200, // per gram
-      '22K': 5700,
-      '18K': 4650,
-      '14K': 3600
-    };
-    
-    if (weight && purity) {
-      return Math.round(parseFloat(weight) * goldRates[purity]);
-    }
-    return 0;
-  };
-
   // Calculate effective property price after gold deduction
   const getEffectivePrice = () => {
     const basePrice = parseFloat(formData.price) || 0;
-    const goldValue = formData.goldOffer.enabled ? (parseFloat(formData.goldOffer.goldValue) || 0) : 0;
-    return Math.max(0, basePrice - goldValue);
+    const goldAmount = formData.goldOffer.enabled ? (parseFloat(formData.goldOffer.goldAmount) || 0) : 0;
+    return Math.max(0, basePrice - goldAmount);
   };
 
   const handleNext = () => {
@@ -322,55 +305,18 @@ const PostProperty = () => {
                         <div className="gold-offer-card">
                           <h4 className="gold-details-title">Gold Offer Details</h4>
                           
-                          <div className="form-grid">
-                            <div className="form-group">
-                              <label>Gold Weight (grams)</label>
-                              <input
-                                type="number"
-                                value={formData.goldOffer.goldWeight}
-                                onChange={(e) => {
-                                  const weight = e.target.value;
-                                  handleGoldOfferChange('goldWeight', weight);
-                                  const calculatedValue = calculateGoldValue(weight, formData.goldOffer.goldPurity);
-                                  handleGoldOfferChange('goldValue', calculatedValue);
-                                }}
-                                placeholder="Enter gold weight"
-                                min="0"
-                                step="0.1"
-                              />
-                            </div>
-                            <div className="form-group">
-                              <label>Gold Purity</label>
-                              <select
-                                value={formData.goldOffer.goldPurity}
-                                onChange={(e) => {
-                                  const purity = e.target.value;
-                                  handleGoldOfferChange('goldPurity', purity);
-                                  const calculatedValue = calculateGoldValue(formData.goldOffer.goldWeight, purity);
-                                  handleGoldOfferChange('goldValue', calculatedValue);
-                                }}
-                              >
-                                <option value="24K">24K (99.9% Pure)</option>
-                                <option value="22K">22K (91.6% Pure)</option>
-                                <option value="18K">18K (75% Pure)</option>
-                                <option value="14K">14K (58.3% Pure)</option>
-                              </select>
-                            </div>
-                          </div>
-
                           <div className="form-group">
-                            <label>Estimated Gold Value (₹)</label>
+                            <label>Gold Offer Amount (₹)</label>
                             <input
                               type="number"
-                              value={formData.goldOffer.goldValue}
-                              onChange={(e) => handleGoldOfferChange('goldValue', e.target.value)}
-                              placeholder="Auto-calculated or enter manually"
+                              value={formData.goldOffer.goldAmount}
+                              onChange={(e) => handleGoldOfferChange('goldAmount', e.target.value)}
+                              placeholder="Enter gold offer amount (e.g., 5000)"
+                              min="0"
                               className="gold-value-input"
                             />
                             <small className="gold-rate-info">
-                              Current rate: ₹{formData.goldOffer.goldPurity === '24K' ? '6,200' : 
-                                           formData.goldOffer.goldPurity === '22K' ? '5,700' : 
-                                           formData.goldOffer.goldPurity === '18K' ? '4,650' : '3,600'}/gram
+                              Enter the total value of gold you want to offer with this property
                             </small>
                           </div>
 
@@ -379,7 +325,7 @@ const PostProperty = () => {
                             <textarea
                               value={formData.goldOffer.goldDescription}
                               onChange={(e) => handleGoldOfferChange('goldDescription', e.target.value)}
-                              placeholder="Describe the gold items (e.g., 22K gold necklace set, gold coins, etc.)"
+                              placeholder="Describe the gold items (e.g., ₹5000 worth of 22K gold jewelry, gold coins worth ₹10000, etc.)"
                               rows="3"
                             />
                           </div>
@@ -393,7 +339,7 @@ const PostProperty = () => {
                               </div>
                               <div className="price-row gold-deduction">
                                 <span>Gold Offer Value:</span>
-                                <span className="price-amount">- ₹{formData.goldOffer.goldValue ? parseFloat(formData.goldOffer.goldValue).toLocaleString('en-IN') : '0'}</span>
+                                <span className="price-amount">- ₹{formData.goldOffer.goldAmount ? parseFloat(formData.goldOffer.goldAmount).toLocaleString('en-IN') : '0'}</span>
                               </div>
                               <div className="price-row total-price">
                                 <span>Effective Property Price:</span>
@@ -454,8 +400,6 @@ const PostProperty = () => {
                       </div>
                     </div>
                   </div>
-
-                
                   <div className="media-category">
                     <h3 className="media-category-title">🛋️ Interior View</h3>
                     <div className="upload-box">

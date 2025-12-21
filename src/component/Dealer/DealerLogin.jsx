@@ -341,5 +341,4 @@ const DealerLogin = () => {
     </div>
   );
 };
-
 export default DealerLogin;
