@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
+import toast from 'react-hot-toast';
+
 const AppContext = createContext();
 
 
@@ -22,17 +24,38 @@ export const AppProvider = ({ children }) => {
   const [favorites, setFavorites] = useState([]);
   const [recentlyViewed, setRecentlyViewed] = useState([]);
 
-  
-  const [notifications, setNotifications] = useState([]);
-
-
   const showNotification = (message, type = 'info', duration = 3000) => {
-    const id = Date.now();
-    setNotifications(prev => [...prev, { id, message, type, duration }]);
-  };
-
-  const removeNotification = (id) => {
-    setNotifications(prev => prev.filter(notification => notification.id !== id));
+    switch (type) {
+      case 'success':
+        toast.success(message, { duration });
+        break;
+      case 'error':
+        toast.error(message, { duration });
+        break;
+      case 'warning':
+        toast(message, { 
+          icon: '⚠️',
+          duration,
+          style: {
+            background: '#fef3c7',
+            color: '#92400e',
+            border: '1px solid #fbbf24',
+          }
+        });
+        break;
+      case 'info':
+      default:
+        toast(message, { 
+          icon: 'ℹ️',
+          duration,
+          style: {
+            background: '#dbeafe',
+            color: '#1e40af',
+            border: '1px solid #60a5fa',
+          }
+        });
+        break;
+    }
   };
 
   const login = (userData) => {
@@ -121,9 +144,7 @@ export const AppProvider = ({ children }) => {
     addToRecentlyViewed,
 
     // Notifications
-    notifications,
-    showNotification,
-    removeNotification
+    showNotification
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

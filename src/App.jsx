@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AppProvider, useAppContext } from './Context/AppContext';
+import { AppProvider } from './Context/AppContext';
 import ProtectedRoute from './component/ProtectedRoute';
 import ScrollToTop from './component/ScrollToTop';
-import NotificationContainer from './component/NotificationContainer';
+import { Toaster } from 'react-hot-toast';
 import Home from './pages/Home';
 import AboutUs from './pages/AboutUs';
 import Projects from './pages/Projects';
@@ -16,14 +16,13 @@ import PostProperty from './pages/PostProperty';
 import Dashboard from './pages/Dashboard';
 import Activity from './pages/Activity';
 import RecentlyViewed from './pages/RecentlyViewed';
+import Shortlisted from './pages/Shortlisted';
 import NotFound from './pages/NotFound';
 import PropertyEvalution from './component/PropertyEvalution/PropertyEvalution';
 import DealerLogin from './component/Dealer/DealerLogin';
 import LoginModal from './component/LoginModal';
 
 const AppContent = () => {
-  const { notifications, removeNotification } = useAppContext();
-
   return (
     <>
       <ScrollToTop />
@@ -112,11 +111,39 @@ const AppContent = () => {
             </ProtectedRoute>
           } 
         />
+        <Route 
+          path="/shortlisted" 
+          element={
+            <ProtectedRoute message="Please login to view your shortlisted properties">
+              <Shortlisted />
+            </ProtectedRoute>
+          } 
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <NotificationContainer 
-        notifications={notifications} 
-        removeNotification={removeNotification} 
+      <Toaster 
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: '#fff',
+            color: '#333',
+            borderRadius: '8px',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+          },
+          success: {
+            iconTheme: {
+              primary: '#10b981',
+              secondary: '#fff',
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: '#ef4444',
+              secondary: '#fff',
+            },
+          },
+        }}
       />
     </>
   );

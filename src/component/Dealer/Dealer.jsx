@@ -74,9 +74,7 @@ const Dealer = ({ dealerData }) => {
           <div>
             <span className="font-medium">Mobile:</span> {dealerData?.mobile || '+91 9876543210'}
           </div>
-          <div>
-            <span className="font-medium">Member Since:</span> January 2024
-          </div>
+         
           <div>
             <span className="font-medium">Status:</span> <span className="text-green-600 font-medium">Active</span>
           </div>
@@ -493,14 +491,14 @@ const Dealer = ({ dealerData }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <svg onClick={()=>navigate('/')} className="w-8 h-8 mr-3" fill="currentColor" viewBox="0 0 24 24">
+              <svg onClick={()=>navigate('/')}  className="w-8 h-8 cursor-pointer mr-3" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
               </svg>
-              <h1 className="text-xl font-bold">Dashboard</h1>
+              <h1 className="text-xl font-bold cursor-pointer">Dashboard</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="text-sm cursor-pointer hidden sm:block">
-                🏠 Home › My Dashboard
+              <div onClick={()=>navigate('/')} className="text-sm cursor-pointer hidden sm:block">
+                🏠 Home ›   My Dashboard
               </div>
               <div className="relative">
                 <button

@@ -3,9 +3,10 @@ import { FaEnvelope, FaLock, FaTimes } from 'react-icons/fa';
 import { useAppContext } from '../Context/AppContext';
 import { validateEmail, validateRequired, getErrorMessage } from '../../utils/validation';
 import gsap from 'gsap';
+import toast from 'react-hot-toast';
 
 const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
-  const { login, showNotification } = useAppContext();
+  const { login } = useAppContext();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
@@ -94,7 +95,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
       
       const userData = { email, name: email.split('@')[0] };
       login(userData);
-      showNotification('Login successful!', 'success', 3000);
+      toast.success('Login successful!');
       
   
       setEmail('');
@@ -103,7 +104,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
       setTouched({});
       handleClose();
     } catch (error) {
-      showNotification('Login failed. Please try again.', 'error', 3000);
+      toast.error("Login failed");
     } finally {
       setIsSubmitting(false);
     }

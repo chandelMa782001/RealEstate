@@ -7,34 +7,29 @@ This project now uses GSAP (GreenSock Animation Platform) for smooth, profession
 
 ## Components with GSAP Animations
 
-### 1. **Notification Component** (`src/component/Notification.jsx`)
-- Slide-in from right animation when notification appears
-- Smooth slide-out animation when dismissed
-- Auto-dismiss with animation after duration
-
-### 2. **FeaturedProperties Component** (`src/component/FeaturedProperties.jsx`)
+### 1. **FeaturedProperties Component** (`src/component/FeaturedProperties.jsx`)
 - Property cards animate in on scroll with stagger effect
 - Each card fades in, scales up, and moves from bottom
 - Button click animation with scale effect
 - Uses ScrollTrigger plugin for scroll-based animations
 
-### 3. **Hero Component** (`src/component/Hero.jsx`)
+### 2. **Hero Component** (`src/component/Hero.jsx`)
 - Title animates down with fade-in
 - Subtitle follows with stagger
 - Search box scales up with bounce effect
 - Timeline-based sequential animations
 
-### 4. **PropertyDetail Page** (`src/pages/PropertyDetail.jsx`)
+### 3. **PropertyDetail Page** (`src/pages/PropertyDetail.jsx`)
 - Main content slides in from left
 - Sidebar slides in from right
 - Smooth page entry animation
 
-### 5. **LoginModal Component** (`src/component/LoginModal.jsx`)
+### 4. **LoginModal Component** (`src/component/LoginModal.jsx`)
 - Modal scales up with bounce effect
 - Overlay fades in
 - Close animation scales down and fades out
 
-### 6. **SignupModal Component** (`src/component/SignupModal.jsx`)
+### 5. **SignupModal Component** (`src/component/SignupModal.jsx`)
 - Same smooth modal animations as LoginModal
 - Consistent user experience across modals
 

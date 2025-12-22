@@ -7,7 +7,7 @@ import { propertiess } from '../../Constant/Constants';
 gsap.registerPlugin(ScrollTrigger);
 const FeaturedProperties = () => {
   const navigate = useNavigate();
-  const { showNotification, isAuthenticated, setIsLoginModalOpen } = useAppContext();
+  const { showNotification, isAuthenticated, setIsLoginModalOpen, favorites, addToFavorites, removeFromFavorites } = useAppContext();
   const cardsRef = useRef([]);
   useEffect(() => {  
     cardsRef.current.forEach((card, index) => {
@@ -49,6 +49,28 @@ const FeaturedProperties = () => {
       navigate(`/property/${property.id}`);
     }, 300);
   };
+
+  const handleToggleShortlist = (property, e) => {
+    e.stopPropagation();
+    
+    if (!isAuthenticated) {
+      showNotification('Please login to shortlist properties', 'warning', 3000);
+      setTimeout(() => {
+        setIsLoginModalOpen(true);
+      }, 500);
+      return;
+    }
+
+    const isShortlisted = favorites.includes(property.id);
+    
+    if (isShortlisted) {
+      removeFromFavorites(property.id);
+      showNotification('Property removed from shortlist', 'info', 2000);
+    } else {
+      addToFavorites(property.id);
+      showNotification('Property added to shortlist', 'success', 2000);
+    }
+  };
   return (
     <div className="bg-gray-50 py-16">
       <div className="max-w-7xl mx-auto px-4">
@@ -71,6 +93,18 @@ const FeaturedProperties = () => {
                 <div className="absolute top-3 right-3 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
                   {property.type}
                 </div>
+                <button 
+                  onClick={(e) => handleToggleShortlist(property, e)}
+                  className={`absolute bottom-3 right-3 p-2 rounded-full transition-all ${
+                    favorites.includes(property.id) 
+                      ? 'bg-red-500 text-white hover:bg-red-600' 
+                      : 'bg-white bg-opacity-80 hover:bg-opacity-100 text-gray-600'
+                  }`}
+                >
+                  <svg className="w-5 h-5" fill={favorites.includes(property.id) ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                </button>
               </div> 
               <div className="p-4">
                 <h3 className="text-xl font-bold text-gray-800 mb-2">{property.title}</h3>

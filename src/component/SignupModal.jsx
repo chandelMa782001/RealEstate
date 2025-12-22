@@ -3,9 +3,10 @@ import { FaUser, FaEnvelope, FaPhone, FaTimes, FaEye, FaEyeSlash } from 'react-i
 import { useAppContext } from '../Context/AppContext';
 import { validateForm, getErrorMessage } from '../../utils/validation';
 import gsap from 'gsap';
+import toast from 'react-hot-toast';
 
 const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
-  const { signup, showNotification } = useAppContext();
+  const { signup } = useAppContext();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -114,7 +115,8 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
 
     if (Object.keys(validationErrors).length > 0) {
       setIsSubmitting(false);
-      showNotification('Enter the Required filed', 'error', 3000);
+      // showNotification('Enter the Required filed', 'error', 3000);
+      toast.error('Enter the Required filed')
       return;
     }
 
@@ -128,7 +130,7 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
         mobile: formData.mobile 
       };
       signup(userData);
-      showNotification('Account created successfully!', 'success', 3000);
+      toast.success(`Account created successfully! Welcome, ${userData.name}!`);
       
       // Reset form
       setFormData({
@@ -142,7 +144,7 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
       setTouched({});
       handleClose();
     } catch (error) {
-      showNotification('Signup failed. Please try again.', 'error', 3000);
+      toast.error('Signup failed. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -282,7 +284,6 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
                 <p className="text-red-500 text-xs mt-1 ml-1">{errors.password}</p>
               )}
             </div>
-
             <div>
               <div className="relative">
                 <input

@@ -10,7 +10,7 @@ import './Properties.css';
 gsap.registerPlugin(ScrollTrigger);
 const Properties = () => {
   const navigate = useNavigate();
-  const { showNotification, isAuthenticated, setIsLoginModalOpen } = useAppContext();
+  const { showNotification, isAuthenticated, setIsLoginModalOpen, favorites, addToFavorites, removeFromFavorites } = useAppContext();
   const { filteredProperties, filters, handleFilterChange, clearFilters } = usePropertyFilter();
   const [showFilters, setShowFilters] = useState(false);
 
@@ -79,6 +79,28 @@ const Properties = () => {
     // If authenticated, show contact details or open contact modal
     showNotification(`Contacting owner for ${property.title}`, 'success', 2000);
     // Here you would typically open a contact modal or show contact details
+  };
+
+  const handleToggleShortlist = (property, e) => {
+    e.stopPropagation();
+    
+    if (!isAuthenticated) {
+      showNotification('Please login to shortlist properties', 'warning', 3000);
+      setTimeout(() => {
+        setIsLoginModalOpen(true);
+      }, 500);
+      return;
+    }
+
+    const isShortlisted = favorites.includes(property.id);
+    
+    if (isShortlisted) {
+      removeFromFavorites(property.id);
+      showNotification('Property removed from shortlist', 'info', 2000);
+    } else {
+      addToFavorites(property.id);
+      showNotification('Property added to shortlist', 'success', 2000);
+    }
   };
 
   return (
@@ -183,8 +205,15 @@ const Properties = () => {
                     <div className="absolute top-2 right-2 sm:top-3 sm:right-3 bg-orange-500 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold">
                       {property.type}
                     </div>
-                    <button className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 bg-white bg-opacity-80 hover:bg-opacity-100 p-1.5 sm:p-2 rounded-full transition-all">
-                      <svg className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <button 
+                      onClick={(e) => handleToggleShortlist(property, e)}
+                      className={`absolute bottom-2 right-2 sm:bottom-3 sm:right-3 p-1.5 sm:p-2 rounded-full transition-all ${
+                        favorites.includes(property.id) 
+                          ? 'bg-red-500 text-white hover:bg-red-600' 
+                          : 'bg-white bg-opacity-80 hover:bg-opacity-100 text-gray-600'
+                      }`}
+                    >
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5" fill={favorites.includes(property.id) ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                       </svg>
                     </button>
