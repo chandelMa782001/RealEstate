@@ -556,8 +556,6 @@ export   const propertiess = [
       requiresAuth: true
     }
   ];
-
-
   export   const dummyLeads = [
     {
       id: 1,

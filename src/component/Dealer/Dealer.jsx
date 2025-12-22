@@ -1,10 +1,51 @@
 import { useState } from "react";
+import "../../../src/pages/Dashboard.css"
 import { useAppContext } from "../../Context/AppContext";
 import { dummyLeads } from "../../../Constant/Constants";
+import { useNavigate } from "react-router-dom";
 const Dealer = ({ dealerData }) => {
   const { showNotification } = useAppContext();
+  const navigate=useNavigate()
   const [activeTab, setActiveTab] = useState('dashboard');
   const [showLogout, setShowLogout] = useState(false);
+  const [leadStatus, setLeadStatus] = useState("");
+  
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+
+  const handlePasswordChange = (e) => {
+    const { name, value } = e.target;
+    setPasswordData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handlePasswordSubmit = (e) => {
+    e.preventDefault();
+    
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      showNotification('New passwords do not match', 'error');
+      return;
+    }
+    
+    if (passwordData.newPassword.length < 6) {
+      showNotification('Password must be at least 6 characters long', 'error');
+      return;
+    }
+    
+    // Here you would typically validate the current password and update it
+    // For now, we'll just show a success message
+    showNotification('Password changed successfully!', 'success');
+    setPasswordData({
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: ''
+    });
+  };
   const handleLogout = () => {
     localStorage.removeItem('currentDealer');
     showNotification('You have been logged out successfully', 'info');
@@ -16,7 +57,7 @@ const Dealer = ({ dealerData }) => {
     { id: 'leads', label: 'Manage Leads', icon: '👥', count: 12 },
     { id: 'activity', label: 'My Activity', icon: '📊' },
     { id: 'searched', label: 'Recently Searched', icon: '🔍' },
-    { id: 'add-property', label: 'Add Property', icon: '➕' },
+    // { id: 'add-property', label: 'Add Property', icon: '➕' },
     { id: 'change-password', label: 'Change Password', icon: '🔒' },
   ];
   const renderDashboardContent = () => (
@@ -149,7 +190,7 @@ const Dealer = ({ dealerData }) => {
       <div className="bg-white rounded-lg shadow-sm p-6">
         <h3 className="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <button 
+          {/* <button 
             onClick={() => setActiveTab('add-property')}
             className="flex items-center p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition duration-200"
           >
@@ -162,7 +203,7 @@ const Dealer = ({ dealerData }) => {
               <p className="font-medium text-gray-900">Add New Property</p>
               <p className="text-sm text-gray-600">List a new property</p>
             </div>
-          </button>
+          </button> */}
 
           <button 
             onClick={() => setActiveTab('properties')}
@@ -230,12 +271,17 @@ const Dealer = ({ dealerData }) => {
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 space-y-4 sm:space-y-0">
                 <h2 className="text-2xl font-bold text-gray-800">Manage Leads</h2>
                 <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
-                  <select className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
-                    <option value="">All Status</option>
-                    <option value="new">New</option>
-                    <option value="contacted">Contacted</option>
-                    <option value="qualified">Qualified</option>
-                  </select>
+                 
+                  <select
+  value={leadStatus}
+  onChange={(e) => setLeadStatus(e.target.value)}
+  className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+>
+  <option value="">All Status</option>
+  <option value="New">New</option>
+  <option value="Contacted">Contacted</option>
+  <option value="Qualified">Qualified</option>
+</select>
                   <button className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition duration-200">
                     Export Leads
                   </button>
@@ -263,7 +309,7 @@ const Dealer = ({ dealerData }) => {
                 <div className="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-500">
                   <p className="text-xs sm:text-sm font-medium text-purple-600">Qualified</p>
                   <p className="text-xl sm:text-2xl font-bold text-purple-700">
-                    {dummyLeads.filter(lead => lead.status === 'Qualified').length}
+                    {filteredLeads.filter(lead => lead.status === 'Qualified').length}
                   </p>
                 </div>
               </div>
@@ -271,7 +317,7 @@ const Dealer = ({ dealerData }) => {
               
               <div className="h-[60vh] sm:h-[65vh] lg:h-96 overflow-y-auto border border-gray-200 rounded-lg p-2 sm:p-4 bg-gray-50">
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4">
-                  {dummyLeads.map((lead) => (
+                  {filteredLeads.map((lead) => (
                     <div key={lead.id} className="bg-white border border-gray-200 rounded-lg p-3 sm:p-4 hover:shadow-md transition duration-200">
                       {/* Lead Header */}
                       <div className="flex items-start justify-between mb-3">
@@ -383,24 +429,63 @@ const Dealer = ({ dealerData }) => {
             <p className="text-gray-600">Search history functionality will be implemented here.</p>
           </div>
         );
-      case 'add-property':
-        return (
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">Add Property</h2>
-            <p className="text-gray-600">Property addition form will be implemented here.</p>
-          </div>
-        );
+     
       case 'change-password':
         return (
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white   items-center
+           rounded-lg shadow-sm p-6">
+
             <h2 className="text-xl font-bold text-gray-800 mb-4">Change Password</h2>
-            <p className="text-gray-600">Password change functionality will be implemented here.</p>
+          
+               <form onSubmit={handlePasswordSubmit} className="password-form">
+                      <div className="form-group">
+                        <input
+                          type="password"
+                          name="currentPassword"
+                          value={passwordData.currentPassword}
+                          onChange={handlePasswordChange}
+                          placeholder="Current Password*"
+                          required
+                          className="password-input"
+                        />
+                      </div>
+                      <div className="form-group">
+                        <input
+                          type="password"
+                          name="newPassword"
+                          value={passwordData.newPassword}
+                          onChange={handlePasswordChange}
+                          placeholder="New Password*"
+                          required
+                          className="password-input"
+                        />
+                      </div>
+                      <div className="form-group">
+                        <input
+                          type="password"
+                          name="confirmPassword"
+                          value={passwordData.confirmPassword}
+                          onChange={handlePasswordChange}
+                          placeholder="Confirm New Password*"
+                          required
+                          className="password-input"
+                        />
+                      </div>
+                      <button type="submit" className="save-changes-btn">
+                        Save Changes
+                      </button>
+                    </form>
           </div>
         );
       default:
         return renderDashboardContent();
     }
   };
+
+  const filteredLeads = leadStatus
+  ? dummyLeads.filter((lead) => lead.status === leadStatus)
+  : dummyLeads;
+
   return (
     <div className="min-h-screen bg-gray-50">
     
@@ -408,7 +493,7 @@ const Dealer = ({ dealerData }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <svg className="w-8 h-8 mr-3" fill="currentColor" viewBox="0 0 24 24">
+              <svg onClick={()=>navigate('/')} className="w-8 h-8 mr-3" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
               </svg>
               <h1 className="text-xl font-bold">Dashboard</h1>
@@ -450,7 +535,7 @@ const Dealer = ({ dealerData }) => {
 
       
       <div className="pt-16 flex h-screen">
-        {/* Fixed Sidebar */}
+      
         <div className="w-full lg:w-72 lg:flex-shrink-0 lg:fixed lg:left-0 lg:top-16 lg:h-[calc(100vh-4rem)] lg:overflow-y-auto bg-gray-800">
           <div className="lg:h-full">
             <nav className="p-4 lg:h-full lg:overflow-y-auto">

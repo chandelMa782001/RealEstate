@@ -20,7 +20,10 @@ import builder_4 from "../src/assets/image/builder4.jpg"
 import builder_5 from "../src/assets/image/builder5.jpg"
 import builder_6 from "../src/assets/image/builder6.jpg"
 import builder_7 from "../src/assets/image/builder7.jpg"
+
+import dealerImage from "../src/assets/image/Dealer.jpg"
 export const images={
+    dealerImage,
     companylogo,
     house_1,
     house_2,
