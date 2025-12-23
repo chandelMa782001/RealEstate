@@ -17,6 +17,7 @@ import Dashboard from './pages/Dashboard';
 import Activity from './pages/Activity';
 import RecentlyViewed from './pages/RecentlyViewed';
 import Shortlisted from './pages/Shortlisted';
+import ContactedProperty from './pages/ContactedProperty';
 import NotFound from './pages/NotFound';
 import PropertyEvalution from './component/PropertyEvalution/PropertyEvalution';
 import DealerLogin from './component/Dealer/DealerLogin';
@@ -116,6 +117,14 @@ const AppContent = () => {
           element={
             <ProtectedRoute message="Please login to view your shortlisted properties">
               <Shortlisted />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/contacted-property" 
+          element={
+            <ProtectedRoute message="Please login to view your contacted properties">
+              <ContactedProperty />
             </ProtectedRoute>
           } 
         />

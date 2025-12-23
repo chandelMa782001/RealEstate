@@ -523,9 +523,13 @@ const Navbar = () => {
                     >
                       Shortlisted
                     </Link>
-                    <a href="#" className="block px-6 py-3 text-gray-700 hover:bg-gray-50 transition">
+                    <Link 
+                      to="/contacted-property" 
+                      className="block px-6 py-3 text-gray-700 hover:bg-gray-50 transition"
+                      onClick={() => setIsUserMenuOpen(false)}
+                    >
                       Contacted
-                    </a>
+                    </Link>
                   </div>
                   
                   <div className="px-6 py-3 border-t border-gray-200">
@@ -747,6 +751,13 @@ const Navbar = () => {
                   className="block text-gray-700 hover:text-orange-500 transition py-2"
                 >
                   ❤️ Shortlisted
+                </Link>
+                <Link 
+                  to="/contacted-property" 
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block text-gray-700 hover:text-orange-500 transition py-2"
+                >
+                  📞 Contacted
                 </Link>
               </>
             )}
