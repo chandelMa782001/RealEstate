@@ -27,6 +27,30 @@ const Hero = () => {
     'Under Construction Property':false,
     'Other': false
   });
+
+  const [selectedCommercialTypes, setSelectedCommercialTypes] = useState({
+    'Office Space': false,
+    'IT / ITES Office': false,
+    'Corporate Office': false,
+    'Business Park': false,
+    'Co-working Space': false,
+    'Virtual Office': false,
+    'Retail Properties': false,
+    'Shop': false,
+    'Showroom': false,
+    'Retail Space': false,
+    'Shopping Mall Unit': false,
+    'High Street Retail': false,
+    'Kiosk': false
+  });
+
+  const [selectedPlotTypes, setSelectedPlotTypes] = useState({
+    'Residential Plots/Land': false,
+    'Commercial Plots/Land': false,
+    'Agricultural / Farm Land': false,
+    'Industrial Plots/Land': false,
+    'Commercial / Inst. Land': false
+  });
   const [showPropertyTypes, setShowPropertyTypes] = useState(false);
   const [showBudgetDropdown, setShowBudgetDropdown] = useState(false);
   const [showBedroomDropdown, setShowBedroomDropdown] = useState(false);
@@ -54,35 +78,101 @@ const Hero = () => {
     console.log("------------konsi tab switch huw h",tab)
     setActiveTab(tab);
   
-    setSelectedPropertyTypes({
-      'Flat/Apartment': false,
-      'Independent/Builder Floor': false,
-      'Independent House/Villa': false,
-      'Residential Land': false,
-      '1 RK/ Studio Apartment': false,
-      'Farm House': false,
-      'Serviced Apartments': false,
-      'Other': false
-    });
+    // Reset property types based on tab
+    if (tab === 'Commercial') {
+      setSelectedCommercialTypes({
+        'Office Space': false,
+        'IT / ITES Office': false,
+        'Corporate Office': false,
+        'Business Park': false,
+        'Co-working Space': false,
+        'Virtual Office': false,
+        'Retail Properties': false,
+        'Shop': false,
+        'Showroom': false,
+        'Retail Space': false,
+        'Shopping Mall Unit': false,
+        'High Street Retail': false,
+        'Kiosk': false
+      });
+    } else if (tab === 'Plots/Land') {
+      setSelectedPlotTypes({
+        'Residential Plots/Land': false,
+        'Commercial Plots/Land': false,
+        'Agricultural / Farm Land': false,
+        'Industrial Plots/Land': false,
+        'Commercial / Inst. Land': false
+      });
+    } else {
+      setSelectedPropertyTypes({
+         'Flat/Apartment': false,
+    'Independent/Builder Floor': false,
+    'Independent House/Villa': false,
+    'Residential Land/plot': false,
+    '1 RK/ Studio Apartment': false,
+    'Farm House': false,
+    'Serviced Apartments': false,
+    'Penthouse':false,
+    'Duplex/Triples':false,
+    'Row House':false,
+    'Bungalow':false,
+    'Gated Community Home':false,
+    'service apartment':false,
+    'Co-living Space':false,
+    'PG / Hostel':false,
+    'Luxury Residential Property':false,
+    'Under Construction Property':false,
+    'Other': false
+      });
+    }
     setShowPropertyTypes(false);
   };
   const handlePropertyTypeChange = (type) => {
     console.log("konsa check hua h")
     console.log("-------------",type)
-    setSelectedPropertyTypes(prev => ({
-      ...prev,
-      [type]: !prev[type]
-    }));
+    if (activeTab === 'Commercial') {
+      setSelectedCommercialTypes(prev => ({
+        ...prev,
+        [type]: !prev[type]
+      }));
+    } else if (activeTab === 'Plots/Land') {
+      setSelectedPlotTypes(prev => ({
+        ...prev,
+        [type]: !prev[type]
+      }));
+    } else {
+      setSelectedPropertyTypes(prev => ({
+        ...prev,
+        [type]: !prev[type]
+      }));
+    }
   };
   const getSelectedPropertyTypesCount = () => {
+    if (activeTab === 'Commercial') {
+      return Object.values(selectedCommercialTypes).filter(Boolean).length;
+    } else if (activeTab === 'Plots/Land') {
+      return Object.values(selectedPlotTypes).filter(Boolean).length;
+    }
     return Object.values(selectedPropertyTypes).filter(Boolean).length;
   };
   const getPropertyTypeDisplayText = () => {
     const count = getSelectedPropertyTypesCount();
-    if (count === 0) return 'All Residential';
+    if (count === 0) {
+      if (activeTab === 'Commercial') return 'All Commercial';
+      if (activeTab === 'Plots/Land') return 'All Plots/Land';
+      return 'All Residential';
+    }
     if (count === 1) {
-      const selectedType = Object.keys(selectedPropertyTypes).find(type => selectedPropertyTypes[type]);
-      return selectedType;
+      if (activeTab === 'Commercial') {
+        const selectedType = Object.keys(selectedCommercialTypes).find(type => selectedCommercialTypes[type]);
+        return selectedType;
+      } else if (activeTab === 'Plots/Land') {
+        const selectedType = Object.keys(selectedPlotTypes).find(type => selectedPlotTypes[type]);
+        return selectedType;
+      } else {
+        const selectedType = Object.keys(selectedPropertyTypes).find(type => selectedPropertyTypes[type]);
+        return selectedType;
+      }
     }
     return `${count} Property Types`;
   };
@@ -116,13 +206,23 @@ const Hero = () => {
       params.set('search', searchQuery.trim());
     }
     
-   
-    const selectedTypes = Object.keys(selectedPropertyTypes).filter(type => selectedPropertyTypes[type]);
+    // Handle property types based on active tab
+    let selectedTypes;
+    if (activeTab === 'Commercial') {
+      selectedTypes = Object.keys(selectedCommercialTypes).filter(type => selectedCommercialTypes[type]);
+    } else if (activeTab === 'Plots/Land') {
+      selectedTypes = Object.keys(selectedPlotTypes).filter(type => selectedPlotTypes[type]);
+    } else {
+      selectedTypes = Object.keys(selectedPropertyTypes).filter(type => selectedPropertyTypes[type]);
+    }
+    
     if (selectedTypes.length > 0) {
       params.set('propertyTypes', selectedTypes.join(','));
     }
     
-   
+    // Add tab info
+    params.set('tab', activeTab);
+    
     if (budgetRange.min !== 0 || budgetRange.max !== 100) {
       params.set('budgetMin', budgetRange.min.toString());
       params.set('budgetMax', budgetRange.max.toString());
@@ -286,40 +386,121 @@ const Hero = () => {
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="font-semibold text-gray-800 text-sm sm:text-base">Property Type</h3>
                   <div className="flex items-center space-x-2">
-                    {getSelectedPropertyTypesCount() < Object.keys(selectedPropertyTypes).length && (
-                      <button
-                        onClick={() => setSelectedPropertyTypes({
-
-                          'Flat/Apartment': true,
-                          'Independent/Builder Floor': true,
-                          'Independent House/Villa': true,
-                          'Residential Land': true,
-                          '1 RK/ Studio Apartment': true,
-                          'Farm House': true,
-                          'Serviced Apartments': true,
-                          'Other': true
-                        })}
-                        className="text-green-600 hover:text-green-800 text-xs sm:text-sm font-medium"
-                      >
-                        Select All
-                      </button>
-                    )}
-                    {getSelectedPropertyTypesCount() > 0 && (
-                      <button
-                        onClick={() => setSelectedPropertyTypes({
-                          'Flat/Apartment': false,
-                          'Independent/Builder Floor': false,
-                          'Independent House/Villa': false,
-                          'Residential Land': false,
-                          '1 RK/ Studio Apartment': false,
-                          'Farm House': false,
-                          'Serviced Apartments': false,
-                          'Other': false
-                        })}
-                        className="text-red-600 hover:text-red-800 text-xs sm:text-sm font-medium"
-                      >
-                        Clear All
-                      </button>
+                    {activeTab === 'Commercial' ? (
+                      <>
+                        {getSelectedPropertyTypesCount() < Object.keys(selectedCommercialTypes).length && (
+                          <button
+                            onClick={() => setSelectedCommercialTypes({
+                              'Office Space': true,
+                              'IT / ITES Office': true,
+                              'Corporate Office': true,
+                              'Business Park': true,
+                              'Co-working Space': true,
+                              'Virtual Office': true,
+                              'Retail Properties': true,
+                              'Shop': true,
+                              'Showroom': true,
+                              'Retail Space': true,
+                              'Shopping Mall Unit': true,
+                              'High Street Retail': true,
+                              'Kiosk': true
+                            })}
+                            className="text-green-600 hover:text-green-800 text-xs sm:text-sm font-medium"
+                          >
+                            Select All
+                          </button>
+                        )}
+                        {getSelectedPropertyTypesCount() > 0 && (
+                          <button
+                            onClick={() => setSelectedCommercialTypes({
+                              'Office Space': false,
+                              'IT / ITES Office': false,
+                              'Corporate Office': false,
+                              'Business Park': false,
+                              'Co-working Space': false,
+                              'Virtual Office': false,
+                              'Retail Properties': false,
+                              'Shop': false,
+                              'Showroom': false,
+                              'Retail Space': false,
+                              'Shopping Mall Unit': false,
+                              'High Street Retail': false,
+                              'Kiosk': false
+                            })}
+                            className="text-red-600 hover:text-red-800 text-xs sm:text-sm font-medium"
+                          >
+                            Clear All
+                          </button>
+                        )}
+                      </>
+                    ) : activeTab === 'Plots/Land' ? (
+                      <>
+                        {getSelectedPropertyTypesCount() < Object.keys(selectedPlotTypes).length && (
+                          <button
+                            onClick={() => setSelectedPlotTypes({
+                              'Residential Plots/Land': true,
+                              'Commercial Plots/Land': true,
+                              'Agricultural / Farm Land': true,
+                              'Industrial Plots/Land': true,
+                              'Commercial / Inst. Land': true
+                            })}
+                            className="text-green-600 hover:text-green-800 text-xs sm:text-sm font-medium"
+                          >
+                            Select All
+                          </button>
+                        )}
+                        {getSelectedPropertyTypesCount() > 0 && (
+                          <button
+                            onClick={() => setSelectedPlotTypes({
+                              'Residential Plots/Land': false,
+                              'Commercial Plots/Land': false,
+                              'Agricultural / Farm Land': false,
+                              'Industrial Plots/Land': false,
+                              'Commercial / Inst. Land': false
+                            })}
+                            className="text-red-600 hover:text-red-800 text-xs sm:text-sm font-medium"
+                          >
+                            Clear All
+                          </button>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        {getSelectedPropertyTypesCount() < Object.keys(selectedPropertyTypes).length && (
+                          <button
+                            onClick={() => setSelectedPropertyTypes({
+                              'Flat/Apartment': true,
+                              'Independent/Builder Floor': true,
+                              'Independent House/Villa': true,
+                              'Residential Land': true,
+                              '1 RK/ Studio Apartment': true,
+                              'Farm House': true,
+                              'Serviced Apartments': true,
+                              'Other': true
+                            })}
+                            className="text-green-600 hover:text-green-800 text-xs sm:text-sm font-medium"
+                          >
+                            Select All
+                          </button>
+                        )}
+                        {getSelectedPropertyTypesCount() > 0 && (
+                          <button
+                            onClick={() => setSelectedPropertyTypes({
+                              'Flat/Apartment': false,
+                              'Independent/Builder Floor': false,
+                              'Independent House/Villa': false,
+                              'Residential Land': false,
+                              '1 RK/ Studio Apartment': false,
+                              'Farm House': false,
+                              'Serviced Apartments': false,
+                              'Other': false
+                            })}
+                            className="text-red-600 hover:text-red-800 text-xs sm:text-sm font-medium"
+                          >
+                            Clear All
+                          </button>
+                        )}
+                      </>
                     )}
                     <button
                       onClick={() => setShowPropertyTypes(false)}
@@ -330,46 +511,130 @@ const Hero = () => {
                   </div>
                 </div>
                 <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
-                  {Object.keys(selectedPropertyTypes).map((type) => (
-                    <label 
-                      key={type} 
-                      className={`flex items-center space-x-2 cursor-pointer p-2 rounded transition-all duration-200 ${
-                        selectedPropertyTypes[type] 
-                          ? 'bg-blue-100 border border-blue-300 shadow-sm' 
-                          : 'hover:bg-white border border-transparent'
-                      }`}
-                    >
-                      <div className="relative">
-                        <input
-                          type="checkbox"
-                          checked={selectedPropertyTypes[type]}
-                          onChange={() => handlePropertyTypeChange(type)}
-                          className="w-4 h-4 text-blue-600 border-2 border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 transition-all duration-200"
-                        />
-                        {selectedPropertyTypes[type] && (
-                          <svg 
-                            className="absolute top-0 left-0 w-4 h-4 text-blue-600 pointer-events-none" 
-                            fill="currentColor" 
-                            viewBox="0 0 20 20"
-                          >
-                            <path 
-                              fillRule="evenodd" 
-                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" 
-                              clipRule="evenodd" 
-                            />
-                          </svg>
-                        )}
-                      </div>
-                      <span className={`text-xs sm:text-sm leading-tight transition-colors duration-200 ${
-                        selectedPropertyTypes[type] ? 'text-blue-800 font-medium' : 'text-gray-700'
-                      }`}>
-                        {type}
-                      </span>
-                    </label>
-                  ))}
+                  {activeTab === 'Commercial' ? (
+                    Object.keys(selectedCommercialTypes).map((type) => (
+                      <label 
+                        key={type} 
+                        className={`flex items-center space-x-2 cursor-pointer p-2 rounded transition-all duration-200 ${
+                          selectedCommercialTypes[type] 
+                            ? 'bg-blue-100 border border-blue-300 shadow-sm' 
+                            : 'hover:bg-white border border-transparent'
+                        }`}
+                      >
+                        <div className="relative">
+                          <input
+                            type="checkbox"
+                            checked={selectedCommercialTypes[type]}
+                            onChange={() => handlePropertyTypeChange(type)}
+                            className="w-4 h-4 text-blue-600 border-2 border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 transition-all duration-200"
+                          />
+                          {selectedCommercialTypes[type] && (
+                            <svg 
+                              className="absolute top-0 left-0 w-4 h-4 text-blue-600 pointer-events-none" 
+                              fill="currentColor" 
+                              viewBox="0 0 20 20"
+                            >
+                              <path 
+                                fillRule="evenodd" 
+                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" 
+                                clipRule="evenodd" 
+                              />
+                            </svg>
+                          )}
+                        </div>
+                        <span className={`text-xs sm:text-sm leading-tight transition-colors duration-200 ${
+                          selectedCommercialTypes[type] ? 'text-blue-800 font-medium' : 'text-gray-700'
+                        }`}>
+                          {type}
+                        </span>
+                      </label>
+                    ))
+                  ) : activeTab === 'Plots/Land' ? (
+                    Object.keys(selectedPlotTypes).map((type) => (
+                      <label 
+                        key={type} 
+                        className={`flex items-center space-x-2 cursor-pointer p-2 rounded transition-all duration-200 ${
+                          selectedPlotTypes[type] 
+                            ? 'bg-blue-100 border border-blue-300 shadow-sm' 
+                            : 'hover:bg-white border border-transparent'
+                        }`}
+                      >
+                        <div className="relative">
+                          <input
+                            type="checkbox"
+                            checked={selectedPlotTypes[type]}
+                            onChange={() => handlePropertyTypeChange(type)}
+                            className="w-4 h-4 text-blue-600 border-2 border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 transition-all duration-200"
+                          />
+                          {selectedPlotTypes[type] && (
+                            <svg 
+                              className="absolute top-0 left-0 w-4 h-4 text-blue-600 pointer-events-none" 
+                              fill="currentColor" 
+                              viewBox="0 0 20 20"
+                            >
+                              <path 
+                                fillRule="evenodd" 
+                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" 
+                                clipRule="evenodd" 
+                              />
+                            </svg>
+                          )}
+                        </div>
+                        <span className={`text-xs sm:text-sm leading-tight transition-colors duration-200 ${
+                          selectedPlotTypes[type] ? 'text-blue-800 font-medium' : 'text-gray-700'
+                        }`}>
+                          {type}
+                        </span>
+                      </label>
+                    ))
+                  ) : (
+                    Object.keys(selectedPropertyTypes).map((type) => (
+                      <label 
+                        key={type} 
+                        className={`flex items-center space-x-2 cursor-pointer p-2 rounded transition-all duration-200 ${
+                          selectedPropertyTypes[type] 
+                            ? 'bg-blue-100 border border-blue-300 shadow-sm' 
+                            : 'hover:bg-white border border-transparent'
+                        }`}
+                      >
+                        <div className="relative">
+                          <input
+                            type="checkbox"
+                            checked={selectedPropertyTypes[type]}
+                            onChange={() => handlePropertyTypeChange(type)}
+                            className="w-4 h-4 text-blue-600 border-2 border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 transition-all duration-200"
+                          />
+                          {selectedPropertyTypes[type] && (
+                            <svg 
+                              className="absolute top-0 left-0 w-4 h-4 text-blue-600 pointer-events-none" 
+                              fill="currentColor" 
+                              viewBox="0 0 20 20"
+                            >
+                              <path 
+                                fillRule="evenodd" 
+                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" 
+                                clipRule="evenodd" 
+                              />
+                            </svg>
+                          )}
+                        </div>
+                        <span className={`text-xs sm:text-sm leading-tight transition-colors duration-200 ${
+                          selectedPropertyTypes[type] ? 'text-blue-800 font-medium' : 'text-gray-700'
+                        }`}>
+                          {type}
+                        </span>
+                      </label>
+                    ))
+                  )}
                 </div>
                 <div className="mt-3 text-xs text-gray-500">
-                  Looking for commercial properties? <button className="text-blue-600 hover:underline">Click here</button>
+                  {activeTab === 'Commercial' ? (
+                    <>Looking for residential properties? <button className="text-blue-600 hover:underline">Click here</button></>
+                  ) : activeTab === 'Plots/Land' ? (
+                    <>Looking for residential properties? <button className="text-blue-600 hover:underline">Click here</button></>
+                  ) : (
+                    <>Looking for commercial properties? <button className="text-blue-600 hover:underline">Click here</button></>
+                  )}
                 </div>
               </div>
             )}
