@@ -178,7 +178,7 @@ const Navbar = () => {
                         
                           <div className="grid grid-cols-2 gap-2 mb-3">
                             {[
-                              { label: '₹30L - ₹50L', min: 30, max: 50 },
+                              { label: '₹1L - ₹50L', min: 30, max: 50 },
                               { label: '₹50L - ₹1Cr', min: 50, max: 100 },
                               { label: '₹1Cr - ₹2Cr', min: 100, max: 200 },
                               { label: '₹2Cr+', min: 200, max: 500 }
@@ -352,7 +352,7 @@ const Navbar = () => {
                       </div>
                       <span className="hidden md:inline text-gray-300">|</span>
                       <div className="text-gray-600 text-center">
-                        Email us at <a href="mailto:services@99acres.com" className="text-blue-600 hover:underline">services@99acres.com</a>, or call us at <span className="font-semibold">1800 41 99099</span> <span className="text-gray-400">(IND Toll-Free)</span>
+                        Email us at <a href="mailto:info@maigreatgroup.com" className="text-blue-600 hover:underline">info@maigreatgroup.com</a>, or call us at <span className="font-semibold">1800 41 99099</span> <span className="text-gray-400">(IND Toll-Free)</span>
                       </div>
                     </div>
                   </div>
@@ -439,7 +439,7 @@ const Navbar = () => {
                       </div>
                       <span className="hidden md:inline text-gray-300">|</span>
                       <div className="text-gray-600 text-center">
-                        Email us at <a href="mailto:services@99acres.com" className="text-blue-600 hover:underline">services@99acres.com</a>, or call us at <span className="font-semibold">1800 41 99099</span> <span className="text-gray-400">(IND Toll-Free)</span>
+                        Email us at <a href="mailto:info@maigreatgroup.com" className="text-blue-600 hover:underline">info@maigreatgroup.com</a>, or call us at <span className="font-semibold">1800 41 99099</span> <span className="text-gray-400">(IND Toll-Free)</span>
                       </div>
                     </div>
                   </div>

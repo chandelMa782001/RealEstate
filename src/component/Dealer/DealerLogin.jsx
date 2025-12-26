@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 
 const DealerLogin = () => {
   const navigate=useNavigate()
-  const [isLogin, setIsLogin] = useState(false); 
+  const [isLogin, setIsLogin] = useState(true); 
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [registeredUsers, setRegisteredUsers] = useState([]);
   const [currentDealer, setCurrentDealer] = useState(null);
@@ -12,10 +13,13 @@ const DealerLogin = () => {
     email: '',
     password: '',
     name: '',
-    mobile: ''
+    mobile: '',
+    newPassword: '',
+    confirmPassword: ''
   });
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState(''); 
+  const [resetStep, setResetStep] = useState(1); // 1: email verification, 2: password reset
 
 
   const showMessage = (msg, type) => {
@@ -54,6 +58,12 @@ const DealerLogin = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    if (isForgotPassword) {
+      handleForgotPassword();
+      return;
+    }
+    
     if (isLogin) {
       const user = registeredUsers.find(
         user => user.email === formData.email && user.password === formData.password
@@ -94,18 +104,110 @@ const DealerLogin = () => {
         email: formData.email, 
         password: '',
         name: '',
-        mobile: ''
+        mobile: '',
+        newPassword: '',
+        confirmPassword: ''
       });
+    }
+  };
+
+  const handleForgotPassword = () => {
+    if (resetStep === 1) {
+      // Step 1: Verify email exists
+      const user = registeredUsers.find(user => user.email === formData.email);
+      if (!user) {
+        showMessage('No account found with this email address.', 'error');
+        return;
+      }
+      showMessage('Email verified! Please enter your new password.', 'success');
+      setResetStep(2);
+    } else {
+      // Step 2: Reset password
+      if (!formData.newPassword || !formData.confirmPassword) {
+        showMessage('Please fill in both password fields.', 'error');
+        return;
+      }
+      
+      if (formData.newPassword.length < 6) {
+        showMessage('Password must be at least 6 characters long.', 'error');
+        return;
+      }
+      
+      if (formData.newPassword !== formData.confirmPassword) {
+        showMessage('Passwords do not match.', 'error');
+        return;
+      }
+      
+      // Update password in localStorage
+      const updatedUsers = registeredUsers.map(user => 
+        user.email === formData.email 
+          ? { ...user, password: formData.newPassword }
+          : user
+      );
+      
+      setRegisteredUsers(updatedUsers);
+      localStorage.setItem('dealerUsers', JSON.stringify(updatedUsers));
+      
+      showMessage('Password reset successfully! Please login with your new password.', 'success');
+      
+      // Reset to login mode
+      setTimeout(() => {
+        setIsForgotPassword(false);
+        setIsLogin(true);
+        setResetStep(1);
+        setFormData({
+          email: formData.email,
+          password: '',
+          name: '',
+          mobile: '',
+          newPassword: '',
+          confirmPassword: ''
+        });
+      }, 2000);
     }
   };
 
   const toggleMode = () => {
     setIsLogin(!isLogin);
+    setIsForgotPassword(false);
+    setResetStep(1);
     setFormData({
       email: '',
       password: '',
       name: '',
-      mobile: ''
+      mobile: '',
+      newPassword: '',
+      confirmPassword: ''
+    });
+    setMessage('');
+  };
+
+  const handleForgotPasswordClick = () => {
+    setIsForgotPassword(true);
+    setIsLogin(false);
+    setResetStep(1);
+    setFormData({
+      email: formData.email,
+      password: '',
+      name: '',
+      mobile: '',
+      newPassword: '',
+      confirmPassword: ''
+    });
+    setMessage('');
+  };
+
+  const handleBackToLogin = () => {
+    setIsForgotPassword(false);
+    setIsLogin(true);
+    setResetStep(1);
+    setFormData({
+      email: '',
+      password: '',
+      name: '',
+      mobile: '',
+      newPassword: '',
+      confirmPassword: ''
     });
     setMessage('');
   };
@@ -126,7 +228,7 @@ const DealerLogin = () => {
             <div className="flex items-center">
               <div className="w-1 h-8 bg-orange-500 rounded-full mr-3"></div>
               <h2 className="text-2xl font-semibold text-gray-800">
-                {isLogin ? 'Login' : 'Register'}
+                {isForgotPassword ? 'Reset Password' : (isLogin ? 'Login' : 'Register')}
               </h2>
             </div>
             <button 
@@ -149,7 +251,8 @@ const DealerLogin = () => {
               </div>
             )}
             <form onSubmit={handleSubmit} className="space-y-4">
-              {!isLogin && (
+              {/* Registration fields */}
+              {!isLogin && !isForgotPassword && (
                 <div className="relative">
                   <input
                     type="text"
@@ -159,7 +262,7 @@ const DealerLogin = () => {
                     onChange={handleInputChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200 outline-none text-gray-700 placeholder-gray-400"
                     placeholder="Enter your Full Name"
-                    required={!isLogin}
+                    required={!isLogin && !isForgotPassword}
                   />
                   <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                     <svg className="w-5 h-5 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
@@ -169,6 +272,7 @@ const DealerLogin = () => {
                 </div>
               )}
 
+              {/* Email field - shown in all modes */}
               <div className="relative">
                 <input
                   type="email"
@@ -177,8 +281,9 @@ const DealerLogin = () => {
                   value={formData.email}
                   onChange={handleInputChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200 outline-none text-gray-700 placeholder-gray-400"
-                  placeholder="Enter your Email"
+                  placeholder={isForgotPassword ? "Enter your registered email" : "Enter your Email"}
                   required
+                  disabled={isForgotPassword && resetStep === 2}
                 />
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                   <svg className="w-5 h-5 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
@@ -188,7 +293,8 @@ const DealerLogin = () => {
                 </div>
               </div>
 
-              {!isLogin && (
+              {/* Mobile field - only for registration */}
+              {!isLogin && !isForgotPassword && (
                 <div className="relative">
                   <input
                     type="tel"
@@ -198,7 +304,7 @@ const DealerLogin = () => {
                     onChange={handleInputChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200 outline-none text-gray-700 placeholder-gray-400"
                     placeholder="Enter Mobile Number"
-                    required={!isLogin}
+                    required={!isLogin && !isForgotPassword}
                   />
                   <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                     <svg className="w-5 h-5 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
@@ -208,44 +314,119 @@ const DealerLogin = () => {
                 </div>
               )}
 
-              <div className="relative">
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200 outline-none text-gray-700 placeholder-gray-400"
-                  placeholder="Enter Password"
-                  required
-                />
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  <svg className="w-5 h-5 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd"/>
-                  </svg>
+              {/* Password field - for login and registration */}
+              {!isForgotPassword && (
+                <div className="relative">
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200 outline-none text-gray-700 placeholder-gray-400"
+                    placeholder="Enter Password"
+                    required={!isForgotPassword}
+                  />
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    <svg className="w-5 h-5 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd"/>
+                    </svg>
+                  </div>
                 </div>
-              </div>
+              )}
 
-            
-              <div className="text-center py-2">
-                <span className="text-gray-600 text-sm">
-                  {isLogin ? "New to Maigreat Group ?" : "Already have an account?"}
-                </span>
-                <button
-                  type="button"
-                  onClick={toggleMode}
-                  className="ml-2 text-blue-600 hover:text-blue-800 font-medium text-sm transition duration-200 hover:underline"
-                >
-                  {isLogin ? 'Register For a New Account' : 'Login Here'}
-                </button>
-              </div>
+              {/* New password fields - for forgot password step 2 */}
+              {isForgotPassword && resetStep === 2 && (
+                <>
+                  <div className="relative">
+                    <input
+                      type="password"
+                      id="newPassword"
+                      name="newPassword"
+                      value={formData.newPassword}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200 outline-none text-gray-700 placeholder-gray-400"
+                      placeholder="Enter New Password"
+                      required
+                    />
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                      <svg className="w-5 h-5 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd"/>
+                      </svg>
+                    </div>
+                  </div>
+                  
+                  <div className="relative">
+                    <input
+                      type="password"
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      value={formData.confirmPassword}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200 outline-none text-gray-700 placeholder-gray-400"
+                      placeholder="Confirm New Password"
+                      required
+                    />
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                      <svg className="w-5 h-5 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd"/>
+                      </svg>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* Forgot password link - only show in login mode */}
+              {isLogin && !isForgotPassword && (
+                <div className="text-right">
+                  <button
+                    type="button"
+                    onClick={handleForgotPasswordClick}
+                    className="text-sm text-blue-600 hover:text-blue-800 transition duration-200 hover:underline"
+                  >
+                    Forgot Password?
+                  </button>
+                </div>
+              )}
+
+              {/* Mode toggle - not shown in forgot password mode */}
+              {!isForgotPassword && (
+                <div className="text-center py-2">
+                  <span className="text-gray-600 text-sm">
+                    {isLogin ? "New to Maigreat Group ?" : "Already have an account?"}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={toggleMode}
+                    className="ml-2 text-blue-600 hover:text-blue-800 font-medium text-sm transition duration-200 hover:underline"
+                  >
+                    {isLogin ? 'Register For a New Account' : 'Login Here'}
+                  </button>
+                </div>
+              )}
+
+              {/* Back to login link - only show in forgot password mode */}
+              {isForgotPassword && (
+                <div className="text-center py-2">
+                  <button
+                    type="button"
+                    onClick={handleBackToLogin}
+                    className="text-blue-600 hover:text-blue-800 font-medium text-sm transition duration-200 hover:underline"
+                  >
+                    ← Back to Login
+                  </button>
+                </div>
+              )}
 
               <div className="flex space-x-3 pt-4">
                 <button
                   type="submit"
                   className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 px-6 rounded-lg font-medium transition-all duration-200 transform hover:scale-[1.02] shadow-md uppercase tracking-wide"
                 >
-                  {isLogin ? 'LOGIN' : 'REGISTER'}
+                  {isForgotPassword 
+                    ? (resetStep === 1 ? 'VERIFY EMAIL' : 'RESET PASSWORD')
+                    : (isLogin ? 'LOGIN' : 'REGISTER')
+                  }
                 </button>
                 <button
                   type="button"

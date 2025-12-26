@@ -11,10 +11,20 @@ const Hero = () => {
     'Flat/Apartment': false,
     'Independent/Builder Floor': false,
     'Independent House/Villa': false,
-    'Residential Land': false,
+    'Residential Land/plot': false,
     '1 RK/ Studio Apartment': false,
     'Farm House': false,
     'Serviced Apartments': false,
+    'Penthouse':false,
+    'Duplex/Triples':false,
+    'Row House':false,
+    'Bungalow':false,
+    'Gated Community Home':false,
+    'service apartment':false,
+    'Co-living Space':false,
+    'PG / Hostel':false,
+    'Luxury Residential Property':false,
+    'Under Construction Property':false,
     'Other': false
   });
   const [showPropertyTypes, setShowPropertyTypes] = useState(false);
