@@ -276,12 +276,12 @@ const Navbar = () => {
                           <h3 className="text-gray-700 font-bold text-sm md:text-base mb-2 uppercase tracking-wide">POPULAR AREAS</h3>
                         </div>
                         <div>
-                          <h3 className="text-blue-600 font-bold text-sm md:text-base mb-2 uppercase tracking-wide flex items-center gap-2">
+                          <h3 onClick={()=>navigate('/blogs')} className="text-blue-600 cursor-pointer font-bold text-sm md:text-base mb-2 uppercase tracking-wide flex items-center gap-2">
                             INSIGHTS <span className="bg-blue-500 text-white text-xs px-2 py-0.5 rounded font-bold">NEW</span>
                           </h3>
                         </div>
                         <div>
-                          <h3 className="text-gray-700 font-bold text-sm md:text-base mb-2 uppercase tracking-wide">ARTICLES & NEWS</h3>
+                          <h3 onClick={()=>navigate('/blogs')} className="text-gray-700 font-bold text-sm md:text-base mb-2 uppercase tracking-wide">ARTICLES & NEWS</h3>
                         </div>
                       </div>
                       
@@ -383,12 +383,12 @@ const Navbar = () => {
                           <h3  className="text-gray-700 font-bold text-sm md:text-base mb-2 uppercase tracking-wide">OWNER OFFERINGS</h3>
                         </div>
                         <div>
-                          <h3 className="text-blue-600 font-bold text-sm md:text-base mb-2 uppercase tracking-wide flex items-center gap-2">
+                          <h3 onClick={()=>navigate('/blogs')} className="text-blue-600 cursor-pointer font-bold text-sm md:text-base mb-2 uppercase tracking-wide flex items-center gap-2">
                             INSIGHTS <span className="bg-blue-500 text-white text-xs px-2 py-0.5 rounded font-bold">NEW</span>
                           </h3>
                         </div>
                         <div>
-                          <h3 className="text-gray-700 font-bold text-sm md:text-base mb-2 uppercase tracking-wide">ARTICLES & NEWS</h3>
+                          <h3 onClick={()=>navigate('/blogs')} className="text-gray-700 font-bold text-sm md:text-base mb-2 uppercase tracking-wide">ARTICLES & NEWS</h3>
                         </div>
                       </div>
                       

@@ -63,7 +63,7 @@ const Footer = () => {
               <li><Link to="/about-us" className="text-gray-300 hover:text-orange-400 transition text-base">About Us</Link></li>
               <li><Link to="/offers" className="text-gray-300 hover:text-orange-400 transition text-base">View Offer</Link></li>
               <li><Link to="/projects" className="text-gray-300 hover:text-orange-400 transition text-base">Projects</Link></li>
-              <li><a href="#" className="text-gray-300 hover:text-orange-400 transition text-base">Blog</a></li>
+              <li><Link to="/blogs" className="text-gray-300 hover:text-orange-400 transition text-base">Blog</Link></li>
               <li><a href="#" className="text-gray-300 hover:text-orange-400 transition text-base">Site map</a></li>
               <li><a href="#" className="text-gray-300 hover:text-orange-400 transition text-base">Advertise With us</a></li>
             </ul>
@@ -110,17 +110,12 @@ const Footer = () => {
           <p className="text-gray-300 text-sm leading-relaxed">
             <span className="font-semibold">Disclaimer:</span> The content, listings, and information provided on www.maigreatgroup.com are for general informational purposes only. While we strive for accuracy, we do not warrant or guarantee the completeness, accuracy, reliability, or availability of any listings, data, or other information on the platform. All information provided on this platform, including but not limited to property details, pricing, agent details, and property images, should not be considered as professional real estate advice. Users are encouraged to consult with a real estate professional or legal counsel before making any property-related decisions.
           </p>
-         
         </div>
-
- 
         <div className="border-t border-gray-700 pt-6 text-center">
           <p className="text-gray-400 text-sm">
             &copy; 2024 Maigreat Group. All rights reserved.
           </p>
         </div>
-
-   
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           className="fixed bottom-8 right-8 bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-full shadow-lg transition transform hover:scale-110"
