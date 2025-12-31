@@ -23,6 +23,7 @@ import PropertyEvalution from './component/PropertyEvalution/PropertyEvalution';
 import DealerLogin from './component/Dealer/DealerLogin';
 import LoginModal from './component/LoginModal';
 import Blogs from './pages/Blogs';
+import BlogDetail from './pages/BlogDetail';
 
 const AppContent = () => {
   return (
@@ -38,6 +39,7 @@ const AppContent = () => {
         <Route path='/dealer/login' element={<DealerLogin/>}/>
         <Route path='/login' element={<LoginModal/>} />
         <Route path='/blogs' element={<Blogs/>}/>
+        <Route path='/blog/:id' element={<BlogDetail/>}/>
         
         {/* Semi-Protected Routes - Login Required for Full Access */}
         <Route 
