@@ -448,7 +448,7 @@ const Navbar = () => {
             </div>
             
             <Link to="/builders" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base">Builders Project</Link>
-             <Link to="/dealer/login" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base">Dealer Login</Link>
+             <Link to="/dealer/login" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base" replace>Dealer Login</Link>
           
           
             <Link to="/post-property" className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold transition whitespace-nowrap text-base inline-block">

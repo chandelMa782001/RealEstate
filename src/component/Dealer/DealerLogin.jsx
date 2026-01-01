@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import Dealer from './Dealer';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const DealerLogin = () => {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
+  const location = useLocation();
   const [isLogin, setIsLogin] = useState(true); 
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -34,6 +35,11 @@ const DealerLogin = () => {
 
 
   useEffect(() => {
+    // Clean URL if it has query parameters
+    if (location.search) {
+      navigate('/dealer/login', { replace: true });
+    }
+    
     const storedDealers = localStorage.getItem('dealerUsers');
     const storedCurrentDealer = localStorage.getItem('currentDealer');
     
@@ -46,7 +52,7 @@ const DealerLogin = () => {
       setCurrentDealer(dealer);
       setIsAuthenticated(true);
     }
-  }, []);
+  }, [navigate, location.search]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
