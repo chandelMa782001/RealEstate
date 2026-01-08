@@ -5,7 +5,6 @@ import { authAPI } from '../apiServcies/authApi';
 import { handleApiError } from '../../utils/apiUtils';
 import gsap from 'gsap';
 import toast from 'react-hot-toast';
-
 const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -14,7 +13,6 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
     password: '',
     confirmPassword: ''
   });
-  
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState({});
@@ -22,7 +20,6 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const modalRef = useRef(null);
   const overlayRef = useRef(null);
-
   useEffect(() => {
     if (isOpen && modalRef.current) {
       gsap.fromTo(
@@ -37,7 +34,6 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
       );
     }
   }, [isOpen]);
-
   const handleClose = () => {
     gsap.to(modalRef.current, {
       scale: 0.8,
@@ -94,7 +90,7 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
     };
     setFormData(updatedFormData);
     
-    // Console log the form data changes
+
     console.log('🔄 Form Data Updated:', updatedFormData);
     console.log(`📝 Field "${name}" changed to:`, value);
 
@@ -111,10 +107,7 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
   const handleSignup = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-
-    // Console log form data before submission
     console.log('🚀 Submitting Form Data:', formData);
-
     const allTouched = {
       name: true,
       email: true,
@@ -123,48 +116,32 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
       confirmPassword: true
     };
     setTouched(allTouched);
-
-
     const validationErrors = validateForm(formData, ['name', 'email', 'mobile', 'password']);
-    
-   
     if (formData.password !== formData.confirmPassword) {
       validationErrors.confirmPassword = 'Passwords do not match';
     }
-
     setErrors(validationErrors);
-
     if (Object.keys(validationErrors).length > 0) {
       console.log('❌ Validation Errors:', validationErrors);
       setIsSubmitting(false);
       toast.error('Please fill all required fields correctly');
       return;
     }
-
     try {
-    
       const registrationData = {
         name: formData.name,
         email: formData.email,
         mobile: formData.mobile,
         password: formData.password,
         confirmPassword:formData.confirmPassword
-
       };
-
       console.log('📤 Sending Registration Data:', registrationData);
-   
       const response = await authAPI.register(registrationData);
       console.log('📥 API Response:', response);
-     
-      // Check if signup was successful (handle different response formats)
       const isSuccess = response.success || response.status === 'success' || response.message?.includes('success');
-      
       if (isSuccess) {
         console.log('✅ Signup successful, starting modal transition...');
-        
         toast.success(response.message || `Account created successfully! Please login to continue.`);
-        
         console.log('🧹 Clearing form data...');
         // Clear form immediately
         clearForm();
@@ -190,8 +167,6 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
       setIsSubmitting(false);
     }
   };
-
-  // Reset form when modal closes
   useEffect(() => {
     if (!isOpen) {
       console.log('🔄 Modal closed - Resetting form data');
