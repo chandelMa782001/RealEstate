@@ -28,7 +28,7 @@ const Navbar = () => {
   const [activeTab, setActiveTab] = useState('Buy');
   const [propertyType, setPropertyType] = useState('Residential');
   const [searchCity, setSearchCity] = useState('');
-  const [budgetRange, setBudgetRange] = useState({ min: 30, max: 500 });
+  const [budgetRange, setBudgetRange] = useState({ min: 10, max: 500 });
   const [showBudgetSlider, setShowBudgetSlider] = useState(false);
 
   
@@ -147,14 +147,14 @@ const Navbar = () => {
                               <div className="flex-1 relative">
                                 <input
                                   type="range"
-                                  min="10"
+                                  min="1"
                                   max="500"
-                                  step="10"
+                                  step="1"
                                   value={budgetRange.min}
                                   onChange={(e) => setBudgetRange(prev => ({ ...prev, min: parseInt(e.target.value) }))}
                                   className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer slider"
                                   style={{
-                                    background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${(budgetRange.min-10)/490*100}%, #e5e7eb ${(budgetRange.min-10)/490*100}%, #e5e7eb 100%)`
+                                    background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${(budgetRange.min-1)/499*100}%, #e5e7eb ${(budgetRange.min-1)/499*100}%, #e5e7eb 100%)`
                                   }}
                                 />
                               </div>
@@ -163,14 +163,14 @@ const Navbar = () => {
                             
                             <input
                               type="range"
-                              min="20"
+                              min="2"
                               max="500"
-                              step="10"
+                              step="1"
                               value={budgetRange.max}
                               onChange={(e) => setBudgetRange(prev => ({ ...prev, max: parseInt(e.target.value) }))}
                               className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer slider"
                               style={{
-                                background: `linear-gradient(to right, #e5e7eb 0%, #e5e7eb ${(budgetRange.max-20)/480*100}%, #3b82f6 ${(budgetRange.max-20)/480*100}%, #3b82f6 100%)`
+                                background: `linear-gradient(to right, #e5e7eb 0%, #e5e7eb ${(budgetRange.max-2)/498*100}%, #3b82f6 ${(budgetRange.max-2)/498*100}%, #3b82f6 100%)`
                               }}
                             />
                           </div>
@@ -178,7 +178,7 @@ const Navbar = () => {
                         
                           <div className="grid grid-cols-2 gap-2 mb-3">
                             {[
-                              { label: '₹1L - ₹50L', min: 30, max: 50 },
+                              { label: '₹1L - ₹50L', min: 1, max: 50 },
                               { label: '₹50L - ₹1Cr', min: 50, max: 100 },
                               { label: '₹1Cr - ₹2Cr', min: 100, max: 200 },
                               { label: '₹2Cr+', min: 200, max: 500 }
@@ -391,6 +391,8 @@ const Navbar = () => {
                           <h3 onClick={()=>navigate('/blogs')} className="text-gray-700 font-bold text-sm md:text-base mb-2 uppercase tracking-wide">ARTICLES & NEWS</h3>
                         </div>
                       </div>
+
+
                       
                    
                       <div className="col-span-1 md:col-span-4 bg-white p-4 md:p-6">
@@ -446,6 +448,7 @@ const Navbar = () => {
                 </div>
               )}
             </div>
+            <Link to='/offers' className='text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base' >Offers</Link>
             
             <Link to="/builders" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base">Builders Project</Link>
              <Link to="/dealer/login" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base" replace>Dealer Login</Link>
@@ -623,9 +626,9 @@ const Navbar = () => {
                         <label className="text-xs text-gray-600 mb-1 block">Min: ₹{budgetRange.min} Lacs</label>
                         <input
                           type="range"
-                          min="10"
+                          min="1"
                           max="500"
-                          step="10"
+                          step="1"
                           value={budgetRange.min}
                           onChange={(e) => setBudgetRange(prev => ({ ...prev, min: parseInt(e.target.value) }))}
                           className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer slider"
@@ -635,9 +638,9 @@ const Navbar = () => {
                         <label className="text-xs text-gray-600 mb-1 block">Max: ₹{budgetRange.max >= 100 ? `${Math.round(budgetRange.max/100)}+ Cr` : `${budgetRange.max} Lacs`}</label>
                         <input
                           type="range"
-                          min="20"
+                          min="2"
                           max="500"
-                          step="10"
+                          step="1"
                           value={budgetRange.max}
                           onChange={(e) => setBudgetRange(prev => ({ ...prev, max: parseInt(e.target.value) }))}
                           className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer slider"
@@ -648,7 +651,7 @@ const Navbar = () => {
                 
                     <div className="grid grid-cols-2 gap-2">
                       {[
-                        { label: '₹30L - ₹50L', min: 30, max: 50 },
+                        { label: '₹1L - ₹50L', min: 1, max: 50 },
                         { label: '₹50L - ₹1Cr', min: 50, max: 100 },
                         { label: '₹1Cr - ₹2Cr', min: 100, max: 200 },
                         { label: '₹2Cr+', min: 200, max: 500 }

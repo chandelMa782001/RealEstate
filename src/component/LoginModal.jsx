@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { FaEnvelope, FaLock, FaTimes } from 'react-icons/fa';
 import { useAppContext } from '../Context/AppContext';
-import { validateEmail, validateRequired, getErrorMessage } from '../../utils/validation';
+import { getErrorMessage } from '../../utils/validation';
+import { authAPI } from '../apiServcies/authApi';
+import { handleApiError, setAuthToken, setUserToStorage } from '../../utils/apiUtils';
 import gsap from 'gsap';
 import toast from 'react-hot-toast';
 
@@ -17,6 +19,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
 
   useEffect(() => {
     if (isOpen && modalRef.current) {
+      console.log('🔓 Login modal opening...');
       gsap.fromTo(
         overlayRef.current,
         { opacity: 0 },
@@ -76,35 +79,65 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-  
+    // Mark fields as touched
     setTouched({ email: true, password: true });
 
-   
+    // Validate fields
     const emailValid = validateField('email', email);
     const passwordValid = validateField('password', password);
 
     if (!emailValid || !passwordValid) {
       setIsSubmitting(false);
-      showNotification('Enter the Required Field', 'error', 3000);
+      toast.error('Please fill all required fields correctly');
       return;
     }
 
     try {
-   
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Prepare login data
+      const loginData = {
+        email: email,
+        password: password
+      };
+
+      console.log('📤 Sending Login Data:', loginData);
+
+      // Call login API
+      const response = await authAPI.login(loginData);
       
-      const userData = { email, name: email.split('@')[0] };
-      login(userData);
-      toast.success('Login successful!');
+      console.log('📥 Login API Response:', response);
       
-  
-      setEmail('');
-      setPassword('');
-      setErrors({});
-      setTouched({});
-      handleClose();
+      // Check if login was successful (handle different response formats)
+      const isSuccess = response.success || response.status === 'success' || response.token;
+      
+      if (isSuccess) {
+        console.log('✅ Login successful!');
+        
+        // Store token and user data
+        if (response.token) {
+          setAuthToken(response.token);
+          console.log('🔑 Token stored:', response.token);
+        }
+        if (response.user) {
+          setUserToStorage(response.user);
+          login(response.user); // Update context
+          console.log('👤 User data stored:', response.user);
+        }
+        
+        toast.success(response.message || 'Login successful!');
+        
+        // Reset form
+        setEmail('');
+        setPassword('');
+        setErrors({});
+        setTouched({});
+        handleClose();
+      } else {
+        console.log('❌ Login failed - no success flag in response');
+        toast.error(response.message || 'Login failed. Please check your credentials.');
+      }
     } catch (error) {
-      toast.error("Login failed");
+      const errorResponse = handleApiError(error);
+      toast.error(errorResponse.message || 'Login failed. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -112,11 +145,14 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
 
   useEffect(() => {
     if (!isOpen) {
+      console.log('🧹 Login modal closed - clearing fields...');
       setEmail('');
       setPassword('');
       setErrors({});
       setTouched({});
       setIsSubmitting(false);
+    } else {
+      console.log('🔓 Login modal opened - fields should be empty');
     }
   }, [isOpen]);
 

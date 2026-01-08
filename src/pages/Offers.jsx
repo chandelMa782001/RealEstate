@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../component/Navbar';
 import Footer from '../component/Footer';
-import { FaBed, FaBath, FaRulerCombined, FaMapMarkerAlt, FaTag, FaPercent, FaClock } from 'react-icons/fa';
+import { FaBed, FaBath, FaRulerCombined, FaMapMarkerAlt, FaTag, FaPercent, FaClock, FaSearch } from 'react-icons/fa';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import {offerProperties} from "../../Constant/Constants"
@@ -12,11 +12,18 @@ gsap.registerPlugin(ScrollTrigger);
 const Offers = () => {
   const navigate = useNavigate();
   const [filter, setFilter] = useState('All');
+  const [searchTerm, setSearchTerm] = useState('');
   const cardsRef = useRef([]);
   const filters = ['All', 'Villa', 'Apartment', 'Commercial', 'Penthouse'];
-  const filteredProperties = filter === 'All' 
-    ? offerProperties 
-    : offerProperties.filter(property => property.type === filter);
+  
+  // Filter by type first, then by search term
+  const filteredProperties = offerProperties
+    .filter(property => filter === 'All' || property.type === filter)
+    .filter(property => 
+      searchTerm === '' || 
+      property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      property.location.toLowerCase().includes(searchTerm.toLowerCase())
+    );
   useEffect(() => {
     cardsRef.current.forEach((card, index) => {
       if (card) {
@@ -75,6 +82,22 @@ const Offers = () => {
 
       <div className="max-w-7xl mx-auto px-4 py-8 sm:py-12 md:py-16">
         
+        {/* Search Bar */}
+        <div className="mb-8 sm:mb-10 md:mb-12">
+          <div className="max-w-md mx-auto relative">
+            <div className="relative">
+              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search by title or location..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition text-sm sm:text-base"
+              />
+            </div>
+          </div>
+        </div>
+
         {/* Filter Buttons */}
         <div className="flex flex-wrap gap-2 sm:gap-3 mb-8 sm:mb-10 md:mb-12 justify-center">
           {filters.map((filterOption) => (
@@ -220,8 +243,23 @@ const Offers = () => {
         {filteredProperties.length === 0 && (
           <div className="text-center py-12 sm:py-16">
             <FaTag className="text-gray-300 text-5xl sm:text-6xl mx-auto mb-4" />
-            <h3 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">No Offers Available</h3>
-            <p className="text-gray-600 text-sm sm:text-base">Check back soon for exciting property deals!</p>
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">
+              {searchTerm ? 'No Properties Found' : 'No Offers Available'}
+            </h3>
+            <p className="text-gray-600 text-sm sm:text-base">
+              {searchTerm 
+                ? `No properties match "${searchTerm}". Try adjusting your search or filters.`
+                : 'Check back soon for exciting property deals!'
+              }
+            </p>
+            {searchTerm && (
+              <button
+                onClick={() => setSearchTerm('')}
+                className="mt-4 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm transition"
+              >
+                Clear Search
+              </button>
+            )}
           </div>
         )}
 

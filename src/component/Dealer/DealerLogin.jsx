@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import Dealer from './Dealer';
 import { useNavigate, useLocation } from 'react-router-dom';
-
 const DealerLogin = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -74,6 +73,9 @@ const DealerLogin = () => {
       const user = registeredUsers.find(
         user => user.email === formData.email && user.password === formData.password
       );
+      console.log('userData (found user):', user);
+      console.log('response (login attempt):', user ? 'success' : 'failed');
+      
       if (user) {
         setCurrentDealer(user);
         setIsAuthenticated(true);

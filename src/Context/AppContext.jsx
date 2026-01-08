@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
+import { getUserFromStorage, getAuthToken, removeAuthToken } from '../../utils/apiUtils';
 import toast from 'react-hot-toast';
 
 const AppContext = createContext();
@@ -69,7 +70,7 @@ export const AppProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     setIsAuthenticated(false);
-    localStorage.removeItem('user');
+    removeAuthToken(); // This removes both token and user from localStorage
     showNotification('You have been logged out successfully', 'info');
   };
 
@@ -104,14 +105,16 @@ export const AppProvider = ({ children }) => {
     localStorage.setItem('recentlyViewed', JSON.stringify(newRecentlyViewed));
   };
 
-  
+  // Initialize state from localStorage on app load
   React.useEffect(() => {
-    const storedUser = localStorage.getItem('user');
+    const storedUser = getUserFromStorage();
+    const token = getAuthToken();
     const storedFavorites = localStorage.getItem('favorites');
     const storedRecentlyViewed = localStorage.getItem('recentlyViewed');
 
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    // Only set as authenticated if both user and token exist
+    if (storedUser && token) {
+      setUser(storedUser);
       setIsAuthenticated(true);
     }
     if (storedFavorites) {

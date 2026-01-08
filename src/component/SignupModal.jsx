@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { FaUser, FaEnvelope, FaPhone, FaTimes, FaEye, FaEyeSlash } from 'react-icons/fa';
-import { useAppContext } from '../Context/AppContext';
 import { validateForm, getErrorMessage } from '../../utils/validation';
+import { authAPI } from '../apiServcies/authApi';
+import { handleApiError } from '../../utils/apiUtils';
 import gsap from 'gsap';
 import toast from 'react-hot-toast';
 
 const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
-  const { signup } = useAppContext();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -49,6 +49,21 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
     });
   };
 
+  const clearForm = () => {
+    console.log('🧹 Manually clearing form...');
+    setFormData({
+      name: '',
+      email: '',
+      mobile: '',
+      password: '',
+      confirmPassword: ''
+    });
+    setErrors({});
+    setTouched({});
+    setShowPassword(false);
+    setShowConfirmPassword(false);
+  };
+
   const validateField = (field, value) => {
     let error = '';
     
@@ -73,17 +88,21 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
+    const updatedFormData = {
+      ...formData,
       [name]: value
-    }));
+    };
+    setFormData(updatedFormData);
     
-    // Validate on change if field was touched
+    // Console log the form data changes
+    console.log('🔄 Form Data Updated:', updatedFormData);
+    console.log(`📝 Field "${name}" changed to:`, value);
+
     if (touched[name]) {
       validateField(name, value);
     }
     
-    // Also revalidate confirmPassword if password changes
+    
     if (name === 'password' && touched.confirmPassword) {
       validateField('confirmPassword', formData.confirmPassword);
     }
@@ -93,7 +112,9 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Mark all fields as touched
+    // Console log form data before submission
+    console.log('🚀 Submitting Form Data:', formData);
+
     const allTouched = {
       name: true,
       email: true,
@@ -103,10 +124,10 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
     };
     setTouched(allTouched);
 
-    // Validate all fields
+
     const validationErrors = validateForm(formData, ['name', 'email', 'mobile', 'password']);
     
-    // Check password match
+   
     if (formData.password !== formData.confirmPassword) {
       validationErrors.confirmPassword = 'Passwords do not match';
     }
@@ -114,37 +135,57 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length > 0) {
+      console.log('❌ Validation Errors:', validationErrors);
       setIsSubmitting(false);
-      // showNotification('Enter the Required filed', 'error', 3000);
-      toast.error('Enter the Required filed')
+      toast.error('Please fill all required fields correctly');
       return;
     }
 
     try {
-      
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      const userData = { 
-        name: formData.name, 
-        email: formData.email, 
-        mobile: formData.mobile 
+    
+      const registrationData = {
+        name: formData.name,
+        email: formData.email,
+        mobile: formData.mobile,
+        password: formData.password,
+        confirmPassword:formData.confirmPassword
+
       };
-      signup(userData);
-      toast.success(`Account created successfully! Welcome, ${userData.name}!`);
+
+      console.log('📤 Sending Registration Data:', registrationData);
+   
+      const response = await authAPI.register(registrationData);
+      console.log('📥 API Response:', response);
+     
+      // Check if signup was successful (handle different response formats)
+      const isSuccess = response.success || response.status === 'success' || response.message?.includes('success');
       
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        mobile: '',
-        password: '',
-        confirmPassword: ''
-      });
-      setErrors({});
-      setTouched({});
-      handleClose();
+      if (isSuccess) {
+        console.log('✅ Signup successful, starting modal transition...');
+        
+        toast.success(response.message || `Account created successfully! Please login to continue.`);
+        
+        console.log('🧹 Clearing form data...');
+        // Clear form immediately
+        clearForm();
+        
+        console.log('🚪 Closing signup modal and switching to login...');
+        // Close current modal and switch to login
+        onClose(); // Close signup modal immediately
+        
+        // Switch to login modal after a short delay
+        setTimeout(() => {
+          console.log('🔄 Opening login modal...');
+          onSwitchToLogin();
+        }, 100);
+      } else {
+        console.log('❌ Signup failed - no success flag in response');
+        toast.error(response.message || 'Signup failed. Please try again.');
+      }
     } catch (error) {
-      toast.error('Signup failed. Please try again.');
+      console.log('💥 Signup Error:', error);
+      const errorResponse = handleApiError(error);
+      toast.error(errorResponse.message || 'Signup failed. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -153,18 +194,9 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
   // Reset form when modal closes
   useEffect(() => {
     if (!isOpen) {
-      setFormData({
-        name: '',
-        email: '',
-        mobile: '',
-        password: '',
-        confirmPassword: ''
-      });
-      setErrors({});
-      setTouched({});
+      console.log('🔄 Modal closed - Resetting form data');
+      clearForm();
       setIsSubmitting(false);
-      setShowPassword(false);
-      setShowConfirmPassword(false);
     }
   }, [isOpen]);
 

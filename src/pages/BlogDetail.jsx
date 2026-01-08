@@ -252,7 +252,7 @@ const BlogDetail = () => {
               </Link>
             </div>
             
-            <div className="flex items-center space-x-4">
+            <div className="lg:flex  hidden items-center ">
               <button
                 onClick={() => setIsBookmarked(!isBookmarked)}
                 className={`p-2 rounded-full transition-colors ${

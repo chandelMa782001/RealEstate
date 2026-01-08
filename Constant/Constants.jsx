@@ -1,4 +1,40 @@
 import { images } from "../utils/Image";
+
+// API Configuration
+export const API_CONFIG = {
+  BASE_URL: import.meta.env.VITE_API_BASE_URL,
+  ENDPOINTS: {
+    AUTH: {
+      REGISTER: '/api/auth/register',
+      LOGIN: '/api/auth/login',
+      LOGOUT: '/api/auth/logout',
+      PROFILE: '/api/auth/profile',
+      CHANGE_PASSWORD: '/api/auth/change-password',
+      FORGOT_PASSWORD: '/api/auth/forgot-password',
+      RESET_PASSWORD: '/api/auth/reset-password'
+    },
+    PROPERTIES: {
+      GET_ALL: '/api/properties',
+      GET_BY_ID: '/api/properties/:id',
+      CREATE: '/api/properties',
+      UPDATE: '/api/properties/:id',
+      DELETE: '/api/properties/:id',
+      SEARCH: '/api/properties/search',
+      FEATURED: '/api/properties/featured'
+    },
+    BUILDERS: {
+      GET_ALL: '/api/builders',
+      GET_BY_ID: '/api/builders/:id'
+    }
+  }
+};
+
+// API Response Status
+export const API_STATUS = {
+  SUCCESS: 'success',
+  ERROR: 'error',
+  LOADING: 'loading'
+};
 export   const propertiess = [
     {
       id: 1,

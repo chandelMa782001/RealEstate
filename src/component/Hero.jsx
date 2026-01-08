@@ -51,6 +51,40 @@ const Hero = () => {
     'Industrial Plots/Land': false,
     'Commercial / Inst. Land': false
   });
+
+  const [selectedAgricultureTypes, setSelectedAgricultureTypes] = useState({
+    'Agricultural Land (General)': false,
+    'Cultivable / Farming Land': false,
+    'Irrigated Agricultural Land': false,
+    'Non-Irrigated (Dry) Land': false,
+    'Organic Farming Land': false,
+    'Multi-Crop Land': false,
+    'Single-Crop Land': false,
+    'Horticulture Land': false,
+    'Orchard / Fruit Farm': false,
+    'Vegetable Farming Land': false,
+    'Floriculture Land': false,
+    'Herbal / Medicinal Plant Land': false,
+    'Plantation Land (Tea, Coffee, Rubber, Coconut etc.)': false,
+    'Dairy Farm': false,
+    'Poultry Farm': false,
+    'Goat / Sheep Farm': false,
+    'Cattle Farm': false,
+    'Pig Farm': false,
+    'Fish Farm': false,
+    'Aquaculture / Shrimp Farm': false,
+    'Fish Pond': false,
+    'Hatchery Land': false,
+    'Farm House with Agricultural Land': false,
+    'Agro-Industrial Land': false,
+    'Food Processing Farm': false,
+    'Cold Storage with Farm Land': false,
+    'Agricultural Plot': false,
+    'Agricultural Estate': false,
+    'Leasehold Agricultural Land': false,
+    'Freehold Agricultural Land': false,
+    'Government Allotted Agricultural Land': false
+  });
   const [showPropertyTypes, setShowPropertyTypes] = useState(false);
   const [showBudgetDropdown, setShowBudgetDropdown] = useState(false);
   const [showBedroomDropdown, setShowBedroomDropdown] = useState(false);
@@ -64,7 +98,7 @@ const Hero = () => {
   const titleRef = useRef(null);
   const subtitleRef = useRef(null);
   const searchBoxRef = useRef(null);
-  const tabs = ['Buy', 'Rent', 'New Launch', 'Commercial', 'Plots/Land', 'Projects', 'Post Property'];
+  const tabs = ['Buy', 'Rent', 'New Launch', 'Commercial', 'Plots/Land','Agriculture', 'Projects', 'Post Property'];
   const budgetValues = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
   const formatBudgetValue = (value) => {
     if (value === 0) return '0';
@@ -103,6 +137,40 @@ const Hero = () => {
         'Industrial Plots/Land': false,
         'Commercial / Inst. Land': false
       });
+    } else if (tab === 'Agriculture') {
+      setSelectedAgricultureTypes({
+        'Agricultural Land (General)': false,
+        'Cultivable / Farming Land': false,
+        'Irrigated Agricultural Land': false,
+        'Non-Irrigated (Dry) Land': false,
+        'Organic Farming Land': false,
+        'Multi-Crop Land': false,
+        'Single-Crop Land': false,
+        'Horticulture Land': false,
+        'Orchard / Fruit Farm': false,
+        'Vegetable Farming Land': false,
+        'Floriculture Land': false,
+        'Herbal / Medicinal Plant Land': false,
+        'Plantation Land (Tea, Coffee, Rubber, Coconut etc.)': false,
+        'Dairy Farm': false,
+        'Poultry Farm': false,
+        'Goat / Sheep Farm': false,
+        'Cattle Farm': false,
+        'Pig Farm': false,
+        'Fish Farm': false,
+        'Aquaculture / Shrimp Farm': false,
+        'Fish Pond': false,
+        'Hatchery Land': false,
+        'Farm House with Agricultural Land': false,
+        'Agro-Industrial Land': false,
+        'Food Processing Farm': false,
+        'Cold Storage with Farm Land': false,
+        'Agricultural Plot': false,
+        'Agricultural Estate': false,
+        'Leasehold Agricultural Land': false,
+        'Freehold Agricultural Land': false,
+        'Government Allotted Agricultural Land': false
+      });
     } else {
       setSelectedPropertyTypes({
          'Flat/Apartment': false,
@@ -140,6 +208,11 @@ const Hero = () => {
         ...prev,
         [type]: !prev[type]
       }));
+    } else if (activeTab === 'Agriculture') {
+      setSelectedAgricultureTypes(prev => ({
+        ...prev,
+        [type]: !prev[type]
+      }));
     } else {
       setSelectedPropertyTypes(prev => ({
         ...prev,
@@ -152,6 +225,8 @@ const Hero = () => {
       return Object.values(selectedCommercialTypes).filter(Boolean).length;
     } else if (activeTab === 'Plots/Land') {
       return Object.values(selectedPlotTypes).filter(Boolean).length;
+    } else if (activeTab === 'Agriculture') {
+      return Object.values(selectedAgricultureTypes).filter(Boolean).length;
     }
     return Object.values(selectedPropertyTypes).filter(Boolean).length;
   };
@@ -160,6 +235,7 @@ const Hero = () => {
     if (count === 0) {
       if (activeTab === 'Commercial') return 'All Commercial';
       if (activeTab === 'Plots/Land') return 'All Plots/Land';
+      if (activeTab === 'Agriculture') return 'All Agriculture';
       return 'All Residential';
     }
     if (count === 1) {
@@ -168,6 +244,9 @@ const Hero = () => {
         return selectedType;
       } else if (activeTab === 'Plots/Land') {
         const selectedType = Object.keys(selectedPlotTypes).find(type => selectedPlotTypes[type]);
+        return selectedType;
+      } else if (activeTab === 'Agriculture') {
+        const selectedType = Object.keys(selectedAgricultureTypes).find(type => selectedAgricultureTypes[type]);
         return selectedType;
       } else {
         const selectedType = Object.keys(selectedPropertyTypes).find(type => selectedPropertyTypes[type]);
@@ -212,6 +291,8 @@ const Hero = () => {
       selectedTypes = Object.keys(selectedCommercialTypes).filter(type => selectedCommercialTypes[type]);
     } else if (activeTab === 'Plots/Land') {
       selectedTypes = Object.keys(selectedPlotTypes).filter(type => selectedPlotTypes[type]);
+    } else if (activeTab === 'Agriculture') {
+      selectedTypes = Object.keys(selectedAgricultureTypes).filter(type => selectedAgricultureTypes[type]);
     } else {
       selectedTypes = Object.keys(selectedPropertyTypes).filter(type => selectedPropertyTypes[type]);
     }
@@ -464,6 +545,89 @@ const Hero = () => {
                           </button>
                         )}
                       </>
+                    ) : activeTab === 'Agriculture' ? (
+                      <>
+                        {getSelectedPropertyTypesCount() < Object.keys(selectedAgricultureTypes).length && (
+                          <button
+                            onClick={() => setSelectedAgricultureTypes({
+                              'Agricultural Land (General)': true,
+                              'Cultivable / Farming Land': true,
+                              'Irrigated Agricultural Land': true,
+                              'Non-Irrigated (Dry) Land': true,
+                              'Organic Farming Land': true,
+                              'Multi-Crop Land': true,
+                              'Single-Crop Land': true,
+                              'Horticulture Land': true,
+                              'Orchard / Fruit Farm': true,
+                              'Vegetable Farming Land': true,
+                              'Floriculture Land': true,
+                              'Herbal / Medicinal Plant Land': true,
+                              'Plantation Land (Tea, Coffee, Rubber, Coconut etc.)': true,
+                              'Dairy Farm': true,
+                              'Poultry Farm': true,
+                              'Goat / Sheep Farm': true,
+                              'Cattle Farm': true,
+                              'Pig Farm': true,
+                              'Fish Farm': true,
+                              'Aquaculture / Shrimp Farm': true,
+                              'Fish Pond': true,
+                              'Hatchery Land': true,
+                              'Farm House with Agricultural Land': true,
+                              'Agro-Industrial Land': true,
+                              'Food Processing Farm': true,
+                              'Cold Storage with Farm Land': true,
+                              'Agricultural Plot': true,
+                              'Agricultural Estate': true,
+                              'Leasehold Agricultural Land': true,
+                              'Freehold Agricultural Land': true,
+                              'Government Allotted Agricultural Land': true
+                            })}
+                            className="text-green-600 hover:text-green-800 text-xs sm:text-sm font-medium"
+                          >
+                            Select All
+                          </button>
+                        )}
+                        {getSelectedPropertyTypesCount() > 0 && (
+                          <button
+                            onClick={() => setSelectedAgricultureTypes({
+                              'Agricultural Land (General)': false,
+                              'Cultivable / Farming Land': false,
+                              'Irrigated Agricultural Land': false,
+                              'Non-Irrigated (Dry) Land': false,
+                              'Organic Farming Land': false,
+                              'Multi-Crop Land': false,
+                              'Single-Crop Land': false,
+                              'Horticulture Land': false,
+                              'Orchard / Fruit Farm': false,
+                              'Vegetable Farming Land': false,
+                              'Floriculture Land': false,
+                              'Herbal / Medicinal Plant Land': false,
+                              'Plantation Land (Tea, Coffee, Rubber, Coconut etc.)': false,
+                              'Dairy Farm': false,
+                              'Poultry Farm': false,
+                              'Goat / Sheep Farm': false,
+                              'Cattle Farm': false,
+                              'Pig Farm': false,
+                              'Fish Farm': false,
+                              'Aquaculture / Shrimp Farm': false,
+                              'Fish Pond': false,
+                              'Hatchery Land': false,
+                              'Farm House with Agricultural Land': false,
+                              'Agro-Industrial Land': false,
+                              'Food Processing Farm': false,
+                              'Cold Storage with Farm Land': false,
+                              'Agricultural Plot': false,
+                              'Agricultural Estate': false,
+                              'Leasehold Agricultural Land': false,
+                              'Freehold Agricultural Land': false,
+                              'Government Allotted Agricultural Land': false
+                            })}
+                            className="text-red-600 hover:text-red-800 text-xs sm:text-sm font-medium"
+                          >
+                            Clear All
+                          </button>
+                        )}
+                      </>
                     ) : (
                       <>
                         {getSelectedPropertyTypesCount() < Object.keys(selectedPropertyTypes).length && (
@@ -587,6 +751,44 @@ const Hero = () => {
                         </span>
                       </label>
                     ))
+                  ) : activeTab === 'Agriculture' ? (
+                    Object.keys(selectedAgricultureTypes).map((type) => (
+                      <label 
+                        key={type} 
+                        className={`flex items-center space-x-2 cursor-pointer p-2 rounded transition-all duration-200 ${
+                          selectedAgricultureTypes[type] 
+                            ? 'bg-blue-100 border border-blue-300 shadow-sm' 
+                            : 'hover:bg-white border border-transparent'
+                        }`}
+                      >
+                        <div className="relative">
+                          <input
+                            type="checkbox"
+                            checked={selectedAgricultureTypes[type]}
+                            onChange={() => handlePropertyTypeChange(type)}
+                            className="w-4 h-4 text-blue-600 border-2 border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 transition-all duration-200"
+                          />
+                          {selectedAgricultureTypes[type] && (
+                            <svg 
+                              className="absolute top-0 left-0 w-4 h-4 text-blue-600 pointer-events-none" 
+                              fill="currentColor" 
+                              viewBox="0 0 20 20"
+                            >
+                              <path 
+                                fillRule="evenodd" 
+                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" 
+                                clipRule="evenodd" 
+                              />
+                            </svg>
+                          )}
+                        </div>
+                        <span className={`text-xs sm:text-sm leading-tight transition-colors duration-200 ${
+                          selectedAgricultureTypes[type] ? 'text-blue-800 font-medium' : 'text-gray-700'
+                        }`}>
+                          {type}
+                        </span>
+                      </label>
+                    ))
                   ) : (
                     Object.keys(selectedPropertyTypes).map((type) => (
                       <label 
@@ -631,6 +833,8 @@ const Hero = () => {
                   {activeTab === 'Commercial' ? (
                     <>Looking for residential properties? <button className="text-blue-600 hover:underline">Click here</button></>
                   ) : activeTab === 'Plots/Land' ? (
+                    <>Looking for residential properties? <button className="text-blue-600 hover:underline">Click here</button></>
+                  ) : activeTab === 'Agriculture' ? (
                     <>Looking for residential properties? <button className="text-blue-600 hover:underline">Click here</button></>
                   ) : (
                     <>Looking for commercial properties? <button className="text-blue-600 hover:underline">Click here</button></>
