@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import Dealer from './Dealer';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { dealerAPI } from '../../apiServcies/authApi';
+import { validateEmail, validatePhone, validateName, validatePassword, getErrorMessage } from '../../../utils/validation';
 const DealerLogin = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -17,9 +19,11 @@ const DealerLogin = () => {
     newPassword: '',
     confirmPassword: ''
   });
+  const [formErrors, setFormErrors] = useState({});
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState(''); 
   const [resetStep, setResetStep] = useState(1); // 1: email verification, 2: password reset
+  const [isLoading, setIsLoading] = useState(false);
 
 
   const showMessage = (msg, type) => {
@@ -34,22 +38,25 @@ const DealerLogin = () => {
 
 
   useEffect(() => {
-    // Clean URL if it has query parameters
+   
     if (location.search) {
       navigate('/dealer/login', { replace: true });
     }
     
-    const storedDealers = localStorage.getItem('dealerUsers');
+ 
     const storedCurrentDealer = localStorage.getItem('currentDealer');
+    const storedDealerToken = localStorage.getItem('dealerToken');
     
-    if (storedDealers) {
-      setRegisteredUsers(JSON.parse(storedDealers));
-    }
-    
-    if (storedCurrentDealer) {
+    if (storedCurrentDealer && storedDealerToken) {
       const dealer = JSON.parse(storedCurrentDealer);
       setCurrentDealer(dealer);
       setIsAuthenticated(true);
+    }
+    
+
+    const storedDealers = localStorage.getItem('dealerUsers');
+    if (storedDealers) {
+      setRegisteredUsers(JSON.parse(storedDealers));
     }
   }, [navigate, location.search]);
 
@@ -59,9 +66,17 @@ const DealerLogin = () => {
       ...prev,
       [name]: value
     }));
+    
+   
+    if (formErrors[name]) {
+      setFormErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (isForgotPassword) {
@@ -69,59 +84,151 @@ const DealerLogin = () => {
       return;
     }
     
+    setIsLoading(true);
+    
     if (isLogin) {
-      const user = registeredUsers.find(
-        user => user.email === formData.email && user.password === formData.password
-      );
-      console.log('userData (found user):', user);
-      console.log('response (login attempt):', user ? 'success' : 'failed');
-      
-      if (user) {
-        setCurrentDealer(user);
-        setIsAuthenticated(true);
-        localStorage.setItem('currentDealer', JSON.stringify(user));
+    
+      if (!formData.email || !formData.password) {
+        showMessage('Please enter both email and password.', 'error');
+        setIsLoading(false);
+        return;
+      }
+
+    
+      if (!validateEmail(formData.email)) {
+        showMessage('Please enter a valid email address.', 'error');
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+       
+        const credentials = {
+          email: formData.email.trim().toLowerCase(),
+          password: formData.password
+        };
+
+        console.log('🚀 Attempting dealer login with credentials:', credentials);
         
-        showMessage(`Welcome back, ${user.name}!`, 'success');
-      } else {
-        showMessage('Invalid email or password. Please try again.', 'error');
+        const response = await dealerAPI.login(credentials);
+        
+        console.log('✅ Dealer login successful:', response);
+      
+        if (response.token) {
+          localStorage.setItem('dealerToken', response.token);
+        }
+        
+        const dealerData = response.dealer || response.user || response;
+        setCurrentDealer(dealerData);
+        setIsAuthenticated(true);
+        localStorage.setItem('currentDealer', JSON.stringify(dealerData));
+        
+        showMessage(`Welcome back, ${dealerData.name || 'Dealer'}!`, 'success');
+        
+      } catch (error) {
+        console.error('❌ Dealer login failed:', error);
+        
+      
+        if (error?.message) {
+          showMessage(error.message, 'error');
+        } else if (typeof error === 'string') {
+          showMessage(error, 'error');
+        } else if (error?.email || error?.password) {
+          showMessage('Invalid email or password. Please try again.', 'error');
+        } else {
+          showMessage('Login failed. Please try again.', 'error');
+        }
+      } finally {
+        setIsLoading(false);
       }
     } else {
-      if (!formData.name || !formData.email || !formData.mobile || !formData.password) {
-        showMessage('Please fill in all fields.', 'error');
+  
+      const errors = {};
+      
+      if (!formData.name) {
+        errors.name = getErrorMessage('name', formData.name);
+      } else if (!validateName(formData.name)) {
+        errors.name = getErrorMessage('name', formData.name);
+      }
+      
+      if (!formData.email) {
+        errors.email = getErrorMessage('email', formData.email);
+      } else if (!validateEmail(formData.email)) {
+        errors.email = getErrorMessage('email', formData.email);
+      }
+      
+      if (!formData.mobile) {
+        errors.mobile = getErrorMessage('mobile', formData.mobile);
+      } else if (!validatePhone(formData.mobile)) {
+        errors.mobile = getErrorMessage('mobile', formData.mobile);
+      }
+      
+      if (!formData.password) {
+        errors.password = getErrorMessage('password', formData.password);
+      } else if (!validatePassword(formData.password)) {
+        errors.password = getErrorMessage('password', formData.password);
+      }
+      
+    
+      if (Object.keys(errors).length > 0) {
+        setFormErrors(errors);
+        showMessage('Please fix the errors below.', 'error');
+        setIsLoading(false);
         return;
       }
-      const existingUser = registeredUsers.find(user => user.email === formData.email);
-      if (existingUser) {
-        showMessage('User already exists with this email. Please login instead.', 'error');
-        return;
+
+      try {
+        // Prepare dealer data according to the API payload format
+        const dealerData = {
+          name: formData.name.trim(),
+          email: formData.email.trim().toLowerCase(),
+          mobile: formData.mobile.replace(/[\s\-\(\)]/g, ''),
+          password: formData.password
+        };
+
+        console.log('🚀 Attempting dealer registration with data:', dealerData);
+        
+        const response = await dealerAPI.register(dealerData);
+        
+        console.log('✅ Dealer registration successful:', response);
+        showMessage('Account created successfully! Please login now.', 'success');
+        
+      
+        setFormErrors({});
+        
+    
+        setIsLogin(true);
+        setFormData({
+          email: formData.email, 
+          password: '',
+          name: '',
+          mobile: '',
+          newPassword: '',
+          confirmPassword: ''
+        });
+        
+      } catch (error) {
+        console.error('❌ Dealer registration failed:', error);
+        
+    
+        if (error?.message) {
+          showMessage(error.message, 'error');
+        } else if (typeof error === 'string') {
+          showMessage(error, 'error');
+        } else if (error?.email) {
+          showMessage('User already exists with this email. Please login instead.', 'error');
+        } else {
+          showMessage('Registration failed. Please try again.', 'error');
+        }
+      } finally {
+        setIsLoading(false);
       }
-      const newUser = {
-        id: Date.now(),
-        name: formData.name,
-        email: formData.email,
-        mobile: formData.mobile,
-        password: formData.password,
-        createdAt: new Date().toISOString()
-      };
-      const updatedUsers = [...registeredUsers, newUser];
-      setRegisteredUsers(updatedUsers);
-      localStorage.setItem('dealerUsers', JSON.stringify(updatedUsers));
-      showMessage('Account created successfully! Please login now.', 'success')
-      setIsLogin(true);
-      setFormData({
-        email: formData.email, 
-        password: '',
-        name: '',
-        mobile: '',
-        newPassword: '',
-        confirmPassword: ''
-      });
     }
   };
 
   const handleForgotPassword = () => {
     if (resetStep === 1) {
-      // Step 1: Verify email exists
+     
       const user = registeredUsers.find(user => user.email === formData.email);
       if (!user) {
         showMessage('No account found with this email address.', 'error');
@@ -130,7 +237,7 @@ const DealerLogin = () => {
       showMessage('Email verified! Please enter your new password.', 'success');
       setResetStep(2);
     } else {
-      // Step 2: Reset password
+
       if (!formData.newPassword || !formData.confirmPassword) {
         showMessage('Please fill in both password fields.', 'error');
         return;
@@ -187,6 +294,7 @@ const DealerLogin = () => {
       newPassword: '',
       confirmPassword: ''
     });
+    setFormErrors({});
     setMessage('');
   };
 
@@ -202,6 +310,7 @@ const DealerLogin = () => {
       newPassword: '',
       confirmPassword: ''
     });
+    setFormErrors({});
     setMessage('');
   };
 
@@ -217,6 +326,7 @@ const DealerLogin = () => {
       newPassword: '',
       confirmPassword: ''
     });
+    setFormErrors({});
     setMessage('');
   };
 
@@ -268,7 +378,9 @@ const DealerLogin = () => {
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200 outline-none text-gray-700 placeholder-gray-400"
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200 outline-none text-gray-700 placeholder-gray-400 ${
+                      formErrors.name ? 'border-red-500' : 'border-gray-300'
+                    }`}
                     placeholder="Enter your Full Name"
                     required={!isLogin && !isForgotPassword}
                   />
@@ -277,6 +389,9 @@ const DealerLogin = () => {
                       <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"/>
                     </svg>
                   </div>
+                  {formErrors.name && (
+                    <p className="mt-1 text-sm text-red-600">{formErrors.name}</p>
+                  )}
                 </div>
               )}
 
@@ -288,7 +403,9 @@ const DealerLogin = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200 outline-none text-gray-700 placeholder-gray-400"
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200 outline-none text-gray-700 placeholder-gray-400 ${
+                    formErrors.email ? 'border-red-500' : 'border-gray-300'
+                  }`}
                   placeholder={isForgotPassword ? "Enter your registered email" : "Enter your Email"}
                   required
                   disabled={isForgotPassword && resetStep === 2}
@@ -299,6 +416,9 @@ const DealerLogin = () => {
                     <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
                   </svg>
                 </div>
+                {formErrors.email && (
+                  <p className="mt-1 text-sm text-red-600">{formErrors.email}</p>
+                )}
               </div>
 
               {/* Mobile field - only for registration */}
@@ -310,7 +430,9 @@ const DealerLogin = () => {
                     name="mobile"
                     value={formData.mobile}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200 outline-none text-gray-700 placeholder-gray-400"
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200 outline-none text-gray-700 placeholder-gray-400 ${
+                      formErrors.mobile ? 'border-red-500' : 'border-gray-300'
+                    }`}
                     placeholder="Enter Mobile Number"
                     required={!isLogin && !isForgotPassword}
                   />
@@ -319,6 +441,9 @@ const DealerLogin = () => {
                       <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
                     </svg>
                   </div>
+                  {formErrors.mobile && (
+                    <p className="mt-1 text-sm text-red-600">{formErrors.mobile}</p>
+                  )}
                 </div>
               )}
 
@@ -331,7 +456,9 @@ const DealerLogin = () => {
                     name="password"
                     value={formData.password}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200 outline-none text-gray-700 placeholder-gray-400"
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200 outline-none text-gray-700 placeholder-gray-400 ${
+                      formErrors.password ? 'border-red-500' : 'border-gray-300'
+                    }`}
                     placeholder="Enter Password"
                     required={!isForgotPassword}
                   />
@@ -340,6 +467,9 @@ const DealerLogin = () => {
                       <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd"/>
                     </svg>
                   </div>
+                  {formErrors.password && (
+                    <p className="mt-1 text-sm text-red-600">{formErrors.password}</p>
+                  )}
                 </div>
               )}
 
@@ -429,17 +559,42 @@ const DealerLogin = () => {
               <div className="flex space-x-3 pt-4">
                 <button
                   type="submit"
-                  className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 px-6 rounded-lg font-medium transition-all duration-200 transform hover:scale-[1.02] shadow-md uppercase tracking-wide"
+                  disabled={isLoading}
+                  className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all duration-200 transform hover:scale-[1.02] shadow-md uppercase tracking-wide ${
+                    isLoading 
+                      ? 'bg-gray-400 cursor-not-allowed' 
+                      : 'bg-orange-500 hover:bg-orange-600 text-white'
+                  }`}
                 >
-                  {isForgotPassword 
-                    ? (resetStep === 1 ? 'VERIFY EMAIL' : 'RESET PASSWORD')
-                    : (isLogin ? 'LOGIN' : 'REGISTER')
-                  }
+                  {isLoading ? (
+                    <div className="flex items-center justify-center">
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      {isForgotPassword 
+                        ? (resetStep === 1 ? 'VERIFYING...' : 'RESETTING...')
+                        : (isLogin ? 'LOGGING IN...' : 'REGISTERING...')
+                      }
+                    </div>
+                  ) : (
+                    <>
+                      {isForgotPassword 
+                        ? (resetStep === 1 ? 'VERIFY EMAIL' : 'RESET PASSWORD')
+                        : (isLogin ? 'LOGIN' : 'REGISTER')
+                      }
+                    </>
+                  )}
                 </button>
                 <button
                   type="button"
                   onClick={() => navigate('/')}
-                  className="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 px-6 rounded-lg font-medium transition-all duration-200 transform hover:scale-[1.02] shadow-md uppercase tracking-wide"
+                  disabled={isLoading}
+                  className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all duration-200 transform hover:scale-[1.02] shadow-md uppercase tracking-wide ${
+                    isLoading 
+                      ? 'bg-gray-300 cursor-not-allowed text-gray-500' 
+                      : 'bg-gray-500 hover:bg-gray-600 text-white'
+                  }`}
                 >
                   CANCEL
                 </button>

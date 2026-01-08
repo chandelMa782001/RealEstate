@@ -9,7 +9,7 @@ const api = axios.create({
     "Accept": "application/json",
   },
   withCredentials: false,
-  timeout: 10000, // 10 second timeout
+  timeout: 30000, // 30 second timeout (increased for Render.com)
 });
 
 // Add request interceptor to include auth token

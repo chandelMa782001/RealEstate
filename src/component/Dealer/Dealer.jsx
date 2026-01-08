@@ -63,6 +63,7 @@ const Dealer = ({ dealerData }) => {
 
   const handleLogout = () => {
     localStorage.removeItem('currentDealer');
+    localStorage.removeItem('dealerToken');
     showNotification('You have been logged out successfully', 'info');
     window.location.reload();
   };
