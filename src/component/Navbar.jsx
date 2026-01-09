@@ -244,6 +244,8 @@ const Navbar = () => {
             </div>
       
             <Link to="/properties" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base">For Buyers</Link>
+            
+            <Link to="/post-purchase-services" className="text-gray-700 hover:text-orange-500 transition font-medium whitespace-nowrap text-base">Services</Link>
         
             <div 
               className="relative"
@@ -702,6 +704,13 @@ const Navbar = () => {
               className="block text-gray-700 hover:text-orange-500 transition py-2"
             >
             Properties
+            </Link>
+            <Link 
+              to="/post-purchase-services" 
+              onClick={() => setIsMenuOpen(false)}
+              className="block text-gray-700 hover:text-orange-500 transition py-2"
+            >
+            Services
             </Link>
             <Link 
               to="/offers" 

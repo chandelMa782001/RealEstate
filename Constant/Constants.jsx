@@ -1,4 +1,12 @@
 import { images } from "../utils/Image";
+import { 
+  FaHome, 
+  FaRupeeSign, 
+  FaKey, 
+  FaChartBar, 
+  FaWrench, 
+  FaTools 
+} from 'react-icons/fa';
 
 // API Configuration
 export const API_CONFIG = {
@@ -564,32 +572,46 @@ export   const propertiess = [
 
       export  const services = [
     {
-      icon: '🏠',
+      icon: <FaHome />,
       title: 'Buy Property',
       description: 'Find your dream home from thousands of verified listings',
       actionType: 'Buy Property',
       requiresAuth: false
     },
     {
-      icon: '💰',
+      icon: <FaRupeeSign />,
       title: 'Sell Property',
       description: 'List your property and reach millions of buyers',
       actionType: 'Sell Property',
       requiresAuth: true
     },
     {
-      icon: '🔑',
+      icon: <FaKey />,
       title: 'Rent Property',
       description: 'Discover rental properties that match your needs',
       actionType: 'Rent Property',
       requiresAuth: true
     },
     {
-      icon: '📊',
+      icon: <FaChartBar />,
       title: 'Property Valuation',
       description: 'Get accurate market value of your property',
       actionType: 'Property Valuation',
       requiresAuth: true
+    },
+    {
+      icon: <FaWrench />,
+      title: 'Post-Purchase Services',
+      description: 'Complete property services after purchase - Registration, Interior, Plumbing & more',
+      actionType: 'Post-Purchase Services',
+      requiresAuth: false
+    },
+    {
+      icon: <FaTools />,
+      title: 'Home Services',
+      description: 'Professional home improvement and maintenance services',
+      actionType: 'Home Services',
+      requiresAuth: false
     }
   ];
   export   const dummyLeads = [

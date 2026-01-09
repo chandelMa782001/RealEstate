@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { FaEnvelope, FaLock, FaTimes } from 'react-icons/fa';
+import { FaEnvelope, FaLock, FaTimes, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useAppContext } from '../Context/AppContext';
 import { getErrorMessage } from '../../utils/validation';
 import { authAPI } from '../apiServcies/authApi';
@@ -11,6 +11,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
   const { login } = useAppContext();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -73,6 +74,10 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
     if (touched.password) {
       validateField('password', value);
     }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   const handleLogin = async (e) => {
@@ -197,20 +202,25 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
             <div>
               <div className="relative">
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={handlePasswordChange}
                   onBlur={() => handleBlur('password')}
                   placeholder="Enter Password"
-                  className={`w-full px-4 py-3 border rounded focus:outline-none focus:ring-2 pr-10 ${
+                  className={`w-full px-4 py-3 border rounded focus:outline-none focus:ring-2 pr-20 ${
                     touched.password && errors.password 
                       ? 'border-red-500 focus:ring-red-500' 
                       : 'border-gray-300 focus:ring-orange-500'
                   }`}
                 />
-                <FaLock className={`absolute right-3 top-1/2 -translate-y-1/2 ${
-                  touched.password && errors.password ? 'text-red-500' : 'text-orange-500'
-                }`} />
+              
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute right-3 top-1/2 text-orange-500 -translate-y-1/2 text-gray-500  hover:text-gray-700 transition"
+                >
+                  {showPassword ? <FaEyeSlash  size={16} /> : <FaEye size={16} />}
+                </button>
               </div>
               {touched.password && errors.password && (
                 <p className="text-red-500 text-xs mt-1 ml-1">{errors.password}</p>

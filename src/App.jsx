@@ -25,6 +25,7 @@ import LoginModal from './component/LoginModal';
 import LoginTest from './components/LoginTest';
 import Blogs from './pages/Blogs';
 import BlogDetail from './pages/BlogDetail';
+import PostPurchaseServices from './component/PostPurchaseServices';
 
 const AppContent = () => {
   return (
@@ -42,6 +43,7 @@ const AppContent = () => {
         <Route path='/login' element={<LoginModal/>} />
         <Route path='/blogs' element={<Blogs/>}/>
         <Route path='/blog/:id' element={<BlogDetail/>}/>
+        <Route path='/post-purchase-services' element={<PostPurchaseServices/>}/>
         
         {/* Semi-Protected Routes - Login Required for Full Access */}
         <Route 
