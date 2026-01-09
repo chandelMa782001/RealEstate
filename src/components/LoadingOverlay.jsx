@@ -18,7 +18,7 @@ const LoadingOverlay = ({
       <div className={blur ? 'filter blur-sm pointer-events-none' : 'pointer-events-none opacity-50'}>
         {children}
       </div>
-      
+       
      
       <div className={`absolute inset-0 bg-white ${opacity} flex items-center justify-center z-10`}>
         <div className="bg-white rounded-lg p-6 shadow-xl">

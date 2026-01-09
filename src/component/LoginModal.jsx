@@ -79,10 +79,9 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Mark fields as touched
+    
     setTouched({ email: true, password: true });
 
-    // Validate fields
     const emailValid = validateField('email', email);
     const passwordValid = validateField('password', password);
 

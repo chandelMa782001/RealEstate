@@ -5,7 +5,6 @@ import {services} from "../../Constant/Constants"
 const Services = () => {
   const navigate = useNavigate();
   const { isAuthenticated, setIsLoginModalOpen, showNotification } = useAppContext();
-  
   const handleServiceClick = (service) => {
     if (service.requiresAuth && !isAuthenticated) {
       showNotification(`Please login to ${service.actionType.toLowerCase()}`, 'warning', 3000);
@@ -14,7 +13,6 @@ const Services = () => {
       }, 500);
       return;
     }
-    
     switch (service.actionType) {
       case 'Buy Property':
         navigate('/properties');
@@ -32,7 +30,6 @@ const Services = () => {
         break;
     }
   };
-  
   return (
     <div className="bg-white py-16">
       <div className="max-w-7xl mx-auto px-4">
@@ -49,7 +46,7 @@ const Services = () => {
                 <div className="absolute top-3 right-3 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
                   Login Required
                 </div>
-              )}
+               )}
               <div className="text-6xl mb-4 group-hover:scale-110 transition">{service.icon}</div>
               <h3 className="text-xl font-bold text-gray-800 mb-3">{service.title}</h3>
               <p className="text-gray-600">{service.description}</p>

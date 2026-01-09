@@ -8,7 +8,6 @@ import gsap from 'gsap';
 import { useAppContext } from '../Context/AppContext';
 import {properties} from "../../Constant/Constants"
 import jsPDF from 'jspdf';
-
 const PropertyDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -20,11 +19,8 @@ const PropertyDetail = () => {
   const contentRef = useRef(null);
   const sidebarRef = useRef(null);
   const shareMenuRef = useRef(null);
-
   useEffect(() => {
-  
     const tl = gsap.timeline();
-    
     tl.fromTo(
       contentRef.current,
       { opacity: 0, x: -50 },
@@ -37,7 +33,6 @@ const PropertyDetail = () => {
       '-=0.6'
     );
   }, []);
-
   useEffect(() => {
     if (showShareMenu && shareMenuRef.current) {
       gsap.fromTo(
@@ -47,7 +42,6 @@ const PropertyDetail = () => {
       );
     }
   }, [showShareMenu]);
-
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (shareMenuRef.current && !shareMenuRef.current.contains(event.target) && 
@@ -64,7 +58,6 @@ const PropertyDetail = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [showShareMenu]);
-
 
   useEffect(() => {
     if (id) {
@@ -290,7 +283,6 @@ const PropertyDetail = () => {
                     <FaLinkedin className="text-blue-700 text-xl" />
                     <span className="text-gray-700">LinkedIn</span>
                   </button>
-                  
                   <button
                     onClick={() => handleShare('email')}
                     className="w-full flex items-center space-x-3 px-4 py-2 hover:bg-gray-50 rounded-lg transition text-left"

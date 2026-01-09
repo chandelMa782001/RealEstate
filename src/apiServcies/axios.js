@@ -9,10 +9,9 @@ const api = axios.create({
     "Accept": "application/json",
   },
   withCredentials: false,
-  timeout: 30000, // 30 second timeout (increased for Render.com)
+  timeout: 30000, 
 });
 
-// Add request interceptor to include auth token
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -26,7 +25,7 @@ api.interceptors.request.use(
   }
 );
 
-// Add response interceptor for error handling
+
 api.interceptors.response.use(
   (response) => response,
   (error) => {

@@ -1,8 +1,5 @@
 import api from './axios.js';
-
-// Auth API endpoints
 export const authAPI = {
-  // Register user
   register: async (userData) => {
     try {
       console.log('AUTH API - Register function called');
@@ -28,8 +25,6 @@ export const authAPI = {
       throw error.response?.data || error.message;
     }
   },
-
- 
   login: async (credentials) => {
     try {
       console.log(' AUTH API - Login function called');
@@ -37,14 +32,11 @@ export const authAPI = {
       console.log(' Credentials type:', typeof credentials);
       console.log(' Credentials keys:', Object.keys(credentials));
       console.log(' Credentials stringified:', JSON.stringify(credentials, null, 2));
-      
       const response = await api.post('/api/auth/login', credentials);
-      
       console.log(' API Login - Full Response:', response);
       console.log(' API Login - Response Data:', response.data);
       console.log(' API Login - Response Status:', response.status);
       console.log(' API Login - Response Headers:', response.headers);
-      
       return response.data;
     } catch (error) {
       console.log(' API Login - Error occurred:', error);
@@ -55,8 +47,6 @@ export const authAPI = {
       throw error.response?.data || error.message;
     }
   },
-
-  // Logout user
   logout: async () => {
     try {
       const response = await api.post('/api/auth/logout');
@@ -67,8 +57,6 @@ export const authAPI = {
       throw error.response?.data || error.message;
     }
   },
-
-  // Get user profile
   getProfile: async () => {
     try {
       const response = await api.get('/api/auth/profile');
@@ -77,8 +65,6 @@ export const authAPI = {
       throw error.response?.data || error.message;
     }
   },
-
-  // Update user profile
   updateProfile: async (userData) => {
     try {
       const response = await api.put('/api/auth/profile', userData);
@@ -87,8 +73,6 @@ export const authAPI = {
       throw error.response?.data || error.message;
     }
   },
-
-  // Change password
   changePassword: async (passwordData) => {
     try {
       const response = await api.put('/api/auth/change-password', passwordData);
@@ -97,8 +81,6 @@ export const authAPI = {
       throw error.response?.data || error.message;
     }
   },
-
-  // Forgot password
   forgotPassword: async (email) => {
     try {
       const response = await api.post('/api/auth/forgot-password', { email });
@@ -107,8 +89,6 @@ export const authAPI = {
       throw error.response?.data || error.message;
     }
   },
-
-  // Reset password
   resetPassword: async (resetData) => {
     try {
       const response = await api.post('/api/auth/reset-password', resetData);
@@ -118,10 +98,7 @@ export const authAPI = {
     }
   }
 };
-
-// Dealer API endpoints
 export const dealerAPI = {
-  // Register dealer
   register: async (dealerData) => {
     try {
       console.log(' DEALER API - Register function called');
@@ -146,12 +123,12 @@ export const dealerAPI = {
       console.log(' API Dealer Register - Error message:', error.message);
       console.log(' API Dealer Register - Error code:', error.code);
       
-      // Handle timeout errors specifically
+     
       if (error.code === 'ECONNABORTED' && error.message.includes('timeout')) {
         throw new Error('Server is taking too long to respond. Please try again in a moment.');
       }
       
-      // Handle network errors
+      
       if (error.code === 'ERR_NETWORK') {
         throw new Error('Network error. Please check your internet connection.');
       }
@@ -160,7 +137,6 @@ export const dealerAPI = {
     }
   },
 
-  // Login dealer
   login: async (credentials) => {
     try {
       console.log(' DEALER API - Login function called');
@@ -185,12 +161,12 @@ export const dealerAPI = {
       console.log(' API Dealer Login - Error message:', error.message);
       console.log(' API Dealer Login - Error code:', error.code);
       
-      // Handle timeout errors specifically
+     
       if (error.code === 'ECONNABORTED' && error.message.includes('timeout')) {
         throw new Error('Server is taking too long to respond. Please try again in a moment.');
       }
       
-      // Handle network errors
+   
       if (error.code === 'ERR_NETWORK') {
         throw new Error('Network error. Please check your internet connection.');
       }
