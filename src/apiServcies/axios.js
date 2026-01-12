@@ -9,7 +9,7 @@ const api = axios.create({
     "Accept": "application/json",
   },
   withCredentials: false,
-  timeout: 30000, 
+  timeout: 60000, // Increased timeout to 60 seconds for slow server responses
 });
 
 api.interceptors.request.use(

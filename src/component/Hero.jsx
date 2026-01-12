@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import LoanButton from './LoanButton';
+import AIAssistant from './AIAssistant';
 import "../component/Hero.css"
 const Hero = () => {
   const navigate = useNavigate();
@@ -95,6 +96,7 @@ const Hero = () => {
   const [selectedConstruction, setSelectedConstruction] = useState('Construction Status');
   const [selectedPostedBy, setSelectedPostedBy] = useState('Posted By');
   const [isLoanButtonVisible, setIsLoanButtonVisible] = useState(true);
+  const [isAIAssistantVisible, setIsAIAssistantVisible] = useState(true);
   const titleRef = useRef(null);
   const subtitleRef = useRef(null);
   const searchBoxRef = useRef(null);
@@ -348,6 +350,7 @@ const Hero = () => {
   }, []);
   const handleHeroClick = (e) => {
     setIsLoanButtonVisible(false);
+    setIsAIAssistantVisible(false);
   };
   return (
     <div className="relative min-h-screen" onClick={handleHeroClick}>
@@ -1105,6 +1108,7 @@ const Hero = () => {
         </div>
       </div>
       <LoanButton isVisible={isLoanButtonVisible} />
+      <AIAssistant isVisible={isAIAssistantVisible} />
     </div>
   );
 };

@@ -8,7 +8,7 @@ export const authAPI = {
       console.log(' User Data keys:', Object.keys(userData));
       console.log(' User Data stringified:', JSON.stringify(userData, null, 2));
       
-      const response = await api.post('/api/auth/register', userData);
+      const response = await api.post('/auth/register', userData);
       
       console.log(' API Register - Full Response:', response);
       console.log('API Register - Response Data:', response.data);
@@ -32,7 +32,7 @@ export const authAPI = {
       console.log(' Credentials type:', typeof credentials);
       console.log(' Credentials keys:', Object.keys(credentials));
       console.log(' Credentials stringified:', JSON.stringify(credentials, null, 2));
-      const response = await api.post('/api/auth/login', credentials);
+      const response = await api.post('/auth/login', credentials);
       console.log(' API Login - Full Response:', response);
       console.log(' API Login - Response Data:', response.data);
       console.log(' API Login - Response Status:', response.status);
@@ -49,7 +49,7 @@ export const authAPI = {
   },
   logout: async () => {
     try {
-      const response = await api.post('/api/auth/logout');
+      const response = await api.post('/auth/logout');
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       return response.data;
@@ -59,7 +59,7 @@ export const authAPI = {
   },
   getProfile: async () => {
     try {
-      const response = await api.get('/api/auth/profile');
+      const response = await api.get('/auth/profile');
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
@@ -67,7 +67,7 @@ export const authAPI = {
   },
   updateProfile: async (userData) => {
     try {
-      const response = await api.put('/api/auth/profile', userData);
+      const response = await api.put('/auth/profile', userData);
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
@@ -75,7 +75,7 @@ export const authAPI = {
   },
   changePassword: async (passwordData) => {
     try {
-      const response = await api.put('/api/auth/change-password', passwordData);
+      const response = await api.put('/auth/change-password', passwordData);
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
@@ -83,7 +83,7 @@ export const authAPI = {
   },
   forgotPassword: async (email) => {
     try {
-      const response = await api.post('/api/auth/forgot-password', { email });
+      const response = await api.post('/auth/forgot-password', { email });
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
@@ -91,7 +91,7 @@ export const authAPI = {
   },
   resetPassword: async (resetData) => {
     try {
-      const response = await api.post('/api/auth/reset-password', resetData);
+      const response = await api.post('/auth/reset-password', resetData);
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
@@ -107,7 +107,7 @@ export const dealerAPI = {
       console.log(' Dealer Data keys:', Object.keys(dealerData));
       console.log(' Dealer Data stringified:', JSON.stringify(dealerData, null, 2));
       
-      const response = await api.post('/api/dealer/register', dealerData);
+      const response = await api.post('/dealer/register', dealerData);
       
       console.log(' API Dealer Register - Full Response:', response);
       console.log(' API Dealer Register - Response Data:', response.data);
@@ -145,7 +145,7 @@ export const dealerAPI = {
       console.log(' Credentials keys:', Object.keys(credentials));
       console.log(' Credentials stringified:', JSON.stringify(credentials, null, 2));
       
-      const response = await api.post('/api/dealer/login', credentials);
+      const response = await api.post('/dealer/login', credentials);
       
       console.log(' API Dealer Login - Full Response:', response);
       console.log(' API Dealer Login - Response Data:', response.data);
@@ -169,6 +169,108 @@ export const dealerAPI = {
    
       if (error.code === 'ERR_NETWORK') {
         throw new Error('Network error. Please check your internet connection.');
+      }
+      
+      throw error.response?.data || error.message;
+    }
+  },
+
+  forgotPassword: async (email, retryCount = 0) => {
+    const maxRetries = 2;
+    
+    try {
+      console.log(` DEALER API - Forgot Password function called (attempt ${retryCount + 1})`);
+      console.log(' Email received:', email);
+      
+      const payload = { email };
+      console.log(' Forgot Password Payload:', JSON.stringify(payload, null, 2));
+      
+      // Add a longer timeout specifically for this request
+      const response = await api.post('/dealer/forgot-password', payload);
+      
+      console.log(' API Dealer Forgot Password - Full Response:', response);
+      console.log(' API Dealer Forgot Password - Response Data:', response.data);
+      console.log(' API Dealer Forgot Password - Response Status:', response.status);
+      
+      return response.data;
+    } catch (error) {
+      console.log(` API Dealer Forgot Password - Error occurred (attempt ${retryCount + 1}):`, error);
+      console.log(' API Dealer Forgot Password - Error response:', error.response);
+      console.log(' API Dealer Forgot Password - Error data:', error.response?.data);
+      console.log(' API Dealer Forgot Password - Error status:', error.response?.status);
+      console.log(' API Dealer Forgot Password - Error message:', error.message);
+      console.log(' API Dealer Forgot Password - Error code:', error.code);
+      
+    
+    
+   
+      
+      if (error.code === 'ERR_NETWORK') {
+        throw new Error('Network error. Please check your internet connection and try again.');
+      }
+      
+      // Handle specific HTTP status codes
+      if (error.response?.status === 404) {
+        throw new Error('Email not found. Please check your email address and try again.');
+      }
+      
+      if (error.response?.status === 500) {
+        throw new Error('Server error. Please try again later.');
+      }
+      
+      throw error.response?.data || error.message;
+    }
+  },
+
+  verifyOtp: async (email, otp, retryCount = 0) => {
+    const maxRetries = 2;
+    
+    try {
+      console.log(` DEALER API - Verify OTP function called (attempt ${retryCount + 1})`);
+      console.log(' Email received:', email);
+      console.log(' OTP received:', otp);
+      
+      const payload = { email, otp };
+      console.log(' Verify OTP Payload:', JSON.stringify(payload, null, 2));
+      
+      // Add a longer timeout specifically for this request
+      const response = await api.post('/dealer/verify-otp', payload);
+      
+      console.log(' API Dealer Verify OTP - Full Response:', response);
+      console.log(' API Dealer Verify OTP - Response Data:', response.data);
+      console.log(' API Dealer Verify OTP - Response Status:', response.status);
+      
+      return response.data;
+    } catch (error) {
+     
+      console.log(' API Dealer Verify OTP - Error response:', error.response);
+      console.log(' API Dealer Verify OTP - Error data:', error.response?.data);
+      console.log(' API Dealer Verify OTP - Error status:', error.response?.status);
+      console.log(' API Dealer Verify OTP - Error message:', error.message);
+      console.log(' API Dealer Verify OTP - Error code:', error.code);
+      
+      // Retry logic for timeout errors
+ 
+      
+      if (error.code === 'ECONNABORTED' && error.message.includes('timeout')) {
+        throw new Error('The server is currently slow or unavailable. This might be because the server is starting up (common with free hosting services). Please wait a few minutes and try again.');
+      }
+      
+      if (error.code === 'ERR_NETWORK') {
+        throw new Error('Network error. Please check your internet connection and try again.');
+      }
+      
+      // Handle specific HTTP status codes
+      if (error.response?.status === 400) {
+        throw new Error('Invalid OTP. Please check the code and try again.');
+      }
+      
+      if (error.response?.status === 404) {
+        throw new Error('OTP session expired. Please request a new OTP.');
+      }
+      
+      if (error.response?.status === 500) {
+        throw new Error('Server error. Please try again later.');
       }
       
       throw error.response?.data || error.message;

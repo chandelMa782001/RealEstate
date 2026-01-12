@@ -11,7 +11,6 @@ const LoadingOverlay = ({
   if (!isLoading) {
     return children;
   }
-
   return (
     <div className="relative">
    

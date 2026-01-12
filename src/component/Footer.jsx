@@ -116,7 +116,7 @@ const Footer = () => {
             &copy; 2024 Maigreat Group. All rights reserved.
           </p>
         </div>
-        <button
+        {/* <button
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           className="fixed bottom-8 right-8 bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-full shadow-lg transition transform hover:scale-110"
           aria-label="Scroll to top"
@@ -124,7 +124,7 @@ const Footer = () => {
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
           </svg>
-        </button>
+        </button> */}
       </div>
     </footer>
   );
