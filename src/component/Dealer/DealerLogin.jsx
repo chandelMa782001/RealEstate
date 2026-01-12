@@ -317,8 +317,12 @@ const DealerLogin = () => {
           return;
         }
         
-        // Here you would typically call a reset password API
-        // For now, we'll show success and redirect to login
+        console.log('🚀 Calling reset password API for email:', formData.email);
+        showMessage('Resetting your password... Please wait.', 'info');
+        
+        const response = await dealerAPI.resetPassword(formData.email, formData.newPassword);
+        console.log('✅ Password reset successful:', response);
+        
         showMessage('Password reset successfully! Please login with your new password.', 'success');
         
         // Reset to login mode after 2 seconds
