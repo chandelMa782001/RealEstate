@@ -2,48 +2,26 @@ import api from './axios.js';
 export const authAPI = {
   register: async (userData) => {
     try {
-      console.log('AUTH API - Register function called');
-      console.log('User Data received:', userData);
-      console.log(' User Data type:', typeof userData);
-      console.log(' User Data keys:', Object.keys(userData));
-      console.log(' User Data stringified:', JSON.stringify(userData, null, 2));
+     
       
       const response = await api.post('/auth/register', userData);
       
-      console.log(' API Register - Full Response:', response);
-      console.log('API Register - Response Data:', response.data);
-      console.log(' API Register - Response Status:', response.status);
-      console.log(' API Register - Response Headers:', response.headers);
+    
       
       return response.data;
     } catch (error) {
-      console.log('API Register - Error occurred:', error);
-      console.log('API Register - Error response:', error.response);
-      console.log(' API Register - Error data:', error.response?.data);
-      console.log(' API Register - Error status:', error.response?.status);
-      console.log(' API Register - Error message:', error.message);
+   
       throw error.response?.data || error.message;
     }
   },
   login: async (credentials) => {
     try {
-      console.log(' AUTH API - Login function called');
-      console.log(' Login Credentials received:', credentials);
-      console.log(' Credentials type:', typeof credentials);
-      console.log(' Credentials keys:', Object.keys(credentials));
-      console.log(' Credentials stringified:', JSON.stringify(credentials, null, 2));
+   
       const response = await api.post('/auth/login', credentials);
-      console.log(' API Login - Full Response:', response);
-      console.log(' API Login - Response Data:', response.data);
-      console.log(' API Login - Response Status:', response.status);
-      console.log(' API Login - Response Headers:', response.headers);
+      
       return response.data;
     } catch (error) {
-      console.log(' API Login - Error occurred:', error);
-      console.log(' API Login - Error response:', error.response);
-      console.log(' API Login - Error data:', error.response?.data);
-      console.log(' API Login - Error status:', error.response?.status);
-      console.log(' API Login - Error message:', error.message);
+      
       throw error.response?.data || error.message;
     }
   },
@@ -155,13 +133,12 @@ export const dealerAPI = {
     const maxRetries = 2;
     
     try {
-      console.log(` DEALER API - Forgot Password function called (attempt ${retryCount + 1})`);
-      console.log(' Email received:', email);
+     
       
       const payload = { email };
       console.log(' Forgot Password Payload:', JSON.stringify(payload, null, 2));
       
-      // Add a longer timeout specifically for this request
+      
       const response = await api.post('/dealer/forgot-password', payload);
       
      
@@ -246,7 +223,7 @@ export const dealerAPI = {
     try {
 
       const payload = { email, newPassword };
-      console.log('📦 Reset Password Payload:', JSON.stringify({ email, newPassword: '***' }, null, 2));
+
       
       const response = await api.post('/dealer/reset-password', payload);
       
@@ -258,7 +235,7 @@ export const dealerAPI = {
       
       // Retry logic for timeout errors
       if ((error.code === 'ECONNABORTED' && error.message.includes('timeout')) && retryCount < maxRetries) {
-        console.log(`🔄 Retrying reset password request (${retryCount + 1}/${maxRetries})...`);
+
         await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2 seconds before retry
         return dealerAPI.resetPassword(email, newPassword, retryCount + 1);
       }
