@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../component/Navbar';
 import Footer from '../component/Footer';
+import toast from 'react-hot-toast';
+import { saveUserDetails, saveBasicInfo, uploadPropertyImages, saveLocationDetails } from '../apiServcies/propertyApi';
 import './PostProperty.css';
 const PostProperty = () => {
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [propertyId, setPropertyId] = useState(null);
   const [formData, setFormData] = useState({
     fullName: '',
     mobile: '',
@@ -44,10 +49,12 @@ const PostProperty = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log('📝 Form field changed:', { name, value });
     setFormData({ ...formData, [name]: value });
   };
 
   const handleGoldOfferChange = (field, value) => {
+    console.log('🏆 Gold offer changed:', { field, value });
     setFormData(prev => ({
       ...prev,
       goldOffer: {
@@ -64,8 +71,92 @@ const PostProperty = () => {
     return Math.max(0, basePrice - goldAmount);
   };
 
-  const handleNext = () => {
-    if (currentStep < 4) setCurrentStep(currentStep + 1);
+  const handleNext = async () => {
+    if (loading) return;
+
+    try {
+      setLoading(true);
+      console.log('➡️ Moving to next step. Current step:', currentStep);
+      console.log('📋 Current form data:', formData);
+
+      // Step 1: Save user details and get propertyId
+      if (currentStep === 1) {
+        if (!formData.fullName || !formData.mobile || !formData.email) {
+          toast.error('Please fill all required fields');
+          setLoading(false);
+          return;
+        }
+
+        const userPayload = {
+          fullName: formData.fullName,
+          mobile: formData.mobile,
+          email: formData.email,
+          userType: formData.userType.toUpperCase()
+        };
+
+        console.log('🚀 Sending user details payload:', userPayload);
+        const response = await saveUserDetails(userPayload);
+        console.log('✅ User details response:', response);
+        
+        if (response.success && response.data.propertyId) {
+          setPropertyId(response.data.propertyId);
+          console.log('🆔 Property ID set:', response.data.propertyId);
+          toast.success(response.data.message || 'User details saved successfully');
+          setCurrentStep(2);
+        }
+      }
+      
+      // Step 2: Save basic info
+      else if (currentStep === 2) {
+        if (!propertyId) {
+          toast.error('Property ID not found. Please restart the process.');
+          setLoading(false);
+          return;
+        }
+
+        if (!formData.propertyType || !formData.propertyCategory || !formData.bedrooms || !formData.price || !formData.area) {
+          toast.error('Please fill all required fields');
+          setLoading(false);
+          return;
+        }
+
+        const basicInfoPayload = {
+          propertyType: formData.propertyType.toUpperCase(),
+          propertyCategory: formData.propertyCategory.toUpperCase(),
+          rentalOption: 'BUY',
+          bedrooms: `BHK_${formData.bedrooms}`,
+          price: parseFloat(formData.price),
+          areaSqft: parseFloat(formData.area),
+          description: formData.description,
+          hasGoldOffer: formData.goldOffer.enabled,
+          goldWeight: formData.goldOffer.enabled ? parseFloat(formData.goldOffer.goldAmount) / 6000 : 0,
+          goldPurity: formData.goldOffer.enabled ? 'K24' : null,
+          estimatedGoldValue: formData.goldOffer.enabled ? parseFloat(formData.goldOffer.goldAmount) : 0,
+          goldItemDesc: formData.goldOffer.enabled ? formData.goldOffer.goldDescription : null
+        };
+
+        console.log('🚀 Sending basic info payload:', basicInfoPayload);
+        console.log('🆔 Property ID:', propertyId);
+        const response = await saveBasicInfo(propertyId, basicInfoPayload);
+        console.log('✅ Basic info response:', response);
+        
+        if (response.success) {
+          toast.success(response.data.message || 'Basic info saved successfully');
+          setCurrentStep(3);
+        }
+      }
+      
+      // Step 3: Move to location (images will be uploaded on final submit)
+      else if (currentStep === 3) {
+        setCurrentStep(4);
+      }
+
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.error('Error in handleNext:', error);
+      toast.error(error.response?.data?.message || 'Failed to save data. Please try again.');
+    }
   };
 
   const handlePrevious = () => {
@@ -74,6 +165,11 @@ const PostProperty = () => {
 
   const handleFileUpload = (category, files) => {
     const fileArray = Array.from(files);
+    console.log('📸 Uploading files:', { 
+      category, 
+      fileCount: fileArray.length, 
+      files: fileArray.map(f => ({ name: f.name, size: f.size, type: f.type }))
+    });
     const newPreviews = fileArray.map(file => URL.createObjectURL(file));
     
     setUploadPreviews(prev => ({
@@ -81,13 +177,20 @@ const PostProperty = () => {
       [category]: [...prev[category], ...newPreviews]
     }));
 
-    setFormData(prev => ({
-      ...prev,
-      images: {
-        ...prev.images,
-        [category]: [...prev.images[category], ...fileArray]
-      }
-    }));
+    setFormData(prev => {
+      const updated = {
+        ...prev,
+        images: {
+          ...prev.images,
+          [category]: [...prev.images[category], ...fileArray]
+        }
+      };
+      console.log('📸 Updated images state:', {
+        [category]: updated.images[category].length,
+        allImages: Object.keys(updated.images).map(key => ({ [key]: updated.images[key].length }))
+      });
+      return updated;
+    });
   };
 
   const removeImage = (category, index) => {
@@ -105,10 +208,77 @@ const PostProperty = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Property submitted:', formData);
-    alert('Property posted successfully!');
+    
+    if (loading) return;
+
+    try {
+      setLoading(true);
+      console.log('🎯 Final submit triggered');
+      console.log('📋 Complete form data:', formData);
+      console.log('🆔 Property ID:', propertyId);
+
+      if (!propertyId) {
+        toast.error('Property ID not found. Please restart the process.');
+        setLoading(false);
+        return;
+      }
+
+      // Step 3: Upload images (if any)
+      const hasImages = Object.values(formData.images).some(arr => arr.length > 0);
+      console.log('📸 Has images:', hasImages);
+      console.log('📸 Images summary:', Object.keys(formData.images).map(key => ({ 
+        [key]: formData.images[key].length 
+      })));
+      
+      if (hasImages) {
+        console.log('🚀 Uploading images...');
+        console.log('📸 Images data:', formData.images);
+        await uploadPropertyImages(propertyId, formData.images);
+        console.log('✅ Images uploaded successfully');
+        toast.success('Images uploaded successfully');
+      }
+
+      // Step 4: Save location details
+      if (!formData.address || !formData.city || !formData.state || !formData.pincode) {
+        toast.error('Please fill all location fields');
+        setLoading(false);
+        return;
+      }
+
+      const locationPayload = {
+        address: formData.address,
+        city: formData.city,
+        state: formData.state,
+        pincode: formData.pincode
+      };
+
+      console.log('🚀 Sending location payload:', locationPayload);
+      const response = await saveLocationDetails(propertyId, locationPayload);
+      console.log('✅ Location details response:', response);
+      
+      if (response.success) {
+        toast.success('Property posted successfully! 🎉');
+        console.log('🎉 Property posted successfully! Redirecting...');
+        
+        // Reset form and redirect after a short delay
+        setTimeout(() => {
+          navigate('/properties');
+        }, 2000);
+      }
+
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.error('❌ Error submitting property:', error);
+      console.error('❌ Error details:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status
+      });
+      toast.error(error.response?.data?.message || 'Failed to submit property. Please try again.');
+    }
   };
 
   return (
@@ -584,21 +754,19 @@ const PostProperty = () => {
                   </div>
                 </div>
               )}
-
-             
               <div className="form-navigation">
                 {currentStep > 1 && (
-                  <button type="button" onClick={handlePrevious} className="btn-secondary">
+                  <button type="button" onClick={handlePrevious} className="btn-secondary" disabled={loading}>
                     Previous
                   </button>
                 )}
                 {currentStep < 4 ? (
-                  <button type="button" onClick={handleNext} className="btn-primary">
-                    Next
+                  <button type="button" onClick={handleNext} className="btn-primary" disabled={loading}>
+                    {loading ? 'Saving...' : 'Next'}
                   </button>
                 ) : (
-                  <button type="submit" className="btn-primary">
-                    Submit Property
+                  <button type="submit" className="btn-primary" disabled={loading}>
+                    {loading ? 'Submitting...' : 'Submit Property'}
                   </button>
                 )}
               </div>

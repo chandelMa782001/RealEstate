@@ -2,26 +2,17 @@ import api from './axios.js';
 export const authAPI = {
   register: async (userData) => {
     try {
-     
-      
       const response = await api.post('/auth/register', userData);
-      
-    
-      
       return response.data;
     } catch (error) {
-   
       throw error.response?.data || error.message;
     }
   },
   login: async (credentials) => {
     try {
-   
       const response = await api.post('/auth/login', credentials);
-      
       return response.data;
     } catch (error) {
-      
       throw error.response?.data || error.message;
     }
   },
@@ -79,78 +70,40 @@ export const authAPI = {
 export const dealerAPI = {
   register: async (dealerData) => {
     try {
-      
-      
       const response = await api.post('/dealer/register', dealerData);
-      
-
-      
       return response.data;
     } catch (error) {
-     
-      
-     
       if (error.code === 'ECONNABORTED' && error.message.includes('timeout')) {
         throw new Error('Server is taking too long to respond. Please try again in a moment.');
       }
-      
-      
       if (error.code === 'ERR_NETWORK') {
         throw new Error('Network error. Please check your internet connection.');
       }
-      
       throw error.response?.data || error.message;
     }
   },
-
   login: async (credentials) => {
     try {
-     
-      
       const response = await api.post('/dealer/login', credentials);
-      
-
-      
       return response.data;
     } catch (error) {
-      
-      
-     
       if (error.code === 'ECONNABORTED' && error.message.includes('timeout')) {
         throw new Error('Server is taking too long to respond. Please try again in a moment.');
       }
-      
-   
       if (error.code === 'ERR_NETWORK') {
         throw new Error('Network error. Please check your internet connection.');
       }
-      
       throw error.response?.data || error.message;
     }
   },
-
   forgotPassword: async (email, retryCount = 0) => {
     const maxRetries = 2;
-    
     try {
-     
-      
       const payload = { email };
       console.log(' Forgot Password Payload:', JSON.stringify(payload, null, 2));
-      
-      
       const response = await api.post('/dealer/forgot-password', payload);
-      
-     
-      
       return response.data;
     } catch (error) {
-     
-      
-    
-    
-   
-      
       if (error.code === 'ERR_NETWORK') {
         throw new Error('Network error. Please check your internet connection and try again.');
       }
@@ -181,17 +134,12 @@ export const dealerAPI = {
       
       // Add a longer timeout specifically for this request
       const response = await api.post('/dealer/verify-otp', payload);
-      
-    
-      
       return response.data;
     } catch (error) {
      
       
       
-      // Retry logic for timeout errors
- 
-      
+      // Retry logic for timeout error
       if (error.code === 'ECONNABORTED' && error.message.includes('timeout')) {
         throw new Error('The server is currently slow or unavailable. This might be because the server is starting up (common with free hosting services). Please wait a few minutes and try again.');
       }
@@ -256,11 +204,9 @@ export const dealerAPI = {
       if (error.response?.status === 404) {
         throw new Error('Reset session expired or email not found. Please start the password reset process again.');
       }
-      
       if (error.response?.status === 500) {
         throw new Error('Server error. Please try again later.');
       }
-      
       throw error.response?.data || error.message;
     }
   }

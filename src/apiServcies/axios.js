@@ -9,9 +9,8 @@ const api = axios.create({
     "Accept": "application/json",
   },
   withCredentials: false,
-  timeout: 60000, // Increased timeout to 60 seconds for slow server responses
+  timeout: 60000, 
 });
-
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -24,8 +23,6 @@ api.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
-
 api.interceptors.response.use(
   (response) => response,
   (error) => {

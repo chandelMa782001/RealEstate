@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
 const DealerLayout = ({ 
   dealerData, 
   activeTab, 
@@ -22,7 +21,7 @@ const DealerLayout = ({
     { id: 'activity', label: 'My Activity', icon: '📊' },
     { id: 'searched', label: 'Recently Searched', icon: '🔍' },
     { id: 'master', label: 'Master', icon: '⚙️' },
-    { id: 'change-password', label: 'Change Password', icon: '🔒' },
+    // { id: 'change-password', label: 'Change Password', icon: '🔒' },
   ];
 
   return (
@@ -109,7 +108,7 @@ const DealerLayout = ({
                     key={item.id}
                     onClick={() => {
                       setActiveTab(item.id);
-                      setShowMobileSidebar(false); // Close mobile sidebar on selection
+                      setShowMobileSidebar(false); 
                     }}
                     className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-left transition duration-200 ${
                       activeTab === item.id

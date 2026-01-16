@@ -497,9 +497,15 @@ export   const propertiess = [
     ];
   export   const properties = {
         1: {
-          title: 'Luxury Villa in Gurgaon',
-          location: 'Sector 47, Gurgaon',
-          coordinates: { lat: 28.4211, lng: 77.0797 }, 
+          title: 'Luxury Villa in Noida',
+          // location: 'Sector 47, Gurgaon',
+          // coordinates: { lat: 28.4211, lng: 77.0797 }, 
+          location: "Noida Sector 62",
+coordinates: {
+  lat: 28.6209,
+  lng: 77.3649
+}
+,
           price: '₹2.5 Cr',
           type: 'Villa',
           beds: 4,
