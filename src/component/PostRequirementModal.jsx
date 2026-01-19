@@ -22,37 +22,37 @@ const PostRequirementModal = ({ isOpen, onClose }) => {
   };
 
   // Function to get coordinates from address
-  const getCoordinatesFromAddress = async (address) => {
-    try {
-      // Using a simple geocoding approach - you might want to use Google Maps API
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`
-      );
-      const data = await response.json();
+  // const getCoordinatesFromAddress = async (address) => {
+  //   try {
+  //     // Using a simple geocoding approach - you might want to use Google Maps API
+  //     const response = await fetch(
+  //       `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`
+  //     );
+  //     const data = await response.json();
       
-      if (data && data.length > 0) {
-        return {
-          latitude: parseFloat(data[0].lat),
-          longitude: parseFloat(data[0].lon),
-          placeId: `ChIJ${data[0].place_id || Math.random().toString(36).substr(2, 20)}`
-        };
-      }
+  //     if (data && data.length > 0) {
+  //       return {
+  //         latitude: parseFloat(data[0].lat),
+  //         longitude: parseFloat(data[0].lon),
+  //         placeId: `ChIJ${data[0].place_id || Math.random().toString(36).substr(2, 20)}`
+  //       };
+  //     }
       
-      // Default coordinates (Kolkata) if geocoding fails
-      return {
-        latitude: 22.5726,
-        longitude: 88.3639,
-        placeId: 'ChIJrTLr-GyuEmsRBfy61i59si0'
-      };
-    } catch (error) {
-      console.error('Geocoding error:', error);
-      return {
-        latitude: 22.5726,
-        longitude: 88.3639,
-        placeId: 'ChIJrTLr-GyuEmsRBfy61i59si0'
-      };
-    }
-  };
+  //     // Default coordinates (Kolkata) if geocoding fails
+  //     return {
+  //       latitude: 22.5726,
+  //       longitude: 88.3639,
+  //       placeId: 'ChIJrTLr-GyuEmsRBfy61i59si0'
+  //     };
+  //   } catch (error) {
+  //     console.error('Geocoding error:', error);
+  //     return {
+  //       latitude: 22.5726,
+  //       longitude: 88.3639,
+  //       placeId: 'ChIJrTLr-GyuEmsRBfy61i59si0'
+  //     };
+  //   }
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -66,7 +66,7 @@ const PostRequirementModal = ({ isOpen, onClose }) => {
     
     try {
       // Get coordinates from location
-      const coordinates = await getCoordinatesFromAddress(formData.location);
+      // const coordinates = await getCoordinatesFromAddress(formData.location);
       
       // Prepare payload according to API structure
       const payload = {
@@ -76,10 +76,10 @@ const PostRequirementModal = ({ isOpen, onClose }) => {
         listingType: formData.propertyType.toUpperCase(), // BUY or RENT
         propertyType: propertySubType, // FLAT, VILLA, etc.
         budget: parseInt(formData.budget) || 0,
-        latitude: coordinates.latitude,
-        longitude: coordinates.longitude,
+        // latitude: coordinates.latitude,
+        // longitude: coordinates.longitude,
         address: formData.location,
-        placeId: coordinates.placeId,
+        // placeId: coordinates.placeId,
         description: formData.requirements
       };
 

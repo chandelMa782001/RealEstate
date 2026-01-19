@@ -521,6 +521,12 @@ const Navbar = () => {
                     >
                       Post Your Requirement
                     </button>
+                      <button 
+                     
+                      className="block w-full text-left px-6 py-3 text-gray-700 hover:bg-gray-50 transition"
+                    >
+                      KYC
+                    </button>
                     <Link 
                       to="/shortlisted" 
                       className="block px-6 py-3 text-gray-700 hover:bg-gray-50 transition"
@@ -571,111 +577,8 @@ const Navbar = () => {
         </div>
         {isMenuOpen && (
           <div className="md:hidden mt-4 space-y-3 pb-4">
-            {/* For mobile screen budget */}
-{/*   
-             <div className="bg-gray-50 p-4 rounded-lg mb-4">
-              <h3 className="text-lg font-semibold text-gray-800 mb-3">Search Properties</h3>
-         
-              <select
-                value={propertyType}
-                onChange={(e) => setPropertyType(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-sm mb-3"
-              >
-                <option>Residential</option>
-                <option>Commercial</option>
-                <option>Agricultural</option>
-                <option>Industrial</option>
-              </select>
-
-             
-              <div className="relative mb-3">
-                <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
-                <input
-                  type="text"
-                  value={searchCity}
-                  onChange={(e) => setSearchCity(e.target.value)}
-                  placeholder="Enter City Name"
-                  className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                />
-              </div>
-
-             
-              <div className="mb-3">
-                <button
-                  onClick={() => setShowBudgetSlider(!showBudgetSlider)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-sm text-left flex items-center justify-between hover:bg-gray-50 transition"
-                >
-                  <span className="text-gray-700">
-                    Budget: ₹{budgetRange.min}L - ₹{budgetRange.max >= 100 ? `${Math.round(budgetRange.max/100)}+ Cr` : `${budgetRange.max}L`}
-                  </span>
-                  <RiArrowDropDownLine 
-                    className={`transition-transform duration-200 ${showBudgetSlider ? 'rotate-180' : 'rotate-0'}`}
-                  />
-                </button>
-                
-                {showBudgetSlider && (
-                  <div className="mt-2 bg-white border border-gray-300 rounded-lg shadow-lg p-4">
-                    <div className="mb-3">
-                      <h4 className="text-sm font-semibold text-gray-700 mb-2">Select Price Range</h4>
-                      <div className="text-xs text-gray-500 mb-3">
-                        ₹{budgetRange.min} Lacs - ₹{budgetRange.max >= 100 ? `${Math.round(budgetRange.max/100)}+ Crores` : `${budgetRange.max} Lacs`}
-                      </div>
-                    </div>
-                    
-               
-                    <div className="space-y-3 mb-4">
-                      <div>
-                        <label className="text-xs text-gray-600 mb-1 block">Min: ₹{budgetRange.min} Lacs</label>
-                        <input
-                          type="range"
-                          min="1"
-                          max="500"
-                          step="1"
-                          value={budgetRange.min}
-                          onChange={(e) => setBudgetRange(prev => ({ ...prev, min: parseInt(e.target.value) }))}
-                          className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer slider"
-                        />
-                      </div>
-                      <div>
-                        <label className="text-xs text-gray-600 mb-1 block">Max: ₹{budgetRange.max >= 100 ? `${Math.round(budgetRange.max/100)}+ Cr` : `${budgetRange.max} Lacs`}</label>
-                        <input
-                          type="range"
-                          min="2"
-                          max="500"
-                          step="1"
-                          value={budgetRange.max}
-                          onChange={(e) => setBudgetRange(prev => ({ ...prev, max: parseInt(e.target.value) }))}
-                          className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer slider"
-                        />
-                      </div>
-                    </div>
-
-                
-                    <div className="grid grid-cols-2 gap-2">
-                      {[
-                        { label: '₹1L - ₹50L', min: 1, max: 50 },
-                        { label: '₹50L - ₹1Cr', min: 50, max: 100 },
-                        { label: '₹1Cr - ₹2Cr', min: 100, max: 200 },
-                        { label: '₹2Cr+', min: 200, max: 500 }
-                      ].map((option) => (
-                        <button
-                          key={option.label}
-                          onClick={() => setBudgetRange({ min: option.min, max: option.max })}
-                          className="px-2 py-1 text-xs border border-gray-300 rounded hover:bg-blue-50 hover:border-blue-300 transition"
-                        >
-                          {option.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-
           
-              <button className="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition text-sm">
-                🔍 Search Properties
-              </button>
-            </div>  */}
+
 
             <Link 
               to="/" 
@@ -684,13 +587,7 @@ const Navbar = () => {
             >
               Home
             </Link>
-            {/* <Link 
-              to="/about-us" 
-              onClick={() => setIsMenuOpen(false)}
-              className="block text-gray-700 hover:text-orange-500 transition py-2"
-            >
-              About Us
-            </Link> */}
+           
             <Link 
               to="/projects" 
               onClick={() => setIsMenuOpen(false)}
@@ -780,6 +677,7 @@ const Navbar = () => {
             >
               Post property FREE
             </Link>
+          
             {!isAuthenticated ? (
               <button 
                 onClick={() => {
@@ -813,7 +711,6 @@ const Navbar = () => {
           setIsSignupModalOpen(true);
         }}
       />
-      
       <SignupModal 
         isOpen={isSignupModalOpen} 
         onClose={() => setIsSignupModalOpen(false)}

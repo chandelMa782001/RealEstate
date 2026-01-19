@@ -213,7 +213,6 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
                       : 'border-gray-300 focus:ring-orange-500'
                   }`}
                 />
-              
                 <button
                   type="button"
                   onClick={togglePasswordVisibility}

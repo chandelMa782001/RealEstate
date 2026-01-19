@@ -17,7 +17,25 @@ export const saveUserDetails = async (userData) => {
 // Step 2: Save basic property information
 export const saveBasicInfo = async (propertyId, basicInfo) => {
   try {
-    const response = await api.post(`/properties/basic-info/${propertyId}`, basicInfo);
+    // Try the documented endpoint first
+    let response;
+    try {
+      response = await api.put(`/properties/basic-info/${propertyId}`, basicInfo);
+    } catch (error) {
+      if (error.response?.status === 404) {
+        // If 404, try alternative endpoint structures
+        console.log('🔄 Trying alternative endpoint: /properties/${propertyId}/basic-info');
+        try {
+          response = await api.post(`/properties/${propertyId}/basic-info`, basicInfo);
+        } catch (altError) {
+          console.log('🔄 Trying another alternative: /properties/${propertyId}');
+          response = await api.put(`/properties/${propertyId}`, basicInfo);
+        }
+      } else {
+        throw error;
+      }
+    }
+    
     return {
       success: true,
       data: response.data

@@ -129,8 +129,8 @@ const PostProperty = () => {
           areaSqft: parseFloat(formData.area),
           description: formData.description,
           hasGoldOffer: formData.goldOffer.enabled,
-          goldWeight: formData.goldOffer.enabled ? parseFloat(formData.goldOffer.goldAmount) / 6000 : 0,
-          goldPurity: formData.goldOffer.enabled ? 'K24' : null,
+          // goldWeight: formData.goldOffer.enabled ? parseFloat(formData.goldOffer.goldAmount) / 6000 : 0,
+          // goldPurity: formData.goldOffer.enabled ? 'K24' : null,
           estimatedGoldValue: formData.goldOffer.enabled ? parseFloat(formData.goldOffer.goldAmount) : 0,
           goldItemDesc: formData.goldOffer.enabled ? formData.goldOffer.goldDescription : null
         };
