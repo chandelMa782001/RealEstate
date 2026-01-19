@@ -11,6 +11,7 @@ import DealerLeads from './DealerLeads';
 import DealerMaster from './DealerMaster';
 import DealerPasswordChange from './DealerPasswordChange';
 import DealerProfile from './DealerProfile';
+import DealerProperty from './DealerProperty';
 
 const Dealer = ({ dealerData }) => {
   const { showNotification } = useAppContext();
@@ -97,12 +98,7 @@ const Dealer = ({ dealerData }) => {
         return <DealerDashboard dealerData={dealerData} setActiveTab={setActiveTab} />;
       
       case 'properties':
-        return (
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">My Properties</h2>
-            <p className="text-gray-600">Property management functionality will be implemented here.</p>
-          </div>
-        );
+        return <DealerProperty />;
       
       case 'leads':
         return (

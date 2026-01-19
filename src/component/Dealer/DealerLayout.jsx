@@ -18,8 +18,8 @@ const DealerLayout = ({
     { id: 'profile', label: 'My Profile', icon: '👤' },
     { id: 'properties', label: 'My Properties', icon: '🏢', count: 24 },
     { id: 'leads', label: 'Manage Leads', icon: '👥', count: 12 },
-    { id: 'activity', label: 'My Activity', icon: '📊' },
-    { id: 'searched', label: 'Recently Searched', icon: '🔍' },
+    // { id: 'activity', label: 'My Activity', icon: '📊' },
+    // { id: 'searched', label: 'Recently Searched', icon: '🔍' },
     { id: 'master', label: 'Master', icon: '⚙️' },
     // { id: 'change-password', label: 'Change Password', icon: '🔒' },
   ];
