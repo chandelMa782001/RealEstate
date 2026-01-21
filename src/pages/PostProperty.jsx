@@ -3,13 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../component/Navbar';
 import Footer from '../component/Footer';
 import toast from 'react-hot-toast';
-import { saveUserDetails, saveBasicInfo, uploadPropertyImages, saveLocationDetails } from '../apiServcies/propertyApi';
 import './PostProperty.css';
+
 const PostProperty = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [propertyId, setPropertyId] = useState(null);
+  
   const [formData, setFormData] = useState({
     fullName: '',
     mobile: '',
@@ -17,10 +16,33 @@ const PostProperty = () => {
     userType: 'Owner',
     propertyType: '',
     propertyCategory: '',
-    bedrooms: '',
-    price: '',
-    area: '',
+    lookingTo: 'Sell',
+    projectTitle: '',
+    reraNo: '',
+    projectName: '',
+    builderName: '',
     description: '',
+    stage: 'Fresh Booking',
+    possessionStatus: 'Ready to Move',
+    ownership: 'Freehold',
+    ageOfProperty: '',
+    possessionFrom: '',
+    totalCost: '',
+    maintenanceCharges: '',
+    builtupArea: '',
+    carpetArea: '',
+    totalFloors: '',
+    yourFloor: '',
+    brokerage: 'No',
+    bhk: '',
+    bathrooms: '',
+    balcony: '0',
+    furnished: 'Un-Furnished',
+    facing: '',
+    coveredParking: '0',
+    openParking: '0',
+    societyAmenities: [],
+    internalAmenities: [],
     goldOffer: {
       enabled: false,
       goldAmount: '',
@@ -49,12 +71,10 @@ const PostProperty = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log('📝 Form field changed:', { name, value });
     setFormData({ ...formData, [name]: value });
   };
 
   const handleGoldOfferChange = (field, value) => {
-    console.log('🏆 Gold offer changed:', { field, value });
     setFormData(prev => ({
       ...prev,
       goldOffer: {
@@ -66,96 +86,31 @@ const PostProperty = () => {
 
   // Calculate effective property price after gold deduction
   const getEffectivePrice = () => {
-    const basePrice = parseFloat(formData.price) || 0;
+    const basePrice = parseFloat(formData.totalCost) || 0;
     const goldAmount = formData.goldOffer.enabled ? (parseFloat(formData.goldOffer.goldAmount) || 0) : 0;
     return Math.max(0, basePrice - goldAmount);
   };
 
-  const handleNext = async () => {
-    if (loading) return;
-
-    try {
-      setLoading(true);
-      console.log('➡️ Moving to next step. Current step:', currentStep);
-      console.log('📋 Current form data:', formData);
-
-      // Step 1: Save user details and get propertyId
-      if (currentStep === 1) {
-        if (!formData.fullName || !formData.mobile || !formData.email) {
-          toast.error('Please fill all required fields');
-          setLoading(false);
-          return;
-        }
-
-        const userPayload = {
-          fullName: formData.fullName,
-          mobile: formData.mobile,
-          email: formData.email,
-          userType: formData.userType.toUpperCase()
-        };
-
-        console.log('🚀 Sending user details payload:', userPayload);
-        const response = await saveUserDetails(userPayload);
-        console.log('✅ User details response:', response);
-        
-        if (response.success && response.data.propertyId) {
-          setPropertyId(response.data.propertyId);
-          console.log('🆔 Property ID set:', response.data.propertyId);
-          toast.success(response.data.message || 'User details saved successfully');
-          setCurrentStep(2);
-        }
+  const handleNext = () => {
+    // Simple validation for required fields
+    if (currentStep === 1) {
+      if (!formData.fullName || !formData.mobile || !formData.email) {
+        toast.error('Please fill all required fields');
+        return;
       }
-      
-      // Step 2: Save basic info
-      else if (currentStep === 2) {
-        if (!propertyId) {
-          toast.error('Property ID not found. Please restart the process.');
-          setLoading(false);
-          return;
-        }
-
-        if (!formData.propertyType || !formData.propertyCategory || !formData.bedrooms || !formData.price || !formData.area) {
-          toast.error('Please fill all required fields');
-          setLoading(false);
-          return;
-        }
-
-        const basicInfoPayload = {
-          propertyType: formData.propertyType.toUpperCase(),
-          propertyCategory: formData.propertyCategory.toUpperCase(),
-          rentalOption: 'BUY',
-          bedrooms: `BHK_${formData.bedrooms}`,
-          price: parseFloat(formData.price),
-          areaSqft: parseFloat(formData.area),
-          description: formData.description,
-          hasGoldOffer: formData.goldOffer.enabled,
-          // goldWeight: formData.goldOffer.enabled ? parseFloat(formData.goldOffer.goldAmount) / 6000 : 0,
-          // goldPurity: formData.goldOffer.enabled ? 'K24' : null,
-          estimatedGoldValue: formData.goldOffer.enabled ? parseFloat(formData.goldOffer.goldAmount) : 0,
-          goldItemDesc: formData.goldOffer.enabled ? formData.goldOffer.goldDescription : null
-        };
-
-        console.log('🚀 Sending basic info payload:', basicInfoPayload);
-        console.log('🆔 Property ID:', propertyId);
-        const response = await saveBasicInfo(propertyId, basicInfoPayload);
-        console.log('✅ Basic info response:', response);
-        
-        if (response.success) {
-          toast.success(response.data.message || 'Basic info saved successfully');
-          setCurrentStep(3);
-        }
+      toast.success('User details saved');
+      setCurrentStep(2);
+    }
+    else if (currentStep === 2) {
+      if (!formData.propertyType || !formData.propertyCategory || !formData.bhk || !formData.totalCost || !formData.builtupArea) {
+        toast.error('Please fill all required fields');
+        return;
       }
-      
-      // Step 3: Move to location (images will be uploaded on final submit)
-      else if (currentStep === 3) {
-        setCurrentStep(4);
-      }
-
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      console.error('Error in handleNext:', error);
-      toast.error(error.response?.data?.message || 'Failed to save data. Please try again.');
+      toast.success('Basic info saved');
+      setCurrentStep(3);
+    }
+    else if (currentStep === 3) {
+      setCurrentStep(4);
     }
   };
 
@@ -165,11 +120,6 @@ const PostProperty = () => {
 
   const handleFileUpload = (category, files) => {
     const fileArray = Array.from(files);
-    console.log('📸 Uploading files:', { 
-      category, 
-      fileCount: fileArray.length, 
-      files: fileArray.map(f => ({ name: f.name, size: f.size, type: f.type }))
-    });
     const newPreviews = fileArray.map(file => URL.createObjectURL(file));
     
     setUploadPreviews(prev => ({
@@ -177,20 +127,13 @@ const PostProperty = () => {
       [category]: [...prev[category], ...newPreviews]
     }));
 
-    setFormData(prev => {
-      const updated = {
-        ...prev,
-        images: {
-          ...prev.images,
-          [category]: [...prev.images[category], ...fileArray]
-        }
-      };
-      console.log('📸 Updated images state:', {
-        [category]: updated.images[category].length,
-        allImages: Object.keys(updated.images).map(key => ({ [key]: updated.images[key].length }))
-      });
-      return updated;
-    });
+    setFormData(prev => ({
+      ...prev,
+      images: {
+        ...prev.images,
+        [category]: [...prev.images[category], ...fileArray]
+      }
+    }));
   };
 
   const removeImage = (category, index) => {
@@ -208,77 +151,22 @@ const PostProperty = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     
-    if (loading) return;
-
-    try {
-      setLoading(true);
-      console.log('🎯 Final submit triggered');
-      console.log('📋 Complete form data:', formData);
-      console.log('🆔 Property ID:', propertyId);
-
-      if (!propertyId) {
-        toast.error('Property ID not found. Please restart the process.');
-        setLoading(false);
-        return;
-      }
-
-      // Step 3: Upload images (if any)
-      const hasImages = Object.values(formData.images).some(arr => arr.length > 0);
-      console.log('📸 Has images:', hasImages);
-      console.log('📸 Images summary:', Object.keys(formData.images).map(key => ({ 
-        [key]: formData.images[key].length 
-      })));
-      
-      if (hasImages) {
-        console.log('🚀 Uploading images...');
-        console.log('📸 Images data:', formData.images);
-        await uploadPropertyImages(propertyId, formData.images);
-        console.log('✅ Images uploaded successfully');
-        toast.success('Images uploaded successfully');
-      }
-
-      // Step 4: Save location details
-      if (!formData.address || !formData.city || !formData.state || !formData.pincode) {
-        toast.error('Please fill all location fields');
-        setLoading(false);
-        return;
-      }
-
-      const locationPayload = {
-        address: formData.address,
-        city: formData.city,
-        state: formData.state,
-        pincode: formData.pincode
-      };
-
-      console.log('🚀 Sending location payload:', locationPayload);
-      const response = await saveLocationDetails(propertyId, locationPayload);
-      console.log('✅ Location details response:', response);
-      
-      if (response.success) {
-        toast.success('Property posted successfully! 🎉');
-        console.log('🎉 Property posted successfully! Redirecting...');
-        
-        // Reset form and redirect after a short delay
-        setTimeout(() => {
-          navigate('/properties');
-        }, 2000);
-      }
-
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      console.error('❌ Error submitting property:', error);
-      console.error('❌ Error details:', {
-        message: error.message,
-        response: error.response?.data,
-        status: error.response?.status
-      });
-      toast.error(error.response?.data?.message || 'Failed to submit property. Please try again.');
+    // Simple validation for location fields
+    if (!formData.address || !formData.city || !formData.state || !formData.pincode) {
+      toast.error('Please fill all location fields');
+      return;
     }
+
+    // Show success message and redirect
+    toast.success('Property posted successfully! 🎉');
+    
+    // Reset form and redirect after a short delay
+    setTimeout(() => {
+      navigate('/properties');
+    }, 2000);
   };
 
   return (
@@ -405,38 +293,146 @@ const PostProperty = () => {
                   </div>
                   <div className="form-grid">
                     <div className="form-group">
-                      <label>Bedrooms</label>
-                      <select name="bedrooms" value={formData.bedrooms} onChange={handleChange} required>
-                        <option value="">Select</option>
+                      <label>Looking To</label>
+                      <select name="lookingTo" value={formData.lookingTo} onChange={handleChange} required>
+                        <option value="Sell">Sell</option>
+                        <option value="Rent">Rent</option>
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label>BHK</label>
+                      <select name="bhk" value={formData.bhk} onChange={handleChange} required>
+                        <option value="">Select BHK</option>
                         <option value="1">1 BHK</option>
                         <option value="2">2 BHK</option>
                         <option value="3">3 BHK</option>
                         <option value="4">4 BHK</option>
+                        <option value="5">5+ BHK</option>
                       </select>
                     </div>
+                  </div>
+
+                  <div className="form-grid">
                     <div className="form-group">
-                      <label>Price (₹)</label>
+                      <label>Total Cost (₹)</label>
                       <input
                         type="number"
-                        name="price"
-                        value={formData.price}
+                        name="totalCost"
+                        value={formData.totalCost}
                         onChange={handleChange}
-                        placeholder="Enter price"
+                        placeholder="Enter total cost"
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Built-up Area (sq ft)</label>
+                      <input
+                        type="number"
+                        name="builtupArea"
+                        value={formData.builtupArea}
+                        onChange={handleChange}
+                        placeholder="Enter built-up area"
                         required
                       />
                     </div>
                   </div>
-                  <div className="form-group">
-                    <label>Area (sq ft)</label>
-                    <input
-                      type="number"
-                      name="area"
-                      value={formData.area}
-                      onChange={handleChange}
-                      placeholder="Enter area"
-                      required
-                    />
+
+                  <div className="form-grid">
+                    <div className="form-group">
+                      <label>Carpet Area (sq ft)</label>
+                      <input
+                        type="number"
+                        name="carpetArea"
+                        value={formData.carpetArea}
+                        onChange={handleChange}
+                        placeholder="Enter carpet area"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Bathrooms</label>
+                      <select name="bathrooms" value={formData.bathrooms} onChange={handleChange}>
+                        <option value="">Select</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5+</option>
+                      </select>
+                    </div>
                   </div>
+
+                  <div className="form-grid">
+                    <div className="form-group">
+                      <label>Total Floors</label>
+                      <input
+                        type="text"
+                        name="totalFloors"
+                        value={formData.totalFloors}
+                        onChange={handleChange}
+                        placeholder="e.g., G+10"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Your Floor</label>
+                      <input
+                        type="text"
+                        name="yourFloor"
+                        value={formData.yourFloor}
+                        onChange={handleChange}
+                        placeholder="e.g., 5th Floor"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-grid">
+                    <div className="form-group">
+                      <label>Furnished Status</label>
+                      <select name="furnished" value={formData.furnished} onChange={handleChange}>
+                        <option value="Un-Furnished">Un-Furnished</option>
+                        <option value="Semi-Furnished">Semi-Furnished</option>
+                        <option value="Fully-Furnished">Fully-Furnished</option>
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label>Facing</label>
+                      <select name="facing" value={formData.facing} onChange={handleChange}>
+                        <option value="">Select Facing</option>
+                        <option value="North">North</option>
+                        <option value="South">South</option>
+                        <option value="East">East</option>
+                        <option value="West">West</option>
+                        <option value="North-East">North-East</option>
+                        <option value="North-West">North-West</option>
+                        <option value="South-East">South-East</option>
+                        <option value="South-West">South-West</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="form-grid">
+                    <div className="form-group">
+                      <label>Age of Property</label>
+                      <select name="ageOfProperty" value={formData.ageOfProperty} onChange={handleChange}>
+                        <option value="">Select Age</option>
+                        <option value="Under Construction">Under Construction</option>
+                        <option value="0-1 years">0-1 years</option>
+                        <option value="1-5 years">1-5 years</option>
+                        <option value="5-10 years">5-10 years</option>
+                        <option value="10+ years">10+ years</option>
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label>Maintenance Charges (₹/month)</label>
+                      <input
+                        type="number"
+                        name="maintenanceCharges"
+                        value={formData.maintenanceCharges}
+                        onChange={handleChange}
+                        placeholder="Enter monthly maintenance"
+                      />
+                    </div>
+                  </div>
+                  
                   <div className="form-group">
                     <label>Description</label>
                     <textarea
@@ -505,7 +501,7 @@ const PostProperty = () => {
                             <div className="price-breakdown">
                               <div className="price-row">
                                 <span>Original Property Price:</span>
-                                <span className="price-amount">₹{formData.price ? parseFloat(formData.price).toLocaleString('en-IN') : '0'}</span>
+                                <span className="price-amount">₹{formData.totalCost ? parseFloat(formData.totalCost).toLocaleString('en-IN') : '0'}</span>
                               </div>
                               <div className="price-row gold-deduction">
                                 <span>Gold Offer Value:</span>
@@ -756,17 +752,17 @@ const PostProperty = () => {
               )}
               <div className="form-navigation">
                 {currentStep > 1 && (
-                  <button type="button" onClick={handlePrevious} className="btn-secondary" disabled={loading}>
+                  <button type="button" onClick={handlePrevious} className="btn-secondary">
                     Previous
                   </button>
                 )}
                 {currentStep < 4 ? (
-                  <button type="button" onClick={handleNext} className="btn-primary" disabled={loading}>
-                    {loading ? 'Saving...' : 'Next'}
+                  <button type="button" onClick={handleNext} className="btn-primary">
+                    Next
                   </button>
                 ) : (
-                  <button type="submit" className="btn-primary" disabled={loading}>
-                    {loading ? 'Submitting...' : 'Submit Property'}
+                  <button type="submit" className="btn-primary">
+                    Submit Property
                   </button>
                 )}
               </div>

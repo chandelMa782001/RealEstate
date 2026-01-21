@@ -33,7 +33,6 @@ const AppContent = () => {
     <>
       <ScrollToTop />
       <Routes>
-       
         <Route path="/" element={<Home />} />
         <Route path="/login-test" element={<LoginTest />} />
         <Route path="/property-api-test" element={<PropertyApiTest />} />

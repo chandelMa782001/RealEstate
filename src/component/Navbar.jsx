@@ -521,12 +521,6 @@ const Navbar = () => {
                     >
                       Post Your Requirement
                     </button>
-                      <button 
-                     
-                      className="block w-full text-left px-6 py-3 text-gray-700 hover:bg-gray-50 transition"
-                    >
-                      KYC
-                    </button>
                     <Link 
                       to="/shortlisted" 
                       className="block px-6 py-3 text-gray-700 hover:bg-gray-50 transition"
