@@ -829,14 +829,23 @@ ogressive Workflow Styles */
 }
 
 .amenity-checkbox input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  accent-color: #f97316;
-  cursor: pointer;
+  display: none; /* Hide the native checkbox */
 }
 
 .amenity-checkbox input[type="checkbox"]:checked + .checkmark {
   background: #f97316;
+  border-color: #f97316;
+}
+
+.amenity-checkbox input[type="checkbox"]:checked + .checkmark::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
 }
 
 .checkmark {
@@ -847,6 +856,7 @@ ogressive Workflow Styles */
   display: inline-block;
   position: relative;
   transition: all 0.3s;
+  flex-shrink: 0;
 }
 
 .form-section {
