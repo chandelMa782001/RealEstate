@@ -2,21 +2,24 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../component/Navbar';
 import Footer from '../component/Footer';
+import PropertyFormRenderer from '../components/PropertyForms/PropertyFormRenderer';
 import toast from 'react-hot-toast';
 import './PostProperty.css';
 
 const PostProperty = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
+  const [step2Progress, setStep2Progress] = useState(1); // Track progress within step 2
   
   const [formData, setFormData] = useState({
     fullName: '',
     mobile: '',
     email: '',
     userType: 'Owner',
-    propertyType: '',
-    propertyCategory: '',
-    lookingTo: 'Sell',
+    propertyType: '', // Residential/Commercial
+    lookingTo: '', // Sell/Rent
+    propertyCategory: '', // Plot/Apartment/etc
+    plotType: '', // For plot subcategories
     projectTitle: '',
     reraNo: '',
     projectName: '',
@@ -31,6 +34,11 @@ const PostProperty = () => {
     maintenanceCharges: '',
     builtupArea: '',
     carpetArea: '',
+    plotNo: '',
+    plotArea: '',
+    plotLength: '',
+    plotWidth: '',
+    loanAvailability: 'No',
     totalFloors: '',
     yourFloor: '',
     brokerage: 'No',
@@ -43,6 +51,33 @@ const PostProperty = () => {
     openParking: '0',
     societyAmenities: [],
     internalAmenities: [],
+    // Retail Shop specific fields
+    taxGovtChargeIncluded: 'No',
+    maintenanceChargeIncluded: 'No',
+    privateWashroom: '',
+    publicWashroom: '',
+    privateParking: '',
+    publicParking: '',
+    locationHUB: '',
+    zoneType: '',
+    suitableFor: [],
+    availableFrom: '',
+    entranceWidth: '',
+    ceilingHeight: '',
+    securityDeposit: '',
+    expectedRent: '',
+    lockInPeriod: '',
+    // Office specific fields
+    negotiable: 'No',
+    dgUpsChargeIncluded: 'No',
+    waterChargeIncluded: 'No',
+    noOfStairs: '',
+    passengersLift: '',
+    serviceLift: '',
+    noOfSeats: '',
+    noOfCabin: '',
+    conferenceRoom: '',
+    reception: '',
     goldOffer: {
       enabled: false,
       goldAmount: '',
@@ -60,6 +95,42 @@ const PostProperty = () => {
     state: '',
     pincode: ''
   });
+
+  // Property categories based on main type
+  const propertyCategories = {
+    'Residential': ['Plot', 'Apartment', 'Independent Floor', 'Independent House', 'Villa'],
+    'Commercial': ['Plot', 'Office', 'Retail Shop', 'Warehouse']
+  };
+
+  // Plot types when Plot is selected
+  const plotTypes = {
+    'Residential': ['Residential Plot', 'Kisan Kota Plot', 'Farm House', 'Agriculture Land'],
+    'Commercial': ['Commercial Plot', 'Industrial Plot']
+  };
+
+  const handlePropertyTypeSelect = (type) => {
+    setFormData(prev => ({ ...prev, propertyType: type, propertyCategory: '', plotType: '' }));
+    setStep2Progress(2); // Move to looking to selection
+  };
+
+  const handleLookingToSelect = (option) => {
+    setFormData(prev => ({ ...prev, lookingTo: option }));
+    setStep2Progress(3); // Move to property category selection
+  };
+
+  const handlePropertyCategorySelect = (category) => {
+    setFormData(prev => ({ ...prev, propertyCategory: category, plotType: '' }));
+    if (category === 'Plot') {
+      setStep2Progress(4); // Move to plot type selection
+    } else {
+      setStep2Progress(5); // Move to form fields
+    }
+  };
+
+  const handlePlotTypeSelect = (plotType) => {
+    setFormData(prev => ({ ...prev, plotType }));
+    setStep2Progress(5); // Move to form fields
+  };
 
   const [uploadPreviews, setUploadPreviews] = useState({
     exterior: [],
@@ -102,10 +173,30 @@ const PostProperty = () => {
       setCurrentStep(2);
     }
     else if (currentStep === 2) {
-      if (!formData.propertyType || !formData.propertyCategory || !formData.bhk || !formData.totalCost || !formData.builtupArea) {
+      // Check if we've completed the step 2 workflow
+      if (step2Progress < 5) {
+        toast.error('Please complete all property selections');
+        return;
+      }
+      
+      // Validate based on property type
+      if (formData.propertyCategory === 'Plot') {
+        if (!formData.plotType) {
+          toast.error('Please select plot type');
+          return;
+        }
+      } else {
+        if (!formData.bhk) {
+          toast.error('Please select BHK');
+          return;
+        }
+      }
+      
+      if (!formData.totalCost || !formData.description) {
         toast.error('Please fill all required fields');
         return;
       }
+      
       toast.success('Basic info saved');
       setCurrentStep(3);
     }
@@ -185,7 +276,6 @@ const PostProperty = () => {
         </div>
 
         <div className="max-w-5xl mx-auto px-4 py-8">
-       
           <div className="steps-container">
             <div className={`step ${currentStep >= 1 ? 'active' : ''}`}>
               <div className="step-number">1</div>
@@ -210,7 +300,7 @@ const PostProperty = () => {
 
           <div className="form-card">
             <form onSubmit={handleSubmit}>
-            
+              {/* Step 1: User Details */}
               {currentStep === 1 && (
                 <div className="form-step">
                   <h2 className="form-step-title">User Details</h2>
@@ -267,274 +357,133 @@ const PostProperty = () => {
                 </div>
               )}
 
-         
+              {/* Step 2: Property Information */}
               {currentStep === 2 && (
                 <div className="form-step">
-                  <h2 className="form-step-title">Basic Information</h2>
-                  <div className="form-grid">
-                    <div className="form-group">
-                      <label>Property Type</label>
-                      <select name="propertyType" value={formData.propertyType} onChange={handleChange} required>
-                        <option value="">Select Type</option>
-                        <option value="Residential">Residential</option>
-                        <option value="Commercial">Commercial</option>
-                        <option value="Plot">Plot/Land</option>
-                      </select>
-                    </div>
-                    <div className="form-group">
-                      <label>Property Category</label>
-                      <select name="propertyCategory" value={formData.propertyCategory} onChange={handleChange} required>
-                        <option value="">Select Category</option>
-                        <option value="Apartment">Apartment</option>
-                        <option value="Villa">Villa</option>
-                        <option value="House">Independent House</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className="form-grid">
-                    <div className="form-group">
-                      <label>Looking To</label>
-                      <select name="lookingTo" value={formData.lookingTo} onChange={handleChange} required>
-                        <option value="Sell">Sell</option>
-                        <option value="Rent">Rent</option>
-                      </select>
-                    </div>
-                    <div className="form-group">
-                      <label>BHK</label>
-                      <select name="bhk" value={formData.bhk} onChange={handleChange} required>
-                        <option value="">Select BHK</option>
-                        <option value="1">1 BHK</option>
-                        <option value="2">2 BHK</option>
-                        <option value="3">3 BHK</option>
-                        <option value="4">4 BHK</option>
-                        <option value="5">5+ BHK</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div className="form-grid">
-                    <div className="form-group">
-                      <label>Total Cost (₹)</label>
-                      <input
-                        type="number"
-                        name="totalCost"
-                        value={formData.totalCost}
-                        onChange={handleChange}
-                        placeholder="Enter total cost"
-                        required
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>Built-up Area (sq ft)</label>
-                      <input
-                        type="number"
-                        name="builtupArea"
-                        value={formData.builtupArea}
-                        onChange={handleChange}
-                        placeholder="Enter built-up area"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-grid">
-                    <div className="form-group">
-                      <label>Carpet Area (sq ft)</label>
-                      <input
-                        type="number"
-                        name="carpetArea"
-                        value={formData.carpetArea}
-                        onChange={handleChange}
-                        placeholder="Enter carpet area"
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>Bathrooms</label>
-                      <select name="bathrooms" value={formData.bathrooms} onChange={handleChange}>
-                        <option value="">Select</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5+</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div className="form-grid">
-                    <div className="form-group">
-                      <label>Total Floors</label>
-                      <input
-                        type="text"
-                        name="totalFloors"
-                        value={formData.totalFloors}
-                        onChange={handleChange}
-                        placeholder="e.g., G+10"
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>Your Floor</label>
-                      <input
-                        type="text"
-                        name="yourFloor"
-                        value={formData.yourFloor}
-                        onChange={handleChange}
-                        placeholder="e.g., 5th Floor"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-grid">
-                    <div className="form-group">
-                      <label>Furnished Status</label>
-                      <select name="furnished" value={formData.furnished} onChange={handleChange}>
-                        <option value="Un-Furnished">Un-Furnished</option>
-                        <option value="Semi-Furnished">Semi-Furnished</option>
-                        <option value="Fully-Furnished">Fully-Furnished</option>
-                      </select>
-                    </div>
-                    <div className="form-group">
-                      <label>Facing</label>
-                      <select name="facing" value={formData.facing} onChange={handleChange}>
-                        <option value="">Select Facing</option>
-                        <option value="North">North</option>
-                        <option value="South">South</option>
-                        <option value="East">East</option>
-                        <option value="West">West</option>
-                        <option value="North-East">North-East</option>
-                        <option value="North-West">North-West</option>
-                        <option value="South-East">South-East</option>
-                        <option value="South-West">South-West</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div className="form-grid">
-                    <div className="form-group">
-                      <label>Age of Property</label>
-                      <select name="ageOfProperty" value={formData.ageOfProperty} onChange={handleChange}>
-                        <option value="">Select Age</option>
-                        <option value="Under Construction">Under Construction</option>
-                        <option value="0-1 years">0-1 years</option>
-                        <option value="1-5 years">1-5 years</option>
-                        <option value="5-10 years">5-10 years</option>
-                        <option value="10+ years">10+ years</option>
-                      </select>
-                    </div>
-                    <div className="form-group">
-                      <label>Maintenance Charges (₹/month)</label>
-                      <input
-                        type="number"
-                        name="maintenanceCharges"
-                        value={formData.maintenanceCharges}
-                        onChange={handleChange}
-                        placeholder="Enter monthly maintenance"
-                      />
-                    </div>
-                  </div>
+                  <h2 className="form-step-title">Property Information</h2>
                   
-                  <div className="form-group">
-                    <label>Description</label>
-                    <textarea
-                      name="description"
-                      value={formData.description}
-                      onChange={handleChange}
-                      placeholder="Describe your property"
-                      rows="4"
-                      required
-                    />
-                  </div>
-
-                  {/* Gold Offer Section */}
-                  <div className="gold-offer-section">
-                    <div className="gold-offer-header">
-                      <div className="gold-offer-toggle">
-                        <input
-                          type="checkbox"
-                          id="goldOfferEnabled"
-                          checked={formData.goldOffer.enabled}
-                          onChange={(e) => handleGoldOfferChange('enabled', e.target.checked)}
-                          className="gold-checkbox"
-                        />
-                        <label htmlFor="goldOfferEnabled" className="gold-offer-label">
-                          <span className="gold-icon">🏆</span>
-                          <div className="gold-offer-text">
-                            <h3>Include Gold Offer with Property</h3>
-                            <p>Attract buyers by offering gold jewelry/coins that will reduce the property price</p>
-                          </div>
-                        </label>
+                  {/* Step 1: Choose Property Type (Residential/Commercial) */}
+                  {step2Progress >= 1 && (
+                    <div className="selection-section">
+                      <h3 className="selection-title">Choose Property Type *</h3>
+                      <div className="selection-buttons">
+                        <button
+                          type="button"
+                          className={`selection-btn ${formData.propertyType === 'Residential' ? 'active' : ''}`}
+                          onClick={() => handlePropertyTypeSelect('Residential')}
+                        >
+                          🏠 Residential
+                        </button>
+                        <button
+                          type="button"
+                          className={`selection-btn ${formData.propertyType === 'Commercial' ? 'active' : ''}`}
+                          onClick={() => handlePropertyTypeSelect('Commercial')}
+                        >
+                          🏢 Commercial
+                        </button>
                       </div>
                     </div>
+                  )}
 
-                    {formData.goldOffer.enabled && (
-                      <div className="gold-offer-details">
-                        <div className="gold-offer-card">
-                          <h4 className="gold-details-title">Gold Offer Details</h4>
-                          
-                          <div className="form-group">
-                            <label>Gold Offer Amount (₹)</label>
-                            <input
-                              type="number"
-                              value={formData.goldOffer.goldAmount}
-                              onChange={(e) => handleGoldOfferChange('goldAmount', e.target.value)}
-                              placeholder="Enter gold offer amount (e.g., 5000)"
-                              min="0"
-                              className="gold-value-input"
-                            />
-                            <small className="gold-rate-info">
-                              Enter the total value of gold you want to offer with this property
-                            </small>
-                          </div>
-
-                          <div className="form-group">
-                            <label>Gold Item Description</label>
-                            <textarea
-                              value={formData.goldOffer.goldDescription}
-                              onChange={(e) => handleGoldOfferChange('goldDescription', e.target.value)}
-                              placeholder="Describe the gold items (e.g., ₹5000 worth of 22K gold jewelry, gold coins worth ₹10000, etc.)"
-                              rows="3"
-                            />
-                          </div>
-
-                          {/* Price Summary */}
-                          <div className="price-summary">
-                            <div className="price-breakdown">
-                              <div className="price-row">
-                                <span>Original Property Price:</span>
-                                <span className="price-amount">₹{formData.totalCost ? parseFloat(formData.totalCost).toLocaleString('en-IN') : '0'}</span>
-                              </div>
-                              <div className="price-row gold-deduction">
-                                <span>Gold Offer Value:</span>
-                                <span className="price-amount">- ₹{formData.goldOffer.goldAmount ? parseFloat(formData.goldOffer.goldAmount).toLocaleString('en-IN') : '0'}</span>
-                              </div>
-                              <div className="price-row total-price">
-                                <span>Effective Property Price:</span>
-                                <span className="price-amount">₹{getEffectivePrice().toLocaleString('en-IN')}</span>
-                              </div>
-                            </div>
-                            <div className="gold-offer-benefits">
-                              <h5>Benefits of Gold Offer:</h5>
-                              <ul>
-                                <li>✨ Attracts more buyers</li>
-                                <li>💰 Reduces effective property cost</li>
-                                <li>🏆 Premium listing feature</li>
-                                <li>⚡ Faster property sale</li>
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
+                  {/* Step 2: Select Looking to */}
+                  {step2Progress >= 2 && formData.propertyType && (
+                    <div className="selection-section">
+                      <h3 className="selection-title">Select Looking to *</h3>
+                      <div className="selection-buttons">
+                        <button
+                          type="button"
+                          className={`selection-btn ${formData.lookingTo === 'Sell' ? 'active' : ''}`}
+                          onClick={() => handleLookingToSelect('Sell')}
+                        >
+                          💰 Sell
+                        </button>
+                        <button
+                          type="button"
+                          className={`selection-btn ${formData.lookingTo === 'Rent' ? 'active' : ''}`}
+                          onClick={() => handleLookingToSelect('Rent')}
+                        >
+                          🏠 Rent
+                        </button>
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
+
+                  {/* Step 3: Choose Property Category */}
+                  {step2Progress >= 3 && formData.lookingTo && (
+                    <div className="selection-section">
+                      <h3 className="selection-title">Choose Property Type *</h3>
+                      <div className="property-category-grid">
+                        {propertyCategories[formData.propertyType]?.map((category) => (
+                          <button
+                            key={category}
+                            type="button"
+                            className={`property-category-btn ${formData.propertyCategory === category ? 'active' : ''}`}
+                            onClick={() => handlePropertyCategorySelect(category)}
+                          >
+                            <span className="category-icon">
+                              {category === 'Plot' && '🏞️'}
+                              {category === 'Apartment' && '🏢'}
+                              {category === 'Independent Floor' && '🏠'}
+                              {category === 'Independent House' && '🏡'}
+                              {category === 'Villa' && '🏰'}
+                              {category === 'Office' && '🏢'}
+                              {category === 'Retail Shop' && '🏪'}
+                              {category === 'Warehouse' && '🏭'}
+                            </span>
+                            {category}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Step 4: Plot Type (only if Plot is selected) */}
+                  {step2Progress >= 4 && formData.propertyCategory === 'Plot' && (
+                    <div className="selection-section">
+                      <h3 className="selection-title">Plot Type *</h3>
+                      <div className="property-category-grid">
+                        {plotTypes[formData.propertyType]?.map((plotType) => (
+                          <button
+                            key={plotType}
+                            type="button"
+                            className={`property-category-btn ${formData.plotType === plotType ? 'active' : ''}`}
+                            onClick={() => handlePlotTypeSelect(plotType)}
+                          >
+                            <span className="category-icon">
+                              {plotType === 'Residential Plot' && '🏠'}
+                              {plotType === 'Kisan Kota Plot' && '🌾'}
+                              {plotType === 'Farm House' && '🏡'}
+                              {plotType === 'Agriculture Land' && '🌾'}
+                              {plotType === 'Commercial Plot' && '🏢'}
+                              {plotType === 'Industrial Plot' && '🏭'}
+                            </span>
+                            {plotType}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Step 5: Form Fields (after all selections are made) */}
+                  {step2Progress >= 5 && (
+                    <PropertyFormRenderer 
+                      formData={formData}
+                      setFormData={setFormData}
+                      handleChange={handleChange}
+                      handleGoldOfferChange={handleGoldOfferChange}
+                      getEffectivePrice={getEffectivePrice}
+                    />
+                  )}
                 </div>
               )}
 
+              {/* Step 3: Media Upload */}
               {currentStep === 3 && (
                 <div className="form-step">
                   <h2 className="form-step-title">Upload Property Images</h2>
                   <p className="media-subtitle">Upload images for different views of your property</p>
                   
-              
+                  {/* Exterior View */}
                   <div className="media-category">
                     <h3 className="media-category-title">🏠 Exterior View</h3>
                     <div className="upload-box">
@@ -566,6 +515,8 @@ const PostProperty = () => {
                       </div>
                     </div>
                   </div>
+
+                  {/* Interior View */}
                   <div className="media-category">
                     <h3 className="media-category-title">🛋️ Interior View</h3>
                     <div className="upload-box">
@@ -598,7 +549,7 @@ const PostProperty = () => {
                     </div>
                   </div>
 
-                 
+                  {/* Floor Plan */}
                   <div className="media-category">
                     <h3 className="media-category-title">📐 Floor Plan</h3>
                     <div className="upload-box">
@@ -612,7 +563,7 @@ const PostProperty = () => {
                       />
                       <label htmlFor="floorplan-upload" className="upload-label">
                         <div className="upload-icon-small">📷</div>
-                        <span>Click to upload floor plan</span>
+                        <span>Click to upload floor plan images</span>
                       </label>
                       <div className="image-preview-grid">
                         {uploadPreviews.floorPlan.map((preview, index) => (
@@ -631,7 +582,7 @@ const PostProperty = () => {
                     </div>
                   </div>
 
-             
+                  {/* Master Plan */}
                   <div className="media-category">
                     <h3 className="media-category-title">🗺️ Master Plan</h3>
                     <div className="upload-box">
@@ -645,7 +596,7 @@ const PostProperty = () => {
                       />
                       <label htmlFor="masterplan-upload" className="upload-label">
                         <div className="upload-icon-small">📷</div>
-                        <span>Click to upload master plan</span>
+                        <span>Click to upload master plan images</span>
                       </label>
                       <div className="image-preview-grid">
                         {uploadPreviews.masterPlan.map((preview, index) => (
@@ -664,7 +615,7 @@ const PostProperty = () => {
                     </div>
                   </div>
 
-                 
+                  {/* Location Map */}
                   <div className="media-category">
                     <h3 className="media-category-title">📍 Location Map</h3>
                     <div className="upload-box">
@@ -678,7 +629,7 @@ const PostProperty = () => {
                       />
                       <label htmlFor="locationmap-upload" className="upload-label">
                         <div className="upload-icon-small">📷</div>
-                        <span>Click to upload location map</span>
+                        <span>Click to upload location map images</span>
                       </label>
                       <div className="image-preview-grid">
                         {uploadPreviews.locationMap.map((preview, index) => (
@@ -699,6 +650,7 @@ const PostProperty = () => {
                 </div>
               )}
 
+              {/* Step 4: Location Details */}
               {currentStep === 4 && (
                 <div className="form-step">
                   <h2 className="form-step-title">Location Details</h2>
@@ -750,6 +702,8 @@ const PostProperty = () => {
                   </div>
                 </div>
               )}
+
+              {/* Navigation Buttons */}
               <div className="form-navigation">
                 {currentStep > 1 && (
                   <button type="button" onClick={handlePrevious} className="btn-secondary">
@@ -774,4 +728,5 @@ const PostProperty = () => {
     </>
   );
 };
+
 export default PostProperty;

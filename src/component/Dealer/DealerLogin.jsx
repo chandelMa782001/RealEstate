@@ -3,6 +3,7 @@ import Dealer from './Dealer';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { dealerAPI } from '../../apiServcies/authApi';
 import { validateEmail, validatePhone, validateName, validatePassword, getErrorMessage } from '../../../utils/validation';
+import DealerBg from '../../assets/image/Dealer.jpg';
 const DealerLogin = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -460,7 +461,15 @@ const DealerLogin = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
      
-      <div className="fixed inset-0 bg-black bg-opacity-50 z-40 bg-[url('../src/assets/image/Dealer.jpg')]"></div>
+      <div 
+        className="fixed inset-0 bg-black bg-opacity-50 z-40"
+        style={{
+          backgroundImage: `url(${DealerBg})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      ></div>
 
     
       <div className="relative z-50 w-full max-w-md">
