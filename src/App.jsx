@@ -22,11 +22,9 @@ import NotFound from './pages/NotFound';
 import PropertyEvalution from './component/PropertyEvalution/PropertyEvalution';
 import DealerLogin from './component/Dealer/DealerLogin';
 import LoginModal from './component/LoginModal';
-import LoginTest from './components/LoginTest';
 import Blogs from './pages/Blogs';
 import BlogDetail from './pages/BlogDetail';
 import PostPurchaseServices from './component/PostPurchaseServices';
-import PropertyApiTest from './components/PropertyApiTest';
 
 const AppContent = () => {
   return (
@@ -34,8 +32,6 @@ const AppContent = () => {
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login-test" element={<LoginTest />} />
-        <Route path="/property-api-test" element={<PropertyApiTest />} />
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/properties" element={<Properties />} />

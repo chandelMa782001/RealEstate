@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './PostRequirementModal.css';
-import api from '../apiServcies/axios';
 import toast from 'react-hot-toast';
 const PostRequirementModal = ({ isOpen, onClose }) => {
   const [propertyCategory, setPropertyCategory] = useState('Residential');
@@ -65,54 +64,36 @@ const PostRequirementModal = ({ isOpen, onClose }) => {
     setLoading(true);
     
     try {
-      // Get coordinates from location
-      // const coordinates = await getCoordinatesFromAddress(formData.location);
-      
-      // Prepare payload according to API structure
-      const payload = {
+      // Simulate submission without API
+      console.log('Submitting requirement:', {
         name: formData.name,
         email: formData.email,
         mobile: formData.mobile,
-        listingType: formData.propertyType.toUpperCase(), // BUY or RENT
-        propertyType: propertySubType, // FLAT, VILLA, etc.
+        listingType: formData.propertyType.toUpperCase(),
+        propertyType: propertySubType,
         budget: parseInt(formData.budget) || 0,
-        // latitude: coordinates.latitude,
-        // longitude: coordinates.longitude,
         address: formData.location,
-        // placeId: coordinates.placeId,
         description: formData.requirements
-      };
-
-      console.log('Submitting requirement:', payload);
-      console.log('API Path:', `${api.defaults.baseURL}/requirements/post-requirement`);
-      console.log('Payload JSON:', JSON.stringify(payload, null, 2));
+      });
       
-      const response = await api.post('/requirements/post-requirement', payload);
-      
-      if (response.data) {
-        toast.success('Your requirement has been submitted successfully!');
-        onClose();
-        // Reset form
-        setFormData({
-          name: '',
-          email: '',
-          mobile: '',
-          propertyType: 'Buy',
-          budget: '',
-          location: '',
-          requirements: ''
-        });
-        setPropertyCategory('Residential');
-        setPropertySubType('');
-      }
+      // Simulate success
+      toast.success('Your requirement has been submitted successfully!');
+      onClose();
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        mobile: '',
+        propertyType: 'Buy',
+        budget: '',
+        location: '',
+        requirements: ''
+      });
+      setPropertyCategory('Residential');
+      setPropertySubType('');
     } catch (error) {
       console.error('Error submitting requirement:', error);
-      console.error('Error response data:', error.response?.data);
-      console.error('Error response status:', error.response?.status);
-      console.error('Error response headers:', error.response?.headers);
-      
-      const errorMessage = error.response?.data?.message || error.response?.data?.error || 'Failed to submit requirement. Please try again.';
-      toast.error(errorMessage);
+      toast.error('Failed to submit requirement. Please try again.');
     } finally {
       setLoading(false);
     }

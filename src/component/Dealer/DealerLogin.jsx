@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import Dealer from './Dealer';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { dealerAPI } from '../../apiServcies/authApi';
 import { validateEmail, validatePhone, validateName, validatePassword, getErrorMessage } from '../../../utils/validation';
 import DealerBg from '../../assets/image/Dealer.jpg';
 const DealerLogin = () => {
@@ -10,7 +9,6 @@ const DealerLogin = () => {
   const [isLogin, setIsLogin] = useState(true); 
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [registeredUsers, setRegisteredUsers] = useState([]);
   const [currentDealer, setCurrentDealer] = useState(null);
   const [formData, setFormData] = useState({
     email: '',
@@ -72,12 +70,6 @@ const DealerLogin = () => {
       setCurrentDealer(dealer);
       setIsAuthenticated(true);
     }
-    
-
-    const storedDealers = localStorage.getItem('dealerUsers');
-    if (storedDealers) {
-      setRegisteredUsers(JSON.parse(storedDealers));
-    }
   }, [navigate, location.search]);
 
   const handleInputChange = (e) => {
@@ -122,42 +114,23 @@ const DealerLogin = () => {
       }
 
       try {
-       
-        const credentials = {
+        // Simulate login without API
+        const dealerData = {
           email: formData.email.trim().toLowerCase(),
-          password: formData.password
+          name: formData.email.split('@')[0]
         };
 
-        console.log('🚀 Attempting dealer login with credentials:', credentials);
-        
-        const response = await dealerAPI.login(credentials);
-        
-        console.log('✅ Dealer login successful:', response);
-      
-        if (response.token) {
-          localStorage.setItem('dealerToken', response.token);
-        }
-        
-        const dealerData = response.dealer || response.user || response;
-        setCurrentDealer(dealerData);
-        setIsAuthenticated(true);
+        localStorage.setItem('dealerToken', 'dealer-token-' + Date.now());
         localStorage.setItem('currentDealer', JSON.stringify(dealerData));
         
-        showMessage(`Welcome back, ${dealerData.name || 'Dealer'}!`, 'success');
+        setCurrentDealer(dealerData);
+        setIsAuthenticated(true);
+        
+        showMessage(`Welcome back, ${dealerData.name}!`, 'success');
         
       } catch (error) {
         console.error('❌ Dealer login failed:', error);
-        
-      
-        if (error?.message) {
-          showMessage(error.message, 'error');
-        } else if (typeof error === 'string') {
-          showMessage(error, 'error');
-        } else if (error?.email || error?.password) {
-          showMessage('Invalid email or password. Please try again.', 'error');
-        } else {
-          showMessage('Login failed. Please try again.', 'error');
-        }
+        showMessage('Login failed. Please try again.', 'error');
       } finally {
         setIsLoading(false);
       }
@@ -198,19 +171,8 @@ const DealerLogin = () => {
       }
 
       try {
-        // Prepare dealer data according to the API payload format
-        const dealerData = {
-          name: formData.name.trim(),
-          email: formData.email.trim().toLowerCase(),
-          mobile: formData.mobile.replace(/[\s\-\(\)]/g, ''),
-          password: formData.password
-        };
-
-        console.log('🚀 Attempting dealer registration with data:', dealerData);
-        
-        const response = await dealerAPI.register(dealerData);
-        
-        console.log('✅ Dealer registration successful:', response);
+        // Simulate registration without API
+        console.log('✅ Dealer registration successful');
         showMessage('Account created successfully! Please login now.', 'success');
         
       
@@ -229,17 +191,7 @@ const DealerLogin = () => {
         
       } catch (error) {
         console.error('❌ Dealer registration failed:', error);
-        
-    
-        if (error?.message) {
-          showMessage(error.message, 'error');
-        } else if (typeof error === 'string') {
-          showMessage(error, 'error');
-        } else if (error?.email) {
-          showMessage('User already exists with this email. Please login instead.', 'error');
-        } else {
-          showMessage('Registration failed. Please try again.', 'error');
-        }
+        showMessage('Registration failed. Please try again.', 'error');
       } finally {
         setIsLoading(false);
       }
@@ -264,15 +216,11 @@ const DealerLogin = () => {
           return;
         }
 
+        // Simulate OTP sending
         console.log('🚀 Sending forgot password request for email:', formData.email);
-        showMessage('Sending OTP to your email... This may take up to 60 seconds if the server is starting up.', 'info');
-        
-        const response = await dealerAPI.forgotPassword(formData.email);
-        
-        console.log('✅ Forgot password request successful:', response);
         showMessage('OTP has been sent to your email address. Please check your inbox.', 'success');
         setResetStep(2);
-        setOtpTimer(60); // 60 seconds timer
+        setOtpTimer(60);
         setCanResendOtp(false);
         
       } else if (resetStep === 2) {
@@ -289,12 +237,8 @@ const DealerLogin = () => {
           return;
         }
 
+        // Simulate OTP verification
         console.log('🚀 Verifying OTP for email:', formData.email, 'OTP:', formData.otp);
-        showMessage('Verifying OTP... Please wait.', 'info');
-        
-        const response = await dealerAPI.verifyOtp(formData.email, formData.otp);
-        
-        console.log('✅ OTP verification successful:', response);
         showMessage('OTP verified successfully! Please set your new password.', 'success');
         setResetStep(3);
         
@@ -318,12 +262,8 @@ const DealerLogin = () => {
           return;
         }
         
-        console.log('🚀 Calling reset password API for email:', formData.email);
-        showMessage('Resetting your password... Please wait.', 'info');
-        
-        const response = await dealerAPI.resetPassword(formData.email, formData.newPassword);
-        console.log('✅ Password reset successful:', response);
-        
+        // Simulate password reset
+        console.log('🚀 Resetting password for email:', formData.email);
         showMessage('Password reset successfully! Please login with your new password.', 'success');
         
         // Reset to login mode after 2 seconds
@@ -346,20 +286,7 @@ const DealerLogin = () => {
       }
     } catch (error) {
       console.error('❌ Forgot password process failed:', error);
-      
-      if (error?.message) {
-        showMessage(error.message, 'error');
-      } else if (typeof error === 'string') {
-        showMessage(error, 'error');
-      } else {
-        if (resetStep === 1) {
-          showMessage('Failed to send OTP. Please try again.', 'error');
-        } else if (resetStep === 2) {
-          showMessage('Invalid OTP. Please try again.', 'error');
-        } else {
-          showMessage('Failed to reset password. Please try again.', 'error');
-        }
-      }
+      showMessage('Failed to process request. Please try again.', 'error');
     } finally {
       setIsLoading(false);
     }
@@ -371,12 +298,8 @@ const DealerLogin = () => {
     setIsLoading(true);
     
     try {
+      // Simulate OTP resending
       console.log('🚀 Resending OTP for email:', formData.email);
-      showMessage('Resending OTP... Please wait.', 'info');
-      
-      const response = await dealerAPI.forgotPassword(formData.email);
-      
-      console.log('✅ OTP resent successfully:', response);
       showMessage('OTP has been resent to your email address.', 'success');
       setOtpTimer(60);
       setCanResendOtp(false);

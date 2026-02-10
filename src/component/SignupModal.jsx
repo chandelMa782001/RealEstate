@@ -1,8 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { FaUser, FaEnvelope, FaPhone, FaTimes, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { validateForm, getErrorMessage } from '../../utils/validation';
-import { authAPI } from '../apiServcies/authApi';
-import { handleApiError } from '../../utils/apiUtils';
 import gsap from 'gsap';
 import toast from 'react-hot-toast';
 const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
@@ -128,41 +126,25 @@ const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
       return;
     }
     try {
-      const registrationData = {
-        name: formData.name,
-        email: formData.email,
-        mobile: formData.mobile,
-        password: formData.password,
-        confirmPassword:formData.confirmPassword
-      };
-      console.log('📤 Sending Registration Data:', registrationData);
-      const response = await authAPI.register(registrationData);
-      console.log('📥 API Response:', response);
-      const isSuccess = response.success || response.status === 'success' || response.message?.includes('success');
-      if (isSuccess) {
-        console.log('✅ Signup successful, starting modal transition...');
-        toast.success(response.message || `Account created successfully! Please login to continue.`);
-        console.log('🧹 Clearing form data...');
-        // Clear form immediately
-        clearForm();
-        
-        console.log('🚪 Closing signup modal and switching to login...');
-        // Close current modal and switch to login
-        onClose(); // Close signup modal immediately
-        
-        // Switch to login modal after a short delay
-        setTimeout(() => {
-          console.log('🔄 Opening login modal...');
-          onSwitchToLogin();
-        }, 100);
-      } else {
-        console.log('❌ Signup failed - no success flag in response');
-        toast.error(response.message || 'Signup failed. Please try again.');
-      }
+      // Simulate signup without API
+      console.log('✅ Signup successful, starting modal transition...');
+      toast.success('Account created successfully! Please login to continue.');
+      console.log('🧹 Clearing form data...');
+      // Clear form immediately
+      clearForm();
+      
+      console.log('🚪 Closing signup modal and switching to login...');
+      // Close current modal and switch to login
+      onClose(); // Close signup modal immediately
+      
+      // Switch to login modal after a short delay
+      setTimeout(() => {
+        console.log('🔄 Opening login modal...');
+        onSwitchToLogin();
+      }, 100);
     } catch (error) {
       console.log('💥 Signup Error:', error);
-      const errorResponse = handleApiError(error);
-      toast.error(errorResponse.message || 'Signup failed. Please try again.');
+      toast.error('Signup failed. Please try again.');
     } finally {
       setIsSubmitting(false);
     }

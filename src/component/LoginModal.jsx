@@ -2,8 +2,6 @@ import { useState, useEffect, useRef } from 'react';
 import { FaEnvelope, FaLock, FaTimes, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useAppContext } from '../Context/AppContext';
 import { getErrorMessage } from '../../utils/validation';
-import { authAPI } from '../apiServcies/authApi';
-import { handleApiError, setAuthToken, setUserToStorage } from '../../utils/apiUtils';
 import gsap from 'gsap';
 import toast from 'react-hot-toast';
 
@@ -97,51 +95,28 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
     }
 
     try {
-      // Prepare login data
-      const loginData = {
+      // Simulate login without API
+      const userData = {
         email: email,
-        password: password
+        name: email.split('@')[0]
       };
 
-      console.log('📤 Sending Login Data:', loginData);
-
-      // Call login API
-      const response = await authAPI.login(loginData);
+      // Store token and user data in localStorage
+      localStorage.setItem('token', 'dummy-token-' + Date.now());
+      localStorage.setItem('user', JSON.stringify(userData));
       
-      console.log('📥 Login API Response:', response);
+      login(userData); // Update context
       
-      // Check if login was successful (handle different response formats)
-      const isSuccess = response.success || response.status === 'success' || response.token;
+      toast.success('Login successful!');
       
-      if (isSuccess) {
-        console.log('✅ Login successful!');
-        
-        // Store token and user data
-        if (response.token) {
-          setAuthToken(response.token);
-          console.log('🔑 Token stored:', response.token);
-        }
-        if (response.user) {
-          setUserToStorage(response.user);
-          login(response.user); // Update context
-          console.log('👤 User data stored:', response.user);
-        }
-        
-        toast.success(response.message || 'Login successful!');
-        
-        // Reset form
-        setEmail('');
-        setPassword('');
-        setErrors({});
-        setTouched({});
-        handleClose();
-      } else {
-        console.log('❌ Login failed - no success flag in response');
-        toast.error(response.message || 'Login failed. Please check your credentials.');
-      }
+      // Reset form
+      setEmail('');
+      setPassword('');
+      setErrors({});
+      setTouched({});
+      handleClose();
     } catch (error) {
-      const errorResponse = handleApiError(error);
-      toast.error(errorResponse.message || 'Login failed. Please try again.');
+      toast.error('Login failed. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
