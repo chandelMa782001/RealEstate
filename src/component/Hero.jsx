@@ -100,7 +100,7 @@ const Hero = () => {
   const titleRef = useRef(null);
   const subtitleRef = useRef(null);
   const searchBoxRef = useRef(null);
-  const tabs = ['Buy', 'Rent', 'New Launch', 'Commercial', 'Plots/Land','Agriculture', 'Projects', 'Post Property'];
+  const tabs = ['Residential ', 'Rent', 'New Launch', 'Commercial', 'Plots/Land','Agriculture', 'Projects', 'Post Property'];
   const budgetValues = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
   const formatBudgetValue = (value) => {
     if (value === 0) return '0';

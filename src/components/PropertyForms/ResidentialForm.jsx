@@ -1,5 +1,4 @@
 import React from 'react';
-
 const ResidentialForm = ({ formData, setFormData, handleChange, handleGoldOfferChange, getEffectivePrice }) => {
   return (
     <>

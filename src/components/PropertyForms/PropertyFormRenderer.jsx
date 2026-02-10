@@ -4,6 +4,7 @@ import ResidentialForm from './ResidentialForm';
 import OfficeForm from './OfficeForm';
 import RetailShopForm from './RetailShopForm';
 import WarehouseForm from './WarehouseForm';
+import AgricultureForm from './AgricultureForm';
 
 const PropertyFormRenderer = ({ formData, setFormData, handleChange, handleGoldOfferChange, getEffectivePrice }) => {
   
@@ -33,7 +34,14 @@ const PropertyFormRenderer = ({ formData, setFormData, handleChange, handleGoldO
         />
       );
     }
-    
+    if(formData.propertyType === 'Agriculture'
+    )
+    {
+      return (
+        <AgricultureForm
+        />
+      );
+    }
     // Commercial properties
     if (formData.propertyType === 'Commercial' && formData.propertyCategory !== 'Plot') {
       switch (formData.propertyCategory) {

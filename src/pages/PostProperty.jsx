@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../component/Navbar';
 import Footer from '../component/Footer';
 import PropertyFormRenderer from '../components/PropertyForms/PropertyFormRenderer';
 import toast from 'react-hot-toast';
 import './PostProperty.css';
-
 const PostProperty = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
@@ -96,29 +95,60 @@ const PostProperty = () => {
     pincode: ''
   });
 
+  // Log form data changes
+  useEffect(() => {
+    console.log('Form data updated:', formData);
+  }, [formData]);
+
   // Property categories based on main type
   const propertyCategories = {
-    'Residential': ['Plot', 'Apartment', 'Independent Floor', 'Independent House', 'Villa'],
-    'Commercial': ['Plot', 'Office', 'Retail Shop', 'Warehouse']
+    'Residential': [
+  "Flat/Apartment",
+  "Independent/Builder Floor",
+  "Independent House/Villa",
+  "Residential Land/plot",
+  "1 RK/ Studio Apartment",
+  "Farm House",
+  "Serviced Apartments",
+  "Penthouse",
+  "Duplex/Triples",
+  "Row House",
+  "Bungalow",
+  "Gated Community Home",
+  "service apartment",
+  "Co-living Space",
+  "PG / Hostel",
+  "Luxury Residential Property",
+  "Under Construction Property",
+  "Other",
+  "Plot",
+  "Apartment",
+  "Independent Floor",
+  "Independent House",
+  "Villa"
+]
+,
+    'Commercial': ['Plot', 'Office', 'Retail Shop', 'Warehouse'],
+    'Agriculture':['Agriculture Land']
   };
-
   // Plot types when Plot is selected
   const plotTypes = {
     'Residential': ['Residential Plot', 'Kisan Kota Plot', 'Farm House', 'Agriculture Land'],
     'Commercial': ['Commercial Plot', 'Industrial Plot']
   };
-
   const handlePropertyTypeSelect = (type) => {
+    console.log('Property type selected:', type);
     setFormData(prev => ({ ...prev, propertyType: type, propertyCategory: '', plotType: '' }));
     setStep2Progress(2); // Move to looking to selection
   };
 
   const handleLookingToSelect = (option) => {
+    console.log('Looking to selected:', option);
     setFormData(prev => ({ ...prev, lookingTo: option }));
-    setStep2Progress(3); // Move to property category selection
+    setStep2Progress(3); 
   };
-
   const handlePropertyCategorySelect = (category) => {
+    console.log('Property category selected:', category);
     setFormData(prev => ({ ...prev, propertyCategory: category, plotType: '' }));
     if (category === 'Plot') {
       setStep2Progress(4); // Move to plot type selection
@@ -126,8 +156,8 @@ const PostProperty = () => {
       setStep2Progress(5); // Move to form fields
     }
   };
-
   const handlePlotTypeSelect = (plotType) => {
+    console.log('Plot type selected:', plotType);
     setFormData(prev => ({ ...prev, plotType }));
     setStep2Progress(5); // Move to form fields
   };
@@ -139,12 +169,11 @@ const PostProperty = () => {
     masterPlan: [],
     locationMap: []
   });
-
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log(`Form field changed: ${name} = ${value}`);
     setFormData({ ...formData, [name]: value });
   };
-
   const handleGoldOfferChange = (field, value) => {
     setFormData(prev => ({
       ...prev,
@@ -154,21 +183,22 @@ const PostProperty = () => {
       }
     }));
   };
-
   // Calculate effective property price after gold deduction
   const getEffectivePrice = () => {
     const basePrice = parseFloat(formData.totalCost) || 0;
     const goldAmount = formData.goldOffer.enabled ? (parseFloat(formData.goldOffer.goldAmount) || 0) : 0;
     return Math.max(0, basePrice - goldAmount);
   };
-
   const handleNext = () => {
+    console.log(`Current step: ${currentStep}, Step 2 progress: ${step2Progress}`);
+    console.log('Current form data at step navigation:', formData);
     // Simple validation for required fields
     if (currentStep === 1) {
       if (!formData.fullName || !formData.mobile || !formData.email) {
         toast.error('Please fill all required fields');
         return;
       }
+      console.log('Step 1 completed - User details saved');
       toast.success('User details saved');
       setCurrentStep(2);
     }
@@ -178,7 +208,6 @@ const PostProperty = () => {
         toast.error('Please complete all property selections');
         return;
       }
-      
       // Validate based on property type
       if (formData.propertyCategory === 'Plot') {
         if (!formData.plotType) {
@@ -197,10 +226,12 @@ const PostProperty = () => {
         return;
       }
       
+      console.log('Step 2 completed - Basic info saved');
       toast.success('Basic info saved');
       setCurrentStep(3);
     }
     else if (currentStep === 3) {
+      console.log('Step 3 completed - Moving to location step');
       setCurrentStep(4);
     }
   };
@@ -211,6 +242,7 @@ const PostProperty = () => {
 
   const handleFileUpload = (category, files) => {
     const fileArray = Array.from(files);
+    console.log(`Files uploaded for ${category}:`, fileArray.map(f => f.name));
     const newPreviews = fileArray.map(file => URL.createObjectURL(file));
     
     setUploadPreviews(prev => ({
@@ -225,6 +257,8 @@ const PostProperty = () => {
         [category]: [...prev.images[category], ...fileArray]
       }
     }));
+    
+    console.log(`Total ${category} images:`, fileArray.length + (formData.images[category]?.length || 0));
   };
 
   const removeImage = (category, index) => {
@@ -244,6 +278,141 @@ const PostProperty = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    // Console log the complete form data with enhanced formatting
+    console.log('\n🏠 ===== POST PROPERTY FORM SUBMISSION =====');
+    console.log('📅 Timestamp:', new Date().toLocaleString());
+    console.log('\n📋 COMPLETE FORM DATA:');
+    console.table(formData);
+    
+    console.log('\n👤 USER DETAILS:');
+    console.table({
+      'Full Name': formData.fullName,
+      'Mobile': formData.mobile,
+      'Email': formData.email,
+      'User Type': formData.userType
+    });
+    
+    console.log('\n🏢 PROPERTY INFORMATION:');
+    console.table({
+      'Property Type': formData.propertyType,
+      'Looking To': formData.lookingTo,
+      'Property Category': formData.propertyCategory,
+      'Plot Type': formData.plotType || 'N/A',
+      'BHK': formData.bhk || 'N/A',
+      'Furnished': formData.furnished,
+      'Facing': formData.facing || 'N/A'
+    });
+    
+    console.log('\n💰 PRICING & FINANCIAL:');
+    console.table({
+      'Total Cost/Rent': formData.totalCost,
+      'Maintenance Charges': formData.maintenanceCharges,
+      'Security Deposit': formData.securityDeposit || 'N/A',
+      'Expected Rent': formData.expectedRent || 'N/A',
+      'Gold Offer Enabled': formData.goldOffer.enabled,
+      'Gold Amount': formData.goldOffer.goldAmount || 'N/A',
+      'Effective Price': formData.goldOffer.enabled ? getEffectivePrice() : formData.totalCost
+    });
+    
+    console.log('\n📐 PROPERTY SPECIFICATIONS:');
+    console.table({
+      'Built-up Area': formData.builtupArea,
+      'Carpet Area': formData.carpetArea || 'N/A',
+      'Plot Area': formData.plotArea || 'N/A',
+      'Plot Length': formData.plotLength || 'N/A',
+      'Plot Width': formData.plotWidth || 'N/A',
+      'Total Floors': formData.totalFloors,
+      'Your Floor': formData.yourFloor,
+      'Bathrooms': formData.bathrooms,
+      'Balcony': formData.balcony,
+      'Covered Parking': formData.coveredParking,
+      'Open Parking': formData.openParking
+    });
+    
+    console.log('\n🏗️ PROPERTY STATUS:');
+    console.table({
+      'Stage': formData.stage,
+      'Possession Status': formData.possessionStatus,
+      'Ownership': formData.ownership,
+      'Age of Property': formData.ageOfProperty || 'N/A',
+      'Possession From': formData.possessionFrom || 'N/A',
+      'Available From': formData.availableFrom || 'N/A'
+    });
+    
+    console.log('\n🏢 PROJECT DETAILS:');
+    console.table({
+      'Project Title': formData.projectTitle,
+      'RERA No': formData.reraNo || 'N/A',
+      'Project Name': formData.projectName || 'N/A',
+      'Builder Name': formData.builderName || 'N/A'
+    });
+    
+    console.log('\n✨ AMENITIES:');
+    console.log('🏘️ Society Amenities:', formData.societyAmenities);
+    console.log('🏠 Internal Amenities:', formData.internalAmenities);
+    console.log('🛍️ Suitable For:', formData.suitableFor || []);
+    
+    console.log('\n📸 UPLOADED IMAGES:');
+    Object.entries(formData.images).forEach(([category, files]) => {
+      console.log(`${category.toUpperCase()}:`, files.length, 'files');
+      if (files.length > 0) {
+        console.log(`  - File names:`, files.map(f => f.name || 'Unknown'));
+      }
+    });
+    
+    console.log('\n🏆 GOLD OFFER DETAILS:');
+    if (formData.goldOffer.enabled) {
+      console.table({
+        'Gold Amount': formData.goldOffer.goldAmount,
+        'Gold Description': formData.goldOffer.goldDescription,
+        'Original Price': formData.totalCost,
+        'Effective Price': getEffectivePrice(),
+        'Savings': formData.goldOffer.goldAmount
+      });
+    } else {
+      console.log('Gold offer is disabled');
+    }
+    
+    console.log('\n📍 LOCATION DETAILS:');
+    console.table({
+      'Address': formData.address,
+      'City': formData.city,
+      'State': formData.state,
+      'Pincode': formData.pincode
+    });
+    
+    console.log('\n🔧 ADDITIONAL SETTINGS:');
+    console.table({
+      'Brokerage': formData.brokerage,
+      'Loan Availability': formData.loanAvailability,
+      'Negotiable': formData.negotiable || 'N/A',
+      'Location HUB': formData.locationHUB || 'N/A',
+      'Zone Type': formData.zoneType || 'N/A'
+    });
+    
+    console.log('\n📝 DESCRIPTION:');
+    console.log(formData.description);
+    
+    console.log('\n🔍 FORM DATA SUMMARY:');
+    const filledFields = Object.entries(formData).filter(([key, value]) => {
+      if (Array.isArray(value)) return value.length > 0;
+      if (typeof value === 'object' && value !== null) {
+        return Object.values(value).some(v => v !== '' && v !== false && (Array.isArray(v) ? v.length > 0 : true));
+      }
+      return value !== '' && value !== null && value !== undefined;
+    }).length;
+    
+    console.table({
+      'Total Fields': Object.keys(formData).length,
+      'Filled Fields': filledFields,
+      'Completion Rate': `${Math.round((filledFields / Object.keys(formData).length) * 100)}%`,
+      'Society Amenities Count': formData.societyAmenities.length,
+      'Internal Amenities Count': formData.internalAmenities.length,
+      'Total Images': Object.values(formData.images).reduce((total, files) => total + files.length, 0)
+    });
+    
+    console.log('\n🏠 ===== END FORM SUBMISSION =====\n');
     
     // Simple validation for location fields
     if (!formData.address || !formData.city || !formData.state || !formData.pincode) {
@@ -297,7 +466,6 @@ const PostProperty = () => {
               <div className="step-label">Location</div>
             </div>
           </div>
-
           <div className="form-card">
             <form onSubmit={handleSubmit}>
               {/* Step 1: User Details */}
@@ -380,6 +548,13 @@ const PostProperty = () => {
                           onClick={() => handlePropertyTypeSelect('Commercial')}
                         >
                           🏢 Commercial
+                        </button>
+                          <button
+                          type="button"
+                          className={`selection-btn ${formData.propertyType === 'Agriculture' ? 'active' : ''}`}
+                          onClick={() => handlePropertyTypeSelect('Agriculture')}
+                        >
+                          Agriculture
                         </button>
                       </div>
                     </div>
