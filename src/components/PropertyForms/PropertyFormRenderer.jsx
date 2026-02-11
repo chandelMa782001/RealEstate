@@ -39,6 +39,9 @@ const PropertyFormRenderer = ({ formData, setFormData, handleChange, handleGoldO
     {
       return (
         <AgricultureForm
+          formData={formData}
+          setFormData={setFormData}
+          handleChange={handleChange}
         />
       );
     }

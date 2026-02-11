@@ -15,7 +15,7 @@ const PostProperty = () => {
     mobile: '',
     email: '',
     userType: 'Owner',
-    propertyType: '', // Residential/Commercial
+    propertyType: '', // Residential/Commercial/Agriculture
     lookingTo: '', // Sell/Rent
     propertyCategory: '', // Plot/Apartment/etc
     plotType: '', // For plot subcategories
@@ -77,6 +77,34 @@ const PostProperty = () => {
     noOfCabin: '',
     conferenceRoom: '',
     reception: '',
+    // Agriculture specific fields
+    agriculturePropertyType: '',
+    areaUnit: 'Acre',
+    pricePerUnit: '',
+    district: '',
+    tehsil: '',
+    villageName: '',
+    landmark: '',
+    mapLocation: '',
+    soilType: '',
+    soilFertility: '',
+    landUseType: '',
+    currentCrop: '',
+    lastCrop: '',
+    waterSource: '',
+    numberOfBorewells: '',
+    waterLevel: '',
+    electricityConnection: 'No',
+    roadConnectivity: '',
+    roadWidth: '',
+    distanceFromMainRoad: '',
+    tractorAccess: 'No',
+    ownershipType: '',
+    landRecordAvailable: 'No',
+    clearTitle: 'No',
+    disputeFree: 'No',
+    conversionStatus: 'Agriculture',
+    registryAvailable: 'No',
     goldOffer: {
       enabled: false,
       goldAmount: '',
